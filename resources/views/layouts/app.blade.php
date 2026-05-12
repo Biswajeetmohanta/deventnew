@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'Devent Technology | Premium Software Solutions')</title>
+    <meta name="description" content="@yield('meta_description', 'Devent Technology provides high-quality web development, mobile apps, and digital marketing solutions.')">
+    
+    @if(isset($settings['site_favicon']))
+        <link rel="icon" type="image/x-icon" href="{{ Storage::url($settings['site_favicon']) }}">
+    @endif
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Styles / Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-scrolled {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+        .dark-section {
+            background-color: #0f172a;
+            color: white;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #0052FF;
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 82, 255, 0.3);
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: #0041cc;
+        }
+
+        /* Premium Footer Styles */
+        .premium-footer {
+            background-color: #030712;
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.02) 1px, transparent 0);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        .footer-top-bar {
+            background: linear-gradient(90deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.5) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+        .footer-link {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        .footer-link i {
+            font-size: 10px;
+            margin-right: 12px;
+            color: #3b82f6;
+            transition: transform 0.3s ease;
+        }
+        .footer-link:hover {
+            color: #3b82f6;
+            transform: translateX(5px);
+        }
+        .footer-link:hover i {
+            transform: translateX(2px);
+        }
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .social-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
+        }
+        .newsletter-input {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .newsletter-input:focus {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        .phone-pill {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        .phone-pill:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .footer-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #3b82f6;
+            border-radius: 2px;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .mobile-menu-content {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 400px;
+            height: 100%;
+            background: white;
+            z-index: 101;
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu-content.active {
+            right: 0;
+        }
+
+        /* Process Section Styles */
+        .process-card {
+            text-align: center;
+            position: relative;
+        }
+        .process-circle-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .process-circle-dashed {
+            position: absolute;
+            inset: 0;
+            border: 2px dashed #e2e8f0;
+            border-radius: 50%;
+            animation: spin-slow 20s linear infinite;
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .process-circle-main {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+        .process-card:hover .process-circle-main {
+            transform: scale(1.05);
+            box-shadow: 0 30px 60px rgba(59, 130, 246, 0.15);
+        }
+        .process-step-num {
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            width: 44px;
+            height: 44px;
+            background: #0f172a;
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .process-arrow {
+            position: absolute;
+            top: 30%;
+            right: -20%;
+            width: 40%;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* Premium CTA Button Styles */
+        .premium-cta-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background-color: #0052FF;
+            color: white;
+            font-weight: 700;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 40px -10px rgba(0, 82, 255, 0.4);
+            z-index: 1;
+        }
+
+        .premium-cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+
+        .premium-cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .premium-cta-btn:hover {
+            background-color: #0041cc;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 30px 60px -15px rgba(0, 82, 255, 0.5);
+            color: white;
+        }
+
+        .premium-cta-btn i {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .premium-cta-btn:hover i {
+            transform: translateX(8px) scale(1.1);
+        }
+
+        .premium-cta-btn .btn-text {
+            position: relative;
+            z-index: 3;
+        }
+
+        .premium-cta-btn-white {
+            background-color: white;
+            color: #0052FF;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .premium-cta-btn-white:hover {
+            background-color: #f8fafc;
+            color: #0041cc;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.15);
+        }
+
+        .premium-cta-btn-white::before {
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(0, 82, 255, 0.1),
+                transparent
+            );
+        }
+        /* ===== MEGA MENU STYLES ===== */
+
+        /* Grid Layouts */
+        .mega-dropdown-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 0 !important;
+        }
+        .mega-dropdown-grid-5 {
+            display: grid !important;
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 0 !important;
+        }
+
+        /* Navbar */
+        .mega-nav {
+            background: linear-gradient(135deg, #1a3a8f 0%, #1d4ed8 40%, #2563eb 100%);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Nav Links */
+        .mega-nav .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.8125rem;
+            letter-spacing: 0.02em;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 1.125rem;
+            position: relative;
+            text-decoration: none;
+        }
+        .mega-nav .nav-link:hover,
+        .mega-nav .nav-link.active {
+            color: #ffffff;
+        }
+
+        /* Active underline indicator */
+        .mega-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 3px 3px 0 0;
+            transition: width 0.25s ease, left 0.25s ease;
+        }
+        .mega-nav .nav-link:hover::after,
+        .mega-nav .nav-link.active::after {
+            width: 60%;
+            left: 20%;
+        }
+
+        /* Dropdown Arrow (triangle pointer) */
+        .dropdown-arrow {
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid #ffffff;
+            opacity: 0;
+            transition: opacity 0.2s ease 0.05s;
+            z-index: 52;
+        }
+        .mega-menu-trigger:hover .dropdown-arrow {
+            opacity: 1;
+        }
+
+        /* Mega Dropdown Panel */
+        .mega-dropdown {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            background: #ffffff;
+            box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.15),
+                        0 8px 20px -8px rgba(0, 0, 0, 0.08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+            z-index: 50;
+            border-top: 3px solid #2563eb;
+        }
+
+        /* Hover behavior with delay to prevent flickering */
+        .mega-menu-trigger:hover .mega-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0s;
+        }
+
+        /* Dropdown inner container */
+        .mega-dropdown-inner {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 2rem 2.5rem;
+        }
+
+        /* Column styling */
+        .mega-col {
+            padding: 0.75rem 1.5rem;
+            border-right: 1px solid #f1f5f9;
+        }
+        .mega-col:last-child {
+            border-right: none;
+        }
+
+        /* Column headers */
+        .mega-col-header {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.625rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .mega-col-header::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 1px;
+            background: #2563eb;
+            transform: rotate(45deg);
+            flex-shrink: 0;
+        }
+
+        /* Menu items */
+        .mega-menu-item {
+            display: block;
+            padding: 0.5rem 0;
+            font-size: 0.8125rem;
+            color: #475569;
+            text-decoration: none;
+            transition: color 0.15s ease, padding-left 0.15s ease;
+            line-height: 1.5;
+            font-weight: 450;
+        }
+        .mega-menu-item:hover {
+            color: #2563eb;
+            padding-left: 4px;
+        }
+
+        /* CTA Contact button */
+        .nav-cta-btn {
+            background: #f97316;
+            color: #ffffff !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.625rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        .nav-cta-btn:hover {
+            background: #ea580c;
+            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Mobile hamburger color */
+        .mega-nav #mobileMenuBtn {
+            color: rgba(255,255,255,0.9);
+        }
+        .mega-nav #mobileMenuBtn:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-900 bg-white">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 mega-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-stretch h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{{ url('/') }}" class="text-2xl font-bold tracking-tighter text-white">
+                        @if(isset($settings['site_logo']))
+                            <img src="{{ Storage::url($settings['site_logo']) }}" alt="Logo" class="h-20 brightness-0 invert">
+                        @else
+                            DEVENT<span class="text-blue-200">TECHNOLOGY</span>
+                        @endif
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-stretch space-x-1">
+                    <div class="flex items-center">
+                        <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
+                    </div>
+                    <div class="flex items-center">
+                        <a href="{{ url('/about') }}" class="nav-link {{ request()->is('about') ? 'active' : '' }}">About Us</a>
+                    </div>
+                    
+                    <!-- Services Mega Menu -->
+                    <div class="mega-menu-trigger flex items-stretch">
+                        <a href="{{ url('/services') }}" class="nav-link {{ request()->is('services*') ? 'active' : '' }}">
+                            Services
+                            <div class="dropdown-arrow"></div>
+                        </a>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-inner">
+                                <div class="mega-dropdown-grid">
+                                    @foreach(($navServices ?? collect())->chunk(ceil(($navServices ?? collect())->count() / 3)) as $index => $chunk)
+                                        <div class="mega-col">
+                                            <div class="mega-col-header">Services</div>
+                                            @foreach($chunk as $service)
+                                                <a href="{{ url('/services/' . $service->slug) }}" class="mega-menu-item">{{ $service->title }}</a>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Industry Mega Menu -->
+                    <div class="mega-menu-trigger flex items-stretch">
+                        <a href="{{ url('/industry') }}" class="nav-link {{ request()->is('industry*') ? 'active' : '' }}">
+                            Industry
+                            <div class="dropdown-arrow"></div>
+                        </a>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-inner">
+                                <div class="mega-dropdown-grid-5">
+                                    @foreach(($navIndustries ?? collect())->chunk(ceil(($navIndustries ?? collect())->count() / 5)) as $chunk)
+                                        <div class="mega-col">
+                                            @foreach($chunk as $industry)
+                                                <a href="{{ url('/industry/' . $industry->slug) }}" class="mega-menu-item">{{ $industry->title }}</a>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Technology Mega Menu -->
+                    <div class="mega-menu-trigger flex items-stretch">
+                        <a href="{{ url('/technology') }}" class="nav-link {{ request()->is('technology*') ? 'active' : '' }}">
+                            Technology
+                            <div class="dropdown-arrow"></div>
+                        </a>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-inner">
+                                <div class="mega-dropdown-grid">
+                                    @foreach(($navTechnologies ?? collect())->groupBy('category') as $category => $techs)
+                                        <div class="mega-col">
+                                            <div class="mega-col-header">{{ $category }}</div>
+                                            @foreach($techs as $tech)
+                                                <a href="{{ url('/technology/' . $tech->id) }}" class="mega-menu-item">{{ $tech->name }}</a>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <a href="{{ url('/testimonials') }}" class="nav-link {{ request()->is('testimonials*') ? 'active' : '' }}">Testimonials</a>
+                    </div>
+                    
+                    <div class="flex items-center ml-6">
+                        <a href="{{ url('/contact') }}" class="nav-cta-btn">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button type="button" id="mobileMenuBtn" class="text-slate-600 hover:text-blue-600 focus:outline-none transition-colors">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Container -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay"></div>
+    <div id="mobileMenuContent" class="mobile-menu-content">
+        <div class="flex justify-between items-center mb-12">
+            <a href="{{ url('/') }}" class="text-2xl font-black tracking-tighter text-blue-600">
+                DEVENT<span class="text-slate-950">TECH</span>
+            </a>
+            <button id="closeMenuBtn" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-all">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <nav class="flex flex-col space-y-6">
+            <a href="{{ url('/') }}" class="text-xl font-black text-slate-900 hover:text-blue-600 transition-colors">Home</a>
+            <a href="{{ url('/about') }}" class="text-xl font-black text-slate-900 hover:text-blue-600 transition-colors">About Us</a>
+            
+            <!-- Services Dropdown -->
+            <details class="group">
+                <summary class="flex justify-between items-center text-xl font-black text-slate-900 hover:text-blue-600 transition-colors cursor-pointer list-none">
+                    Services
+                    <span class="transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </span>
+                </summary>
+                <div class="mt-4 ml-4 flex flex-col space-y-3">
+                    <a href="{{ url('/services') }}" class="text-base font-bold text-blue-600 hover:text-blue-700 transition-colors">All Services</a>
+                    @foreach($navServices ?? collect() as $service)
+                        <a href="{{ url('/services/' . $service->slug) }}" class="text-base font-semibold text-slate-600 hover:text-blue-600 transition-colors">{{ $service->title }}</a>
+                    @endforeach
+                </div>
+            </details>
+
+            <!-- Industries Dropdown -->
+            <details class="group">
+                <summary class="flex justify-between items-center text-xl font-black text-slate-900 hover:text-blue-600 transition-colors cursor-pointer list-none">
+                    Industries
+                    <span class="transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </span>
+                </summary>
+                <div class="mt-4 ml-4 flex flex-col space-y-3">
+                    <a href="{{ url('/industry') }}" class="text-base font-bold text-blue-600 hover:text-blue-700 transition-colors">All Industries</a>
+                    @foreach($navIndustries ?? collect() as $industry)
+                        <a href="{{ url('/industry/' . $industry->slug) }}" class="text-base font-semibold text-slate-600 hover:text-blue-600 transition-colors">{{ $industry->title }}</a>
+                    @endforeach
+                </div>
+            </details>
+
+            <!-- Technology Dropdown -->
+            <details class="group">
+                <summary class="flex justify-between items-center text-xl font-black text-slate-900 hover:text-blue-600 transition-colors cursor-pointer list-none">
+                    Technology
+                    <span class="transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </span>
+                </summary>
+                <div class="mt-4 ml-4 flex flex-col space-y-4">
+                    <a href="{{ url('/technology') }}" class="text-base font-bold text-blue-600 hover:text-blue-700 transition-colors">All Technologies</a>
+                    @foreach(($navTechnologies ?? collect())->groupBy('category') as $category => $techs)
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-400 uppercase mb-2">{{ $category }}</h5>
+                            <div class="flex flex-col space-y-2 ml-2">
+                                @foreach($techs as $tech)
+                                    <a href="{{ url('/technology/' . $tech->id) }}" class="text-base font-semibold text-slate-600 hover:text-blue-600 transition-colors">{{ $tech->name }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </details>
+
+            <a href="{{ url('/testimonials') }}" class="text-xl font-black text-slate-900 hover:text-blue-600 transition-colors">Testimonials</a>
+            <hr class="border-slate-100 my-4">
+            <a href="{{ url('/contact') }}" class="bg-blue-600 text-white py-4 rounded-2xl text-center text-sm font-black uppercase tracking-widest shadow-xl shadow-blue-200">
+                Contact Us
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-12 text-center">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Follow Us</p>
+            <div class="flex justify-center gap-4">
+                <a href="#" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <main class="pt-20">
+        @yield('content')
+        <div class="h-32 bg-white"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="premium-footer text-slate-300 mt-24">
+        <div class="footer-pattern"></div>
+        
+        <!-- Footer Top Bar -->
+        <div class="footer-top-bar py-6 mb-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="w-12 h-12 rounded-full border border-slate-800 flex items-center justify-center text-blue-500 bg-slate-900/50">
+                            <i class="fa-solid fa-headset text-xl"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg tracking-tight">Elevating Customer Experience.</h3>
+                    </div>
+                    
+                    <div class="flex items-center gap-4 md:gap-8">
+                        <div class="hidden lg:block h-12 w-px bg-slate-800"></div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-white bg-slate-900/50">
+                                <i class="fa-solid fa-phone-volume text-sm"></i>
+                            </div>
+                            <a href="tel:{{ $settings['contact_phone'] ?? '+919274688925' }}" class="phone-pill group py-2 px-6">
+                                <span class="text-blue-500 font-black tracking-wider group-hover:text-white transition-colors text-sm md:text-base">{{ $settings['contact_phone'] ?? '+91 92746 88925' }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 mb-20">
+                <!-- Company Info -->
+                <div class="space-y-8">
+                    <a href="{{ url('/') }}" class="inline-block">
+                        @if(isset($settings['site_logo']))
+                            <img src="{{ Storage::url($settings['site_logo']) }}" alt="Logo" class="h-20 w-auto brightness-0 invert opacity-90">
+                        @else
+                            <div class="flex flex-col">
+                                <span class="text-2xl font-black tracking-tighter text-white">DEVENT<span class="text-blue-600">TECHNOLOGIES</span></span>
+                                <span class="text-[10px] text-blue-500 font-bold tracking-[0.3em] uppercase -mt-1 ml-1">Be unique with Devent</span>
+                            </div>
+                        @endif
+                    </a>
+                    <p class="text-slate-400 text-sm leading-relaxed font-medium">
+                        {{ $settings['about_description'] ?? 'Delivering innovative solutions with a focus on enhancing user experience and operational efficiency. Partner with us to transform your ideas into impactful results.' }}
+                    </p>
+                    <div class="flex gap-3">
+                        @php
+                            $socials = [
+                                'facebook' => 'fa-facebook-f',
+                                'twitter' => 'fa-x-twitter',
+                                'linkedin' => 'fa-linkedin-in',
+                                'instagram' => 'fa-instagram'
+                            ];
+                        @endphp
+                        @foreach($socials as $key => $icon)
+                            @if(isset($settings[$key . '_url']) && $settings[$key . '_url'] != '')
+                                <a href="{{ $settings[$key . '_url'] }}" target="_blank" class="social-btn">
+                                    <i class="fa-brands {{ $icon }}"></i>
+                                </a>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Useful Links -->
+                <div>
+                    <h4 class="text-white text-sm uppercase footer-title">Useful Links</h4>
+                    <ul class="space-y-4">
+                        <li><a href="{{ url('/about') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>About Us</a></li>
+                        <li><a href="{{ url('/contact') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Contact</a></li>
+                        <li><a href="{{ url('/portfolio') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Portfolio</a></li>
+                        <li><a href="{{ url('/services') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Services</a></li>
+                        <li><a href="{{ url('/testimonials') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Testimonials</a></li>
+                        <li><a href="{{ url('/blog') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
+                        <li><a href="{{ url('/careers') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Our Services -->
+                <div>
+                    <h4 class="text-white text-sm uppercase footer-title">Our Services</h4>
+                    <ul class="space-y-4">
+                        @foreach($footerServices ?? [] as $fService)
+                            <li><a href="{{ url('/services/' . $fService->slug) }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>{{ $fService->title }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-white text-sm uppercase footer-title">Newsletter</h4>
+                    <p class="text-slate-400 text-sm mb-6 font-medium leading-relaxed">
+                        Stay updated with our latest news and insights. Subscribe to our newsletter for industry updates, tips, and exclusive offers.
+                    </p>
+                    <form class="relative">
+                        <input type="email" placeholder="Enter Your E-mail" class="newsletter-input w-full py-4 pl-6 pr-16 text-sm text-white focus:outline-none placeholder:text-slate-600">
+                        <button type="submit" class="absolute right-2 top-2 bottom-2 w-12 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all flex items-center justify-center shadow-lg shadow-blue-900/20">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-slate-900 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-semibold text-slate-500">
+                <p>&copy; {{ date('Y') }} <span class="text-blue-500">Devent Technology</span>. All Rights Reserved.</p>
+                <div class="flex items-center gap-8">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <div class="w-px h-4 bg-slate-800"></div>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div id="backToTop" class="back-to-top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </div>
+
+    <script>
+        const nav = document.querySelector('nav');
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+            } else {
+                nav.classList.remove('nav-scrolled');
+            }
+
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileMenuContent = document.getElementById('mobileMenuContent');
+
+        function toggleMenu() {
+            mobileMenuOverlay.classList.toggle('active');
+            mobileMenuContent.classList.toggle('active');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        mobileMenuOverlay.addEventListener('click', toggleMenu);
+    </script>
+
+    <!-- ===== LIVE CHAT WIDGET ===== -->
+    <style>
+        /* Chat Widget Styles */
+        .chat-widget-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4), 0 0 0 0 rgba(37, 99, 235, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: chatPulse 2s infinite;
+        }
+        .chat-widget-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.5);
+        }
+        .chat-widget-btn.active {
+            animation: none;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.4);
+        }
+        .chat-widget-btn .chat-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+        }
+        .chat-widget-btn .chat-badge.show {
+            display: flex;
+        }
+        @keyframes chatPulse {
+            0% { box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4), 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4), 0 0 0 15px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4), 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        /* Chat Window */
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 28px;
+            width: 380px;
+            max-height: 560px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.03);
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .chat-window.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            padding: 20px 20px 16px;
+            color: white;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .chat-header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+        .chat-header-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .chat-header-info h4 {
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+        .chat-header-info p {
+            font-size: 12px;
+            opacity: 0.8;
+            margin: 2px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .chat-online-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34d399;
+            display: inline-block;
+            animation: onlinePulse 2s infinite;
+        }
+        @keyframes onlinePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chat-minimize-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        .chat-minimize-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Chat Messages */
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 340px;
+            min-height: 200px;
+        }
+        .chat-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .chat-msg {
+            display: flex;
+            gap: 8px;
+            animation: chatMsgIn 0.3s ease;
+        }
+        .chat-msg.visitor {
+            flex-direction: row-reverse;
+        }
+        .chat-msg-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+        }
+        .chat-msg.admin .chat-msg-bubble {
+            background: white;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .chat-msg.visitor .chat-msg-bubble {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+        .chat-msg-time {
+            font-size: 10px;
+            margin-top: 4px;
+            opacity: 0.6;
+        }
+        .chat-msg.visitor .chat-msg-time {
+            text-align: right;
+        }
+        @keyframes chatMsgIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Chat Typing */
+        .chat-typing {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+        .chat-typing.show {
+            display: flex;
+        }
+        .chat-typing-dots {
+            display: flex;
+            gap: 3px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-typing-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #94a3b8;
+            animation: typingDot 1.4s infinite;
+        }
+        .chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        /* Chat Input */
+        .chat-footer {
+            padding: 12px 16px;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+            flex-shrink: 0;
+        }
+        .chat-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 4px 4px 4px 16px;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .chat-input-wrap:focus-within {
+            border-color: #2563eb;
+            background: #f8fafc;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .chat-input-wrap input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 13px;
+            color: #1e293b;
+            padding: 8px 0;
+            font-family: 'Outfit', sans-serif;
+        }
+        .chat-input-wrap input::placeholder {
+            color: #94a3b8;
+        }
+        .chat-send-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .chat-send-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: scale(1.05);
+        }
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Welcome screen */
+        .chat-welcome {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        .chat-welcome-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .chat-welcome h5 {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1e293b;
+            margin: 0 0 6px;
+        }
+        .chat-welcome p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Powered by */
+        .chat-powered {
+            text-align: center;
+            padding: 6px;
+            font-size: 10px;
+            color: #94a3b8;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .chat-window {
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+            .chat-widget-btn {
+                bottom: 16px;
+                right: 16px;
+                width: 54px;
+                height: 54px;
+            }
+            .chat-window.open + .chat-widget-btn {
+                display: none;
+            }
+        }
+    </style>
+
+    <!-- Chat Widget HTML -->
+    <div id="chatWindow" class="chat-window">
+        <!-- Header -->
+        <div class="chat-header">
+            <button class="chat-minimize-btn" onclick="toggleChat()">
+                <i class="fa-solid fa-minus"></i>
+            </button>
+            <div class="chat-header-top">
+                <div class="chat-header-avatar">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <div class="chat-header-info">
+                    <h4>Devent Support</h4>
+                    <p><span class="chat-online-dot"></span> We typically reply in minutes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Body -->
+        <div class="chat-body" id="chatBody">
+            <div class="chat-welcome" id="chatWelcome">
+                <div class="chat-welcome-icon">
+                    <i class="fa-regular fa-comments" style="color: #2563eb;"></i>
+                </div>
+                <h5>Hi there! 👋</h5>
+                <p>How can we help you today? Send us a message and we'll get back to you shortly.</p>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="chat-typing" id="chatTyping" style="padding: 0 16px 8px;">
+            <div class="chat-typing-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-footer">
+            <form id="chatForm" class="chat-input-wrap" autocomplete="off">
+                <input type="text" id="chatInput" placeholder="Type a message..." maxlength="1000">
+                <button type="submit" class="chat-send-btn" id="chatSendBtn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="chat-powered">
+            Powered by <strong style="color: #2563eb;">Devent Technology</strong>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button class="chat-widget-btn" id="chatToggleBtn" onclick="toggleChat()">
+        <i class="fa-solid fa-comment-dots" style="font-size: 24px;" id="chatBtnIcon"></i>
+        <span class="chat-badge" id="chatBadge">0</span>
+    </button>
+
+    <!-- Chat Widget Script -->
+    <script>
+    (function() {
+        const chatWindow = document.getElementById('chatWindow');
+        const chatBody = document.getElementById('chatBody');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
+        const chatToggleBtn = document.getElementById('chatToggleBtn');
+        const chatBtnIcon = document.getElementById('chatBtnIcon');
+        const chatBadge = document.getElementById('chatBadge');
+        const chatWelcome = document.getElementById('chatWelcome');
+        const chatTyping = document.getElementById('chatTyping');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        let sessionId = null;
+        let lastMessageId = 0;
+        let isOpen = false;
+        let isSending = false;
+        let pollInterval = null;
+        let unreadCount = 0;
+        let isInitialized = false;
+
+        // Toggle chat window
+        window.toggleChat = function() {
+            isOpen = !isOpen;
+            chatWindow.classList.toggle('open', isOpen);
+            chatToggleBtn.classList.toggle('active', isOpen);
+            
+            if (isOpen) {
+                chatBtnIcon.className = 'fa-solid fa-xmark';
+                chatBtnIcon.style.fontSize = '22px';
+                
+                if (!isInitialized) {
+                    initChat();
+                }
+                
+                // Clear unread
+                unreadCount = 0;
+                chatBadge.classList.remove('show');
+                
+                // Start polling
+                startPolling();
+                
+                setTimeout(() => chatInput.focus(), 300);
+            } else {
+                chatBtnIcon.className = 'fa-solid fa-comment-dots';
+                chatBtnIcon.style.fontSize = '24px';
+                stopPolling();
+            }
+        };
+
+        // Initialize chat session
+        function initChat() {
+            isInitialized = true;
+
+            fetch('{{ url("/chat/start") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({})
+            })
+            .then(r => r.json())
+            .then(data => {
+                sessionId = data.session_id;
+
+                if (data.messages && data.messages.length > 0) {
+                    chatWelcome.style.display = 'none';
+                    data.messages.forEach(msg => {
+                        appendMessage(msg);
+                    });
+                    lastMessageId = data.messages[data.messages.length - 1].id;
+                }
+            })
+            .catch(err => {
+                console.error('Chat init error:', err);
+                isInitialized = false;
+            });
+        }
+
+        // Append message to chat
+        function appendMessage(msg) {
+            const div = document.createElement('div');
+            div.className = `chat-msg ${msg.sender}`;
+            div.innerHTML = `
+                <div class="chat-msg-bubble">
+                    ${escapeHtml(msg.message)}
+                    <div class="chat-msg-time">${msg.time || ''}</div>
+                </div>
+            `;
+            chatBody.appendChild(div);
+            scrollChatDown();
+        }
+
+        function escapeHtml(text) {
+            const d = document.createElement('div');
+            d.textContent = text;
+            return d.innerHTML;
+        }
+
+        function scrollChatDown() {
+            requestAnimationFrame(() => {
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+        }
+
+        // Send message
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message || isSending || !sessionId) return;
+
+            isSending = true;
+            chatSendBtn.disabled = true;
+            chatWelcome.style.display = 'none';
+
+            fetch('{{ url("/chat/send") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ message: message, session_id: sessionId })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    console.warn(data.error);
+                    return;
+                }
+                appendMessage(data);
+                lastMessageId = Math.max(lastMessageId, data.id);
+                chatInput.value = '';
+
+                // Show typing indicator briefly
+                chatTyping.classList.add('show');
+                setTimeout(() => chatTyping.classList.remove('show'), 2000 + Math.random() * 2000);
+            })
+            .catch(err => console.error('Send error:', err))
+            .finally(() => {
+                isSending = false;
+                chatSendBtn.disabled = false;
+                chatInput.focus();
+            });
+        });
+
+        // Poll for admin replies
+        function startPolling() {
+            if (pollInterval) return;
+            pollInterval = setInterval(pollMessages, 3000);
+        }
+
+        function stopPolling() {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+        }
+
+        function pollMessages() {
+            if (!sessionId) return;
+
+            fetch(`{{ url("/chat/messages") }}?session_id=${sessionId}&last_id=${lastMessageId}`, {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.messages && data.messages.length > 0) {
+                    chatTyping.classList.remove('show');
+                    chatWelcome.style.display = 'none';
+
+                    data.messages.forEach(msg => {
+                        appendMessage(msg);
+                        lastMessageId = Math.max(lastMessageId, msg.id);
+                    });
+
+                    // Play notification sound
+                    playNotificationSound();
+
+                    // If chat is closed, show unread badge
+                    if (!isOpen) {
+                        unreadCount += data.messages.length;
+                        chatBadge.textContent = unreadCount;
+                        chatBadge.classList.add('show');
+                    }
+                }
+            })
+            .catch(() => {});
+        }
+
+        function playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.setValueAtTime(1100, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {}
+        }
+
+        // Also poll when chat is closed (for badge updates)
+        setInterval(function() {
+            if (!isOpen && sessionId) {
+                pollMessages();
+            }
+        }, 8000);
+    })();
+    </script>
+</body>
+</html>
