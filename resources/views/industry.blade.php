@@ -28,22 +28,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
                 @forelse($industries as $industry)
-                    <a href="{{ url('/industry/' . $industry->slug) }}" class="group p-10 rounded-[40px] bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-100 transition-all duration-500 hover:-translate-y-2 block">
-                        <div class="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center mb-10 group-hover:bg-[#0052FF] transition-all duration-500 shadow-inner">
+                    <a href="{{ url('/industry/' . $industry->slug) }}" class="premium-card group block">
+                        <div class="premium-card-icon">
                             @if($industry->icon)
-                                <i class="{{ $industry->icon }} text-3xl {{ !str_contains($industry->icon, 'text-') ? 'text-[#0052FF]' : '' }} group-hover:text-white transition-colors duration-500"></i>
+                                <i class="{{ $industry->icon }} text-2xl {{ !str_contains($industry->icon, 'text-') ? 'text-[#0052FF]' : '' }} transition-colors duration-500"></i>
                             @else
-                                <i class="fa-solid fa-layer-group text-3xl text-[#0052FF] group-hover:text-white transition-colors duration-500"></i>
+                                <i class="fa-solid fa-layer-group text-2xl text-[#0052FF] transition-colors duration-500"></i>
                             @endif
                         </div>
-                        <h3 class="text-2xl font-black text-slate-950 mb-6 tracking-tight group-hover:text-[#0052FF] transition-colors">
+                        <h3 class="premium-card-title group-hover:text-[#0052FF] transition-colors">
                             {{ $industry->title }}
                         </h3>
-                        <p class="text-slate-500 leading-relaxed font-medium text-base mb-8">
+                        <p class="premium-card-text mb-8">
                             {{ $industry->description }}
                         </p>
-                        <div class="flex items-center text-[#0052FF] font-bold text-sm tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                            Learn more <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        <div class="flex items-center text-[#0052FF] font-bold text-xs tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                            Learn more <i class="fa-solid fa-arrow-right ml-2 text-[10px]"></i>
                         </div>
                     </a>
                 @empty

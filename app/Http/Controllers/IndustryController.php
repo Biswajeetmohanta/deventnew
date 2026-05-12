@@ -38,7 +38,9 @@ class IndustryController extends Controller
     public function show($slug)
     {
         $industry = Industry::where('slug', $slug)->firstOrFail();
-        return view('industry.show', compact('industry'));
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $otherIndustries = Industry::all();
+        return view('industry.show', compact('industry', 'settings', 'otherIndustries'));
     }
 
     /**

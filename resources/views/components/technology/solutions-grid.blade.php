@@ -1,24 +1,49 @@
-@props(['title', 'subtitle' => '', 'solutions' => []])
+@props(['title', 'subtitle' => '', 'solutions' => [], 'description' => '', 'label' => 'WHAT WE DO'])
 
 @if(count($solutions) > 0)
-<section class="py-20 bg-slate-50">
+<section style="padding: 80px 0; background: #f8fafc;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{{ $title }}</h2>
+        {{-- Header: Label + Title left, Description right --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" style="margin-bottom: 50px;">
+            <div>
+                <span style="color: #6366f1; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; display: block; margin-bottom: 12px;">{{ $label }}</span>
+                <h2 style="font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; color: #0f172a; line-height: 1.2; letter-spacing: -0.02em;">{{ $title }}</h2>
+            </div>
             @if($subtitle)
-                <p class="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">{{ $subtitle }}</p>
+                <div style="display: flex; align-items: center;">
+                    <p style="color: #64748b; font-size: 15px; line-height: 1.7;">{{ $subtitle }}</p>
+                </div>
             @endif
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            @foreach($solutions as $solution)
-                <div class="bg-white p-8 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300 group flex gap-6">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"></path></svg>
+
+        {{-- Solutions Grid --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @php
+                $cardColors = [
+                    ['bg' => '#f0f4ff', 'icon_bg' => 'rgba(99, 102, 241, 0.1)', 'icon_color' => '#6366f1', 'border' => 'rgba(99, 102, 241, 0.1)'],
+                    ['bg' => '#f0f9ff', 'icon_bg' => 'rgba(59, 130, 246, 0.1)', 'icon_color' => '#3b82f6', 'border' => 'rgba(59, 130, 246, 0.1)'],
+                    ['bg' => '#f0fdf4', 'icon_bg' => 'rgba(16, 185, 129, 0.1)', 'icon_color' => '#10b981', 'border' => 'rgba(16, 185, 129, 0.1)'],
+                    ['bg' => '#fdf4ff', 'icon_bg' => 'rgba(168, 85, 247, 0.1)', 'icon_color' => '#a855f7', 'border' => 'rgba(168, 85, 247, 0.1)'],
+                ];
+                $cardIcons = [
+                    'fa-solid fa-globe',
+                    'fa-solid fa-mobile-screen',
+                    'fa-solid fa-database',
+                    'fa-solid fa-brain',
+                    'fa-solid fa-code',
+                    'fa-solid fa-server',
+                    'fa-solid fa-shield-halved',
+                    'fa-solid fa-chart-line',
+                ];
+            @endphp
+            @foreach($solutions as $index => $solution)
+                @php $color = $cardColors[$index % 4]; @endphp
+                <div class="premium-card group">
+                    <div class="premium-card-icon" style="background: {{ $color['icon_bg'] }};">
+                        <i class="{{ $solution['icon'] ?? $cardIcons[$index % count($cardIcons)] }}" style="color: {{ $color['icon_color'] }}; font-size: 20px;"></i>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $solution['title'] }}</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">{{ $solution['description'] }}</p>
-                    </div>
+                    <h3 class="premium-card-title">{{ $solution['title'] ?? '' }}</h3>
+                    <p class="premium-card-text">{{ $solution['description'] ?? '' }}</p>
                 </div>
             @endforeach
         </div>

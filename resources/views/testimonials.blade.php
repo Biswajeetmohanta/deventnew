@@ -24,7 +24,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
                 @forelse($testimonials as $testimonial)
-                    <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-100 transition-all duration-500 flex flex-col h-full">
+                    <div class="premium-card group flex flex-col h-full">
                         <div class="flex mb-8" style="color: #FFB800;">
                             @for($i = 0; $i < ($testimonial->rating ?? 5); $i++)
                                 <i class="fa-solid fa-star"></i>
@@ -45,8 +45,8 @@
                                 </div>
                             @endif
                             <div>
-                                <h4 class="text-lg font-black text-slate-950 leading-tight">{{ $testimonial->client_name }}</h4>
-                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.15em] leading-tight mt-1.5">{{ $testimonial->client_position ?? 'Business Owner' }}</p>
+                                <h4 class="premium-card-title !mb-0">{{ $testimonial->client_name }}</h4>
+                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.15em] leading-tight mt-2">{{ $testimonial->client_position ?? 'Business Owner' }}</p>
                             </div>
                         </div>
                     </div>

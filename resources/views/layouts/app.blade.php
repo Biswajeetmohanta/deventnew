@@ -18,12 +18,183 @@
 
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Calendly link widget css -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
     
     <style>
         body {
             font-family: 'Outfit', sans-serif;
             scroll-behavior: smooth;
         }
+
+        /* Calendly Modal Styles */
+        .calendly-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calendly-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .calendly-modal-content {
+            background: #fff;
+            width: 95%;
+            max-width: 1060px;
+            height: 95vh;
+            max-height: 900px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .calendly-modal-content {
+                width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border-radius: 0;
+            }
+            .calendly-modal-close {
+                top: 10px;
+                right: 10px;
+                background: rgba(255, 255, 255, 0.8);
+            }
+        }
+        .calendly-modal-overlay.active .calendly-modal-content {
+            transform: scale(1);
+        }
+        .calendly-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s;
+            color: #64748b;
+        }
+        .calendly-modal-close:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            border-color: #fecaca;
+            transform: rotate(90deg);
+        }
+        .calendly-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            z-index: 1;
+            transition: opacity 0.5s;
+        }
+        .calendly-loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e0f2fe;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Gradient Button Style */
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white !important;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6);
+            filter: brightness(1.1);
+        }
+
+        /* Global Premium Card System */
+        .premium-card {
+            background: #fff;
+            border: 2px solid #e0f2fe;
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            cursor: pointer;
+        }
+        .premium-card:hover {
+            transform: translateY(-12px);
+            border-color: #3b82f6;
+            box-shadow: 0 30px 60px rgba(59, 130, 246, 0.15);
+            background: #f0f7ff;
+        }
+        .premium-card-icon {
+            width: 56px;
+            height: 56px;
+            background: #eff6ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            border: 1px solid #dbeafe;
+            transition: all 0.3s ease;
+        }
+        .premium-card:hover .premium-card-icon {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            transform: scale(1.1);
+            color: #fff;
+        }
+        .premium-card:hover .premium-card-icon i {
+            color: #fff !important;
+        }
+        .premium-card:hover .premium-card-icon img {
+            filter: brightness(0) invert(1);
+        }
+        .premium-card-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        .premium-card-text {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
         .glass-nav {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
@@ -197,6 +368,7 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
             box-shadow: -20px 0 50px rgba(0, 0, 0, 0.1);
         }
         .mobile-menu-content.active {
@@ -363,13 +535,13 @@
 
         /* Navbar */
         .mega-nav {
-            background: linear-gradient(135deg, #1a3a8f 0%, #1d4ed8 40%, #2563eb 100%);
+            background: linear-gradient(90deg, #020B4F 0%, #04135F 50%, #051A73 100%);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
         }
 
         /* Nav Links */
         .mega-nav .nav-link {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.75);
             font-weight: 500;
             font-size: 0.8125rem;
             letter-spacing: 0.02em;
@@ -533,6 +705,331 @@
         .mega-nav #mobileMenuBtn:hover {
             color: #ffffff;
         }
+
+        /* ===== HERO SECTION STYLES ===== */
+        .hero-section {
+            background: #f8fafc;
+        }
+        .hero-bg-gradient {
+            background: 
+                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(219, 234, 254, 0.6) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 30%, rgba(224, 231, 255, 0.4) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 50% 80%, rgba(219, 234, 254, 0.3) 0%, transparent 60%),
+                linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%);
+            animation: heroGradientShift 12s ease-in-out infinite alternate;
+        }
+        @keyframes heroGradientShift {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        /* Floating Particles */
+        .hero-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1));
+            animation: heroParticleFloat 15s ease-in-out infinite;
+        }
+        .hero-particle-1 { width: 300px; height: 300px; top: -50px; right: -80px; animation-delay: 0s; animation-duration: 18s; }
+        .hero-particle-2 { width: 200px; height: 200px; bottom: -40px; left: -60px; animation-delay: -4s; animation-duration: 20s; background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(59, 130, 246, 0.06)); }
+        .hero-particle-3 { width: 120px; height: 120px; top: 30%; left: 45%; animation-delay: -8s; animation-duration: 14s; }
+        .hero-particle-4 { width: 80px; height: 80px; bottom: 20%; right: 20%; animation-delay: -2s; animation-duration: 16s; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(239, 68, 68, 0.05)); }
+        .hero-particle-5 { width: 150px; height: 150px; top: 10%; left: 10%; animation-delay: -6s; animation-duration: 22s; background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(59, 130, 246, 0.06)); }
+
+        @keyframes heroParticleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(15px, 30px) scale(1.02); }
+        }
+
+        /* Tagline Badge */
+        .hero-tagline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px 8px 14px;
+            background: linear-gradient(135deg, rgba(219, 234, 254, 0.8), rgba(224, 231, 255, 0.6));
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #2563eb;
+            backdrop-filter: blur(10px);
+        }
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: heroBadgePulse 2s ease-in-out infinite;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+        }
+        @keyframes heroBadgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+        }
+
+        /* Gradient Text */
+        .hero-gradient-text {
+            background: linear-gradient(135deg, #0052FF 0%, #6366f1 40%, #8b5cf6 70%, #0052FF 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: heroGradientText 4s ease-in-out infinite alternate;
+        }
+        @keyframes heroGradientText {
+            0% { background-position: 0% center; }
+            100% { background-position: 100% center; }
+        }
+
+        /* Hero CTA Buttons */
+        .hero-cta-primary {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #0052FF 0%, #2563eb 100%);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 30px -8px rgba(0, 82, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-cta-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .hero-cta-primary:hover::before { left: 100%; }
+        .hero-cta-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(0, 82, 255, 0.5);
+            color: white;
+        }
+
+        .hero-cta-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 16px 28px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 30px -8px rgba(37, 211, 102, 0.35);
+            text-decoration: none;
+        }
+        .hero-cta-whatsapp:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+
+        .hero-cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #334155;
+            padding: 16px 28px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .hero-cta-secondary:hover {
+            transform: translateY(-3px);
+            border-color: #3b82f6;
+            color: #2563eb;
+            box-shadow: 0 15px 30px -10px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Hero Image */
+        .hero-image-wrapper {
+            position: relative;
+        }
+        .hero-image-glow {
+            position: absolute;
+            inset: -8px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+            border-radius: 2.5rem;
+            z-index: 0;
+            filter: blur(20px);
+            animation: heroImageGlow 4s ease-in-out infinite alternate;
+        }
+        @keyframes heroImageGlow {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        /* Floating Cards */
+        .hero-stats-card {
+            position: absolute;
+            top: 16px;
+            left: -40px;
+            background: white;
+            padding: 20px 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.12);
+            z-index: 20;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            animation: heroCardFloat 5s ease-in-out infinite;
+        }
+        .hero-rating-badge {
+            position: absolute;
+            bottom: 20px;
+            right: -20px;
+            background: white;
+            padding: 14px 20px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            flex-direction: column;
+            gap: 4px;
+            animation: heroCardFloat 5s ease-in-out infinite;
+            animation-delay: -2.5s;
+        }
+        @keyframes heroCardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .hero-float-reverse {
+            animation: heroFloatReverse 6s ease-in-out infinite;
+        }
+        @keyframes heroFloatReverse {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(15px) rotate(5deg); }
+        }
+
+        /* Hero Trust Badges */
+        .hero-trust-badges {
+            padding-top: 4px;
+            animation: heroFadeInUp 1s ease-out 0.8s both;
+        }
+
+        /* Hero Entrance Animations */
+        .hero-content-left {
+            animation: heroFadeInUp 0.8s ease-out both;
+        }
+        .hero-content-right {
+            animation: heroFadeInUp 0.8s ease-out 0.3s both;
+        }
+        @keyframes heroFadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CTA WhatsApp Button (dark section) */
+        .cta-whatsapp-btn {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+        }
+        .cta-whatsapp-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 35px -8px rgba(37, 211, 102, 0.5);
+            color: white;
+            filter: brightness(1.1);
+        }
+
+        /* Floating WhatsApp Widget */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 28px;
+            right: 100px;
+            z-index: 9996;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: whatsappBounceIn 0.6s ease-out 2s both;
+        }
+        .whatsapp-float-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            animation: whatsappPulse 2.5s infinite;
+        }
+        .whatsapp-float-btn:hover {
+            transform: scale(1.12);
+            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+        .whatsapp-float-label {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #128C7E;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .whatsapp-float:hover .whatsapp-float-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        @keyframes whatsappPulse {
+            0% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.3); }
+            70% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4), 0 0 0 12px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        @keyframes whatsappBounceIn {
+            from { opacity: 0; transform: scale(0.5); }
+            50% { transform: scale(1.1); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Hero responsive tweaks */
+        @media (max-width: 768px) {
+            .hero-stats-card { left: 10px; top: -20px; padding: 14px 18px; }
+            .hero-rating-badge { right: 10px; bottom: -15px; }
+            .hero-cta-primary, .hero-cta-whatsapp, .hero-cta-secondary {
+                padding: 14px 22px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+            .whatsapp-float { right: 28px; }
+            .whatsapp-float-label { display: none; }
+        }
     </style>
 </head>
 <body class="antialiased text-slate-900 bg-white">
@@ -614,7 +1111,29 @@
                                         <div class="mega-col">
                                             <div class="mega-col-header">{{ $category }}</div>
                                             @foreach($techs as $tech)
-                                                <a href="{{ url('/technology/' . $tech->id) }}" class="mega-menu-item">{{ $tech->name }}</a>
+                                                <a href="{{ url('/technology/' . $tech->slug) }}" class="mega-menu-item">{{ $tech->name }}</a>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Build Your Team Mega Menu -->
+                    <div class="mega-menu-trigger flex items-stretch">
+                        <a href="{{ url('/build-your-team') }}" class="nav-link {{ request()->is('build-your-team*') ? 'active' : '' }}">
+                            Build Your Team
+                            <div class="dropdown-arrow"></div>
+                        </a>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-inner">
+                                <div class="mega-dropdown-grid">
+                                    @foreach(($navTeamRoles ?? collect())->chunk(ceil(($navTeamRoles ?? collect())->count() / 3)) as $index => $chunk)
+                                        <div class="mega-col">
+                                            <div class="mega-col-header">Hiring Roles</div>
+                                            @foreach($chunk as $role)
+                                                <a href="{{ url('/build-your-team/' . $role->slug) }}" class="mega-menu-item">{{ $role->title }}</a>
                                             @endforeach
                                         </div>
                                     @endforeach
@@ -627,9 +1146,14 @@
                         <a href="{{ url('/testimonials') }}" class="nav-link {{ request()->is('testimonials*') ? 'active' : '' }}">Testimonials</a>
                     </div>
                     
-                    <div class="flex items-center ml-6">
-                        <a href="{{ url('/contact') }}" class="nav-cta-btn">
+                    <div class="flex items-center ml-6 gap-3">
+                        <button onclick="openCalendlyModal()" class="border border-white/30 hover:border-white/80 hover:bg-white hover:text-slate-900 hover:scale-[1.02] text-white px-4 py-2 rounded-2xl text-[0.8125rem] font-medium tracking-wide transition-all self-center flex items-center bg-transparent">
+                            <i class="fa-solid fa-calendar mr-2"></i>
+                            Schedule Meeting
+                        </button>
+                        <a href="{{ url('/contact') }}" class="btn-gradient text-white px-4 py-2 rounded-2xl text-[0.8125rem] font-medium tracking-wide transition-all self-center flex items-center">
                             Contact Us
+                            <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
                 </div>
@@ -709,7 +1233,7 @@
                             <h5 class="text-xs font-bold text-slate-400 uppercase mb-2">{{ $category }}</h5>
                             <div class="flex flex-col space-y-2 ml-2">
                                 @foreach($techs as $tech)
-                                    <a href="{{ url('/technology/' . $tech->id) }}" class="text-base font-semibold text-slate-600 hover:text-blue-600 transition-colors">{{ $tech->name }}</a>
+                                    <a href="{{ url('/technology/' . $tech->slug) }}" class="text-base font-semibold text-slate-600 hover:text-blue-600 transition-colors">{{ $tech->name }}</a>
                                 @endforeach
                             </div>
                         </div>
@@ -717,8 +1241,28 @@
                 </div>
             </details>
 
+            <!-- Build Your Team Dropdown -->
+            <details class="group">
+                <summary class="flex justify-between items-center text-xl font-black text-slate-900 hover:text-blue-600 transition-colors cursor-pointer list-none">
+                    Build Your Team
+                    <span class="transition-transform group-open:rotate-180">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </span>
+                </summary>
+                <div class="mt-4 ml-4 flex flex-col space-y-3">
+                    <a href="{{ url('/build-your-team') }}" class="text-base font-bold text-blue-600 hover:text-blue-700 transition-colors">All Roles</a>
+                    @foreach($navTeamRoles ?? collect() as $role)
+                        <a href="{{ url('/build-your-team/' . $role->slug) }}" class="text-base font-semibold text-slate-600 hover:text-blue-600 transition-colors">{{ $role->title }}</a>
+                    @endforeach
+                </div>
+            </details>
+
             <a href="{{ url('/testimonials') }}" class="text-xl font-black text-slate-900 hover:text-blue-600 transition-colors">Testimonials</a>
             <hr class="border-slate-100 my-4">
+            <button onclick="openCalendlyModal()" class="border-2 border-blue-600 text-blue-600 py-4 rounded-2xl text-center text-sm font-black uppercase tracking-widest hover:bg-blue-50 transition-all flex items-center justify-center gap-2 mb-3">
+                <i class="fa-solid fa-calendar"></i>
+                Schedule Meeting
+            </button>
             <a href="{{ url('/contact') }}" class="bg-blue-600 text-white py-4 rounded-2xl text-center text-sm font-black uppercase tracking-widest shadow-xl shadow-blue-200">
                 Contact Us
             </a>
@@ -736,11 +1280,10 @@
 
     <main class="pt-20">
         @yield('content')
-        <div class="h-32 bg-white"></div>
     </main>
 
     <!-- Footer -->
-    <footer class="premium-footer text-slate-300 mt-24">
+    <footer class="premium-footer text-slate-300 mt-12">
         <div class="footer-pattern"></div>
         
         <!-- Footer Top Bar -->
@@ -779,7 +1322,7 @@
                         @else
                             <div class="flex flex-col">
                                 <span class="text-2xl font-black tracking-tighter text-white">DEVENT<span class="text-blue-600">TECHNOLOGIES</span></span>
-                                <span class="text-[10px] text-blue-500 font-bold tracking-[0.3em] uppercase -mt-1 ml-1">Be unique with Devent</span>
+                                <span class="text-[10px] text-blue-500 font-bold tracking-[0.3em] uppercase -mt-1 ml-1">{{ $settings['hero_tagline'] ?? 'Innovative Tech Solutions' }}</span>
                             </div>
                         @endif
                     </a>
@@ -815,6 +1358,7 @@
                         <li><a href="{{ url('/services') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Services</a></li>
                         <li><a href="{{ url('/testimonials') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Testimonials</a></li>
                         <li><a href="{{ url('/blog') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
+                        <li><a href="{{ url('/build-your-team') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Build Your Team</a></li>
                         <li><a href="{{ url('/careers') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
                     </ul>
                 </div>
@@ -857,6 +1401,20 @@
     </footer>
     <div id="backToTop" class="back-to-top">
         <i class="fa-solid fa-arrow-up"></i>
+    </div>
+
+    <!-- Floating Meeting Button -->
+    <button onclick="openCalendlyModal()" class="fixed bottom-7 left-7 z-[9997] btn-gradient text-white px-5 py-3 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-105 font-bold text-sm">
+        <i class="fa-solid fa-calendar-alt mr-2"></i>
+        Book a Meeting
+    </button>
+
+    <!-- Floating WhatsApp Button -->
+    <div class="whatsapp-float">
+        <span class="whatsapp-float-label">Chat with us!</span>
+        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_phone'] ?? '919274688925') }}?text={{ urlencode('Hi Devent Technology! I\'d like to discuss a project.') }}" target="_blank" class="whatsapp-float-btn" aria-label="Chat on WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
     </div>
 
     <script>
@@ -1549,6 +2107,66 @@
             }
         }, 8000);
     })();
+    </script>
+    <!-- Calendly Modal -->
+    <div id="calendlyModal" class="calendly-modal-overlay">
+        <div class="calendly-modal-content">
+            <button class="calendly-modal-close" onclick="closeCalendlyModal()">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <!-- Loader -->
+            <div id="calendlyLoader" class="calendly-loader">
+                <div class="spinner"></div>
+                <p class="text-slate-600 font-medium">Loading scheduler...</p>
+            </div>
+            
+            <!-- Calendly inline widget -->
+            <div class="calendly-inline-widget" data-url="https://calendly.com/jyoti-deventtechnology/30min" style="min-width:320px;height:100%;"></div>
+        </div>
+    </div>
+
+    <!-- Calendly Modal Script -->
+    <script>
+        function openCalendlyModal() {
+            const modal = document.getElementById('calendlyModal');
+            const loader = document.getElementById('calendlyLoader');
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Disable scroll
+            
+            // Hide loader after a delay (or listen to Calendly event if possible, but delay is safer for static embed)
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 2000);
+        }
+
+        function closeCalendlyModal() {
+            const modal = document.getElementById('calendlyModal');
+            const loader = document.getElementById('calendlyLoader');
+            
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Enable scroll
+            
+            // Reset loader for next open
+            setTimeout(() => {
+                loader.classList.remove('fade-out');
+            }, 400);
+        }
+
+        // Close on outside click
+        document.getElementById('calendlyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalendlyModal();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCalendlyModal();
+            }
+        });
     </script>
 </body>
 </html>

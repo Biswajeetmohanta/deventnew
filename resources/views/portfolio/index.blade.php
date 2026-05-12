@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($portfolios as $portfolio)
-                    <div class="group relative overflow-hidden rounded-[40px] bg-white shadow-lg hover:shadow-2xl transition-all duration-700">
+                    <div class="premium-card group !p-0 overflow-hidden">
                         <div class="aspect-w-16 aspect-h-12 overflow-hidden">
                              @if($portfolio->image)
                                 <img src="{{ Storage::url($portfolio->image) }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
@@ -23,10 +23,10 @@
                                 <div class="w-full h-64 bg-slate-200"></div>
                              @endif
                         </div>
-                        <div class="p-8">
-                            <div class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-3">{{ $portfolio->client }}</div>
-                            <h3 class="text-2xl font-bold text-slate-950 mb-4 group-hover:text-blue-600 transition-colors">{{ $portfolio->title }}</h3>
-                            <a href="{{ url('/portfolio/' . $portfolio->slug) }}" class="inline-flex items-center text-sm font-bold text-slate-900 group-hover:text-blue-600">
+                        <div class="p-10">
+                            <div class="text-[10px] font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{{ $portfolio->client }}</div>
+                            <h3 class="premium-card-title group-hover:text-blue-600 transition-colors">{{ $portfolio->title }}</h3>
+                            <a href="{{ url('/portfolio/' . $portfolio->slug) }}" class="inline-flex items-center text-sm font-bold text-slate-900 group-hover:text-blue-600 mt-2">
                                 View Case Study <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 12h16"></path></svg>
                             </a>
                         </div>

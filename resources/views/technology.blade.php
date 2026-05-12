@@ -31,15 +31,15 @@
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
                         @foreach($items as $tech)
-                            <a href="{{ url('/technology/' . $tech->id) }}" class="group p-8 rounded-3xl bg-white border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-100 transition-all duration-500 text-center block">
-                                <div class="h-20 flex items-center justify-center mb-6 transition-all duration-500 transform group-hover:scale-110">
+                            <a href="{{ url('/technology/' . $tech->slug) }}" class="premium-card group text-center block">
+                                <div class="premium-card-icon mx-auto transition-all duration-500 transform group-hover:scale-110">
                                     @if($tech->logo)
-                                        <img src="{{ Storage::url($tech->logo) }}" alt="{{ $tech->name }}" class="h-12 w-auto object-contain">
+                                        <img src="{{ Storage::url($tech->logo) }}" alt="{{ $tech->name }}" class="h-10 w-auto object-contain">
                                     @else
-                                        <i class="fa-solid fa-code text-4xl text-slate-300"></i>
+                                        <i class="fa-solid fa-code text-3xl text-slate-300"></i>
                                     @endif
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-widest">{{ $tech->name }}</h3>
+                                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">{{ $tech->name }}</h3>
                             </a>
                         @endforeach
                     </div>

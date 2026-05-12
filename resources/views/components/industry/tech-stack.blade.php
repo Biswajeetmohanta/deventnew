@@ -1,17 +1,14 @@
-@props(['title', 'frameworks' => []])
+@props(['title', 'tech_stack' => []])
 
-@if(count($frameworks) > 0)
-<section class="py-20 bg-white">
+@if(count($tech_stack) > 0)
+<section style="padding: 80px 0; background: #fff;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 text-center mb-16">{{ $title }}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            @foreach($frameworks as $framework)
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 hover:border-amber-100 hover:shadow-xl transition-all duration-300 group text-center">
-                    <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mb-4 mx-auto group-hover:bg-amber-600 group-hover:text-white transition-all duration-300">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">{{ $framework['title'] }}</h3>
-                    <p class="text-slate-600 text-xs leading-relaxed">{{ $framework['description'] }}</p>
+        <h2 style="font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800; color: #0f172a; text-align: center; margin-bottom: 50px;">{{ $title }}</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            @foreach($tech_stack as $tool)
+                <div style="background: #f8fafc; padding: 24px 20px; border-radius: 14px; border: 1px solid #e2e8f0; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='translateY(-3px)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)';">
+                    <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">{{ $tool['title'] ?? '' }}</h3>
+                    <p style="font-size: 12px; color: #64748b;">{{ $tool['description'] ?? '' }}</p>
                 </div>
             @endforeach
         </div>

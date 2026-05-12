@@ -1,19 +1,36 @@
 @props(['title', 'features' => []])
 
 @if(count($features) > 0)
-<section class="py-20 bg-white">
+<section style="padding: 80px 0; background: #fff;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{{ $title }}</h2>
+        {{-- Section Header --}}
+        <div style="margin-bottom: 50px;">
+            <div style="width: 40px; height: 3px; background: #3b82f6; border-radius: 2px; margin-bottom: 20px;"></div>
+            <h2 style="font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800; color: #0f172a; line-height: 1.2; letter-spacing: -0.02em;">{{ $title }}</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach($features as $feature)
-                <div class="bg-white p-8 rounded-2xl border border-slate-100 hover:border-amber-100 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+
+        {{-- Features Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @php
+                $featureIcons = [
+                    'fa-solid fa-window-restore',
+                    'fa-solid fa-plug',
+                    'fa-solid fa-cart-shopping',
+                    'fa-solid fa-palette',
+                    'fa-solid fa-gauge-high',
+                    'fa-solid fa-cloud',
+                    'fa-solid fa-lock',
+                    'fa-solid fa-rocket',
+                    'fa-solid fa-gears',
+                ];
+            @endphp
+            @foreach($features as $index => $feature)
+                <div class="premium-card group">
+                    <div class="premium-card-icon" style="background: #f0f4ff;">
+                        <i class="{{ $feature['icon'] ?? $featureIcons[$index % count($featureIcons)] }}" style="color: #6366f1; font-size: 22px;"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">{{ $feature['title'] }}</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">{{ $feature['description'] }}</p>
+                    <h3 class="premium-card-title">{{ $feature['title'] ?? '' }}</h3>
+                    <p class="premium-card-text">{{ $feature['description'] ?? '' }}</p>
                 </div>
             @endforeach
         </div>

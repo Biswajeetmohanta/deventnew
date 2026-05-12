@@ -40,5 +40,10 @@ class AppServiceProvider extends ServiceProvider
             $navTechnologies = \App\Models\Technology::where('is_active', true)->get();
             view()->share('navTechnologies', $navTechnologies);
         }
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('team_roles')) {
+            $navTeamRoles = \App\Models\TeamRole::where('is_active', true)->orderBy('order')->get();
+            view()->share('navTeamRoles', $navTeamRoles);
+        }
     }
 }

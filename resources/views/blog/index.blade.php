@@ -25,7 +25,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 @forelse($posts as $post)
-                    <div class="group bg-white rounded-[40px] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-100 transition-all duration-500 hover:-translate-y-2">
+                    <div class="premium-card group !p-0 overflow-hidden">
                         <div class="relative h-64 overflow-hidden">
                             @if($post->image)
                                 <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
@@ -39,17 +39,17 @@
                             </div>
                         </div>
                         <div class="p-10">
-                            <div class="flex items-center gap-4 text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">
+                            <div class="flex items-center gap-4 text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-6">
                                 <span class="flex items-center gap-2"><i class="fa-regular fa-calendar text-[#0052FF]"></i> {{ $post->created_at->format('M d, Y') }}</span>
                             </div>
-                            <h3 class="text-2xl font-black text-slate-950 mb-6 tracking-tight group-hover:text-[#0052FF] transition-colors line-clamp-2">
+                            <h3 class="premium-card-title !text-2xl group-hover:text-[#0052FF] transition-colors line-clamp-2">
                                 <a href="{{ url('/blog/'.$post->slug) }}">{{ $post->title }}</a>
                             </h3>
-                            <p class="text-slate-500 leading-relaxed font-medium text-base mb-8 line-clamp-3">
+                            <p class="premium-card-text line-clamp-3 mb-8">
                                 {{ Str::limit(strip_tags($post->content), 120) }}
                             </p>
-                            <a href="{{ url('/blog/'.$post->slug) }}" class="flex items-center text-[#0052FF] font-bold text-sm tracking-wider uppercase group/link">
-                                Read More <i class="fa-solid fa-arrow-right ml-2 text-xs group-hover/link:translate-x-1 transition-transform"></i>
+                            <a href="{{ url('/blog/'.$post->slug) }}" class="flex items-center text-[#0052FF] font-bold text-xs tracking-wider uppercase group/link">
+                                Read More <i class="fa-solid fa-arrow-right ml-2 text-[10px] group-hover/link:translate-x-1 transition-transform"></i>
                             </a>
                         </div>
                     </div>

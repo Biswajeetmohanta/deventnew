@@ -52,6 +52,14 @@
                         <label for="banner_subtitle" class="text-xs">Banner Subtitle</label>
                         <input type="text" name="banner_subtitle" id="banner_subtitle" value="{{ old('banner_subtitle') }}" placeholder="e.g. Build high-performance cross-platform apps.">
                     </div>
+                    <div>
+                        <label for="banner_badge" class="text-xs">Banner Badge (with emoji)</label>
+                        <input type="text" name="banner_badge" id="banner_badge" value="{{ old('banner_badge') }}" placeholder="e.g. ⚡ Python Development Excellence">
+                    </div>
+                    <div>
+                        <label for="banner_video_url" class="text-xs">Banner Video URL</label>
+                        <input type="text" name="banner_video_url" id="banner_video_url" value="{{ old('banner_video_url') }}" placeholder="e.g. https://youtube.com/...">
+                    </div>
                 </div>
             </div>
 
@@ -95,6 +103,17 @@
                         <label for="about_description" class="text-xs">About Description</label>
                         <textarea name="about_description" id="about_description" rows="3">{{ old('about_description') }}</textarea>
                     </div>
+                    <div>
+                        <label for="detailed_overview" class="text-xs">Detailed Overview (Longer text)</label>
+                        <textarea name="detailed_overview" id="detailed_overview" rows="5">{{ old('detailed_overview') }}</textarea>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="text-xs font-semibold text-slate-600 mb-2 block">Key Highlights (Checklist)</label>
+                    <div id="highlights-container" class="space-y-2">
+                        <!-- Rows added via JS -->
+                    </div>
+                    <button type="button" onclick="addHighlightRow()" class="mt-2 text-sm text-blue-600 hover:text-blue-700 font-semibold">+ Add Highlight</button>
                 </div>
             </div>
 
@@ -104,6 +123,10 @@
                 <div class="mb-4">
                     <label for="solutions_title" class="text-xs">Section Title</label>
                     <input type="text" name="solutions_title" id="solutions_title" value="{{ old('solutions_title') }}" placeholder="e.g. Our React Native Services">
+                </div>
+                <div class="mb-4">
+                    <label for="solutions_label" class="text-xs">Section Label</label>
+                    <input type="text" name="solutions_label" id="solutions_label" value="{{ old('solutions_label') }}" placeholder="e.g. WHAT WE DO">
                 </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-600 mb-2 block">Solutions</label>
@@ -168,6 +191,10 @@
             <!-- 9. Industries We Serve -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">9. Industries We Serve</h5>
+                <div class="mb-4">
+                    <label for="industries_title" class="text-xs">Section Title</label>
+                    <input type="text" name="industries_title" id="industries_title" value="{{ old('industries_title') }}" placeholder="e.g. Industries We Serve">
+                </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-600 mb-2 block">Industries</label>
                     <div id="industries_served-container" class="space-y-2">
@@ -180,6 +207,10 @@
             <!-- 10. Engagement Models -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">10. Engagement Models</h5>
+                <div class="mb-4">
+                    <label for="engagement_title" class="text-xs">Section Title</label>
+                    <input type="text" name="engagement_title" id="engagement_title" value="{{ old('engagement_title') }}" placeholder="e.g. Flexible Engagement Models">
+                </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-600 mb-2 block">Models</label>
                     <div id="engagement_models-container" class="space-y-2">
@@ -219,6 +250,10 @@
             <!-- 13. Tech Stack -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">13. Technology Stack / Tools</h5>
+                <div class="mb-4">
+                    <label for="tech_stack_title" class="text-xs">Section Title</label>
+                    <input type="text" name="tech_stack_title" id="tech_stack_title" value="{{ old('tech_stack_title') }}" placeholder="e.g. Technology Stack & Tools">
+                </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-600 mb-2 block">Tools</label>
                     <div id="tech_stack-container" class="space-y-2">
@@ -231,6 +266,10 @@
             <!-- 14. FAQs -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">14. FAQs</h5>
+                <div class="mb-4">
+                    <label for="faqs_title" class="text-xs">Section Title</label>
+                    <input type="text" name="faqs_title" id="faqs_title" value="{{ old('faqs_title') }}" placeholder="e.g. Frequently Asked Questions">
+                </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-600 mb-2 block">FAQs</label>
                     <div id="faqs-container" class="space-y-2">
@@ -243,6 +282,10 @@
             <!-- 15. Testimonials -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">15. Testimonials</h5>
+                <div class="mb-4">
+                    <label for="testimonials_title" class="text-xs">Section Title</label>
+                    <input type="text" name="testimonials_title" id="testimonials_title" value="{{ old('testimonials_title') }}" placeholder="e.g. Client Success Stories">
+                </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-600 mb-2 block">Testimonials</label>
                     <div id="testimonials-container" class="space-y-2">
@@ -254,7 +297,7 @@
 
             <!-- 16. CTA -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
-                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">16. CTA Section</h5>
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">16. CTA Section (Footer)</h5>
                 <div class="space-y-4">
                     <div>
                         <label for="cta_title" class="text-xs">CTA Title</label>
@@ -267,6 +310,37 @@
                     <div>
                         <label for="cta_button" class="text-xs">Button Text</label>
                         <input type="text" name="cta_button" id="cta_button" value="{{ old('cta_button') }}" placeholder="e.g. Let's Talk">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 17. Advantages -->
+            <div class="bg-slate-50 p-6 rounded-2xl mb-6">
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">17. Advantages (Why Choose This Tech)</h5>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 mb-2 block">Advantages</label>
+                    <div id="advantages-container" class="space-y-2">
+                        <!-- Rows added via JS -->
+                    </div>
+                    <button type="button" onclick="addRow('advantages')" class="mt-2 text-sm text-blue-600 hover:text-blue-700 font-semibold">+ Add Advantage</button>
+                </div>
+            </div>
+
+            <!-- 18. Expert Consultation -->
+            <div class="bg-slate-50 p-6 rounded-2xl mb-6">
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">18. Expert Consultation</h5>
+                <div class="space-y-4">
+                    <div>
+                        <label for="expert_title" class="text-xs">Title</label>
+                        <input type="text" name="expert_title" id="expert_title" value="{{ old('expert_title') }}" placeholder="e.g. Talk to Our Technology Experts">
+                    </div>
+                    <div>
+                        <label for="expert_description" class="text-xs">Description</label>
+                        <textarea name="expert_description" id="expert_description" rows="3">{{ old('expert_description') }}</textarea>
+                    </div>
+                    <div>
+                        <label for="expert_button" class="text-xs">Button Text</label>
+                        <input type="text" name="expert_button" id="expert_button" value="{{ old('expert_button') }}" placeholder="e.g. Schedule a Call">
                     </div>
                 </div>
             </div>
@@ -326,6 +400,19 @@ function addRow(section, isTestimonial = false) {
         `;
     }
     
+    const div = document.createElement('div');
+    div.innerHTML = html.trim();
+    container.appendChild(div.firstChild);
+}
+
+function addHighlightRow() {
+    const container = document.getElementById('highlights-container');
+    const html = `
+        <div class="flex gap-2 row-item relative">
+            <input type="text" name="highlights[]" class="text-sm py-1 w-full" placeholder="e.g. New Feature">
+            <button type="button" onclick="this.closest('.row-item').remove()" class="bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-200">×</button>
+        </div>
+    `;
     const div = document.createElement('div');
     div.innerHTML = html.trim();
     container.appendChild(div.firstChild);

@@ -31,6 +31,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mt-10">
+                        <button onclick="openCalendlyModal()" class="btn-gradient text-white px-8 py-4 rounded-xl font-bold flex items-center shadow-xl shadow-blue-200">
+                            Schedule a Call Directly
+                            <i class="fa-solid fa-calendar-check ml-3"></i>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="bg-slate-50 p-10 md:p-16 rounded-[40px] border border-slate-200 shadow-2xl shadow-blue-50">

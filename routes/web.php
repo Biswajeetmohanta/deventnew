@@ -34,6 +34,7 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function () {
     Route::resource('posts', AdminPostController::class);
     Route::resource('industries', \App\Http\Controllers\Admin\IndustryController::class);
     Route::resource('technologies', \App\Http\Controllers\Admin\TechnologyController::class);
+    Route::resource('team-roles', \App\Http\Controllers\Admin\TeamRoleController::class);
 
     // Global Settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
@@ -57,8 +58,10 @@ Route::get('/portfolio/{slug}', [PortfolioController::class, 'show']);
 Route::get('/industry', [\App\Http\Controllers\IndustryController::class, 'index']);
 Route::get('/industry/{slug}', [\App\Http\Controllers\IndustryController::class, 'show']);
 Route::get('/technology', [\App\Http\Controllers\TechnologyController::class, 'index']);
-Route::get('/technology/{id}', [\App\Http\Controllers\TechnologyController::class, 'show']);
+Route::get('/technology/{slug}', [\App\Http\Controllers\TechnologyController::class, 'show']);
 Route::get('/testimonials', [\App\Http\Controllers\TestimonialController::class, 'index']);
+Route::get('/build-your-team', [\App\Http\Controllers\TeamRoleController::class, 'index']);
+Route::get('/build-your-team/{slug}', [\App\Http\Controllers\TeamRoleController::class, 'show']);
 Route::get('/contact', [ContactController::class, 'index']);
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/about', [AboutController::class, 'index']);

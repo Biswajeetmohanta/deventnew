@@ -270,8 +270,8 @@ Dedicated Team of Experts
                         @php $faqs = $service->content_data['faqs'] ?? []; @endphp
                         @foreach($faqs as $i => $item)
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-white rounded-lg border border-slate-100 row-item relative">
-                                <input type="text" name="faqs[{{ $i }}][title]" value="{{ $item['title'] }}" class="text-sm py-1 w-full" placeholder="e.g. What is the timeline?">
-                                <input type="text" name="faqs[{{ $i }}][description]" value="{{ $item['description'] }}" class="text-sm py-1 w-full" placeholder="e.g. It depends on scope.">
+                                <input type="text" name="faqs[{{ $i }}][title]" value="{{ $item['title'] ?? $item['question'] ?? '' }}" class="text-sm py-1 w-full" placeholder="e.g. What is the timeline?">
+                                <input type="text" name="faqs[{{ $i }}][description]" value="{{ $item['description'] ?? $item['answer'] ?? '' }}" class="text-sm py-1 w-full" placeholder="e.g. It depends on scope.">
                                 <button type="button" onclick="this.closest('.row-item').remove()" class="absolute -right-2 -top-2 bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-200">×</button>
                             </div>
                         @endforeach

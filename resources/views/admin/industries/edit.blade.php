@@ -43,14 +43,41 @@
                         <label for="banner_subtitle" class="text-xs">Banner Subtitle</label>
                         <input type="text" name="banner_subtitle" id="banner_subtitle" value="{{ old('banner_subtitle', $industry->content_data['banner']['subtitle'] ?? '') }}" placeholder="e.g. Scalable solutions for modern retail.">
                     </div>
+                    <div>
+                        <label for="banner_badge" class="text-xs">Banner Badge</label>
+                        <input type="text" name="banner_badge" id="banner_badge" value="{{ old('banner_badge', $industry->content_data['banner']['badge'] ?? '') }}" placeholder="e.g. ⚡ FINTECH EXCELLENCE">
+                    </div>
+                    <div>
+                        <label for="banner_video_url" class="text-xs">Banner Video URL (Youtube/Vimeo)</label>
+                        <input type="text" name="banner_video_url" id="banner_video_url" value="{{ old('banner_video_url', $industry->content_data['banner']['video_url'] ?? '') }}" placeholder="https://youtube.com/...">
+                    </div>
                 </div>
-                <div>
-                    <label for="highlights_raw" class="text-xs">Bullet Highlights (one per line)</label>
+                <div class="mb-4">
+                    <label for="highlights_raw" class="text-xs">Banner Highlights (one per line)</label>
                     <textarea name="highlights_raw" id="highlights_raw" rows="4" placeholder="e.g.
 Custom E-commerce Platforms
 POS Integration
 Omnichannel Solutions">@if(isset($industry->content_data['highlights']))@foreach($industry->content_data['highlights'] as $h){{ $h }}
 @endforeach @endif</textarea>
+                </div>
+            </div>
+
+            <!-- 1b. About / Detailed Overview -->
+            <div class="bg-slate-50 p-6 rounded-2xl mb-6">
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">1b. About Section</h5>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="about_title" class="text-xs">About Section Title</label>
+                        <input type="text" name="about_title" id="about_title" value="{{ old('about_title', $industry->content_data['about']['title'] ?? '') }}" placeholder="e.g. Strategic Digital Transformation">
+                    </div>
+                    <div>
+                        <label for="about_description" class="text-xs">About Description</label>
+                        <textarea name="about_description" id="about_description" rows="3">{{ old('about_description', $industry->content_data['about']['description'] ?? '') }}</textarea>
+                    </div>
+                </div>
+                <div>
+                    <label for="detailed_overview" class="text-xs">Detailed Overview (Sidebar/Bottom)</label>
+                    <textarea name="detailed_overview" id="detailed_overview" rows="4">{{ old('detailed_overview', $industry->content_data['about']['detailed_overview'] ?? '') }}</textarea>
                 </div>
             </div>
 
@@ -80,7 +107,11 @@ Omnichannel Solutions">@if(isset($industry->content_data['highlights']))@foreach
             <!-- 3. Solutions / Services -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">3. Solutions / Services</h5>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="solutions_label" class="text-xs">Solutions Label (Small Text)</label>
+                        <input type="text" name="solutions_label" id="solutions_label" value="{{ old('solutions_label', $industry->content_data['solutions_label'] ?? '') }}" placeholder="e.g. WHAT WE DO">
+                    </div>
                     <div>
                         <label for="solutions_title" class="text-xs">Section Title</label>
                         <input type="text" name="solutions_title" id="solutions_title" value="{{ old('solutions_title', $industry->content_data['solutions_title'] ?? '') }}" placeholder="e.g. Comprehensive E-commerce Solutions">
@@ -144,26 +175,45 @@ Omnichannel Solutions">@if(isset($industry->content_data['highlights']))@foreach
                 </div>
             </div>
 
-            <!-- 5. Frameworks / Tech Stack -->
+            <!-- 5. Technology Stack -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
                 <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">5. Technology Stack</h5>
                 <div class="mb-4">
-                    <label for="frameworks_title" class="text-xs">Section Title</label>
-                    <input type="text" name="frameworks_title" id="frameworks_title" value="{{ old('frameworks_title', $industry->content_data['frameworks_title'] ?? '') }}" placeholder="e.g. Technologies We Specialize In">
+                    <label for="tech_stack_title" class="text-xs">Section Title</label>
+                    <input type="text" name="tech_stack_title" id="tech_stack_title" value="{{ old('tech_stack_title', $industry->content_data['tech_stack_title'] ?? '') }}" placeholder="e.g. Our Fintech Tech Stack">
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-600 mb-2 block">Frameworks</label>
-                    <div id="frameworks-container" class="space-y-2">
-                        @php $frameworks = $industry->content_data['frameworks'] ?? []; @endphp
-                        @foreach($frameworks as $i => $item)
+                    <label class="text-xs font-semibold text-slate-600 mb-2 block">Tools / Frameworks</label>
+                    <div id="tech_stack-container" class="space-y-2">
+                        @php $tech_stack = $industry->content_data['tech_stack'] ?? []; @endphp
+                        @foreach($tech_stack as $i => $item)
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-white rounded-lg border border-slate-100 row-item relative">
-                                <input type="text" name="frameworks[{{ $i }}][title]" value="{{ $item['title'] }}" class="text-sm py-1 w-full" placeholder="e.g. Magento">
-                                <input type="text" name="frameworks[{{ $i }}][description]" value="{{ $item['description'] }}" class="text-sm py-1 w-full" placeholder="e.g. E-commerce platform.">
+                                <input type="text" name="tech_stack[{{ $i }}][title]" value="{{ $item['title'] }}" class="text-sm py-1 w-full" placeholder="e.g. Backend">
+                                <input type="text" name="tech_stack[{{ $i }}][description]" value="{{ $item['description'] }}" class="text-sm py-1 w-full" placeholder="e.g. Java, Python, Go">
                                 <button type="button" onclick="this.closest('.row-item').remove()" class="absolute -right-2 -top-2 bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-200">×</button>
                             </div>
                         @endforeach
                     </div>
-                    <button type="button" onclick="addRow('frameworks')" class="mt-2 text-sm text-blue-600 hover:text-blue-700 font-semibold">+ Add Framework</button>
+                    <button type="button" onclick="addRow('tech_stack')" class="mt-2 text-sm text-blue-600 hover:text-blue-700 font-semibold">+ Add Tech Stack Item</button>
+                </div>
+            </div>
+
+            <!-- 5b. Key Advantages -->
+            <div class="bg-slate-50 p-6 rounded-2xl mb-6">
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">5b. Key Advantages</h5>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 mb-2 block">Advantages</label>
+                    <div id="advantages-container" class="space-y-2">
+                        @php $advantages = $industry->content_data['advantages'] ?? []; @endphp
+                        @foreach($advantages as $i => $item)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-white rounded-lg border border-slate-100 row-item relative">
+                                <input type="text" name="advantages[{{ $i }}][title]" value="{{ $item['title'] }}" class="text-sm py-1 w-full" placeholder="e.g. Cost Efficiency">
+                                <input type="text" name="advantages[{{ $i }}][description]" value="{{ $item['description'] }}" class="text-sm py-1 w-full" placeholder="e.g. Reducing operational costs.">
+                                <button type="button" onclick="this.closest('.row-item').remove()" class="absolute -right-2 -top-2 bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-200">×</button>
+                            </div>
+                        @endforeach
+                    </div>
+                    <button type="button" onclick="addRow('advantages')" class="mt-2 text-sm text-blue-600 hover:text-blue-700 font-semibold">+ Add Advantage</button>
                 </div>
             </div>
 
@@ -188,7 +238,7 @@ Omnichannel Solutions">@if(isset($industry->content_data['highlights']))@foreach
 
             <!-- 7. Why Choose Us -->
             <div class="bg-slate-50 p-6 rounded-2xl mb-6">
-                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">7. Why Choose Us</h5>
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">7. Why Choose Us (Stats Banner)</h5>
                 <div class="mb-4">
                     <label for="why_choose_title" class="text-xs">Section Title</label>
                     <input type="text" name="why_choose_title" id="why_choose_title" value="{{ old('why_choose_title', $industry->content_data['why_choose']['title'] ?? '') }}" placeholder="e.g. Why Partner with Devent?">
@@ -213,6 +263,25 @@ Expert Developers
 On-time Delivery
 Scalable Architecture">@if(isset($industry->content_data['why_choose_points']))@foreach($industry->content_data['why_choose_points'] as $h){{ $h }}
 @endforeach @endif</textarea>
+                </div>
+            </div>
+
+            <!-- 7b. Expert Consultation -->
+            <div class="bg-slate-50 p-6 rounded-2xl mb-6">
+                <h5 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">7b. Expert Consultation</h5>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="expert_consultation_title" class="text-xs">Section Title</label>
+                        <input type="text" name="expert_consultation_title" id="expert_consultation_title" value="{{ old('expert_consultation_title', $industry->content_data['expert_consultation']['title'] ?? '') }}">
+                    </div>
+                    <div>
+                        <label for="expert_consultation_button" class="text-xs">Button Text</label>
+                        <input type="text" name="expert_consultation_button" id="expert_consultation_button" value="{{ old('expert_consultation_button', $industry->content_data['expert_consultation']['button'] ?? '') }}">
+                    </div>
+                </div>
+                <div>
+                    <label for="expert_consultation_description" class="text-xs">Description</label>
+                    <textarea name="expert_consultation_description" id="expert_consultation_description" rows="3">{{ old('expert_consultation_description', $industry->content_data['expert_consultation']['description'] ?? '') }}</textarea>
                 </div>
             </div>
 

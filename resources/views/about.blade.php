@@ -124,12 +124,12 @@
                     ['Quality', 'We never compromise on the excellence of our deliverables.'],
                     ['Integrity', 'We build trust through transparency and honest communication.']
                 ] as $value)
-                    <div class="bg-white p-12 rounded-[40px] shadow-sm hover:shadow-xl transition-all duration-500">
-                        <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-8">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="premium-card group">
+                        <div class="premium-card-icon group-hover:bg-blue-600 transition-all duration-500">
+                            <svg class="w-7 h-7 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         </div>
-                        <h4 class="text-2xl font-bold text-slate-950 mb-4">{{ $value[0] }}</h4>
-                        <p class="text-slate-600 leading-relaxed">{{ $value[1] }}</p>
+                        <h4 class="premium-card-title">{{ $value[0] }}</h4>
+                        <p class="premium-card-text">{{ $value[1] }}</p>
                     </div>
                 @endforeach
             </div>

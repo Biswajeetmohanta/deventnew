@@ -1,36 +1,42 @@
-@props(['title', 'subtitle' => '', 'steps' => [], 'image' => ''])
+@props(['title', 'steps' => [], 'image' => ''])
 
 @if(count($steps) > 0)
-<section class="py-20 bg-slate-50">
+<section style="padding: 80px 0; background: #f8fafc;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{{ $title }}</h2>
-            @if($subtitle)
-                <p class="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">{{ $subtitle }}</p>
-            @endif
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {{-- Left Side: Timeline --}}
             <div>
+                <div style="margin-bottom: 40px;">
+                    <div style="width: 40px; height: 3px; background: #3b82f6; border-radius: 2px; margin-bottom: 20px;"></div>
+                    <h2 style="font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800; color: #0f172a; line-height: 1.2;">{{ $title }}</h2>
+                </div>
+
+                <div style="position: relative; padding-left: 32px; border-left: 2px dashed #e2e8f0;">
+                    @foreach($steps as $index => $step)
+                        <div style="position: relative; margin-bottom: 40px; {{ $loop->last ? 'margin-bottom: 0;' : '' }}">
+                            {{-- Timeline Dot --}}
+                            <div style="position: absolute; left: -41px; top: 0; width: 16px; height: 16px; background: #fff; border: 3px solid #3b82f6; border-radius: 50%; z-index: 1;"></div>
+                            
+                            <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">{{ $step['title'] ?? '' }}</h3>
+                            <p style="font-size: 14px; color: #64748b; line-height: 1.6;">{{ $step['description'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Right Side: Image/Visual --}}
+            <div class="hidden lg:block">
                 @if($image)
-                    <img src="{{ Storage::url($image) }}" alt="Process" class="w-full h-[450px] object-cover rounded-3xl shadow-lg sticky top-32">
+                    <div style="position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1);">
+                        <img src="{{ asset('storage/' . $image) }}" alt="Our Process" style="width: 100%; height: auto; display: block;">
+                    </div>
                 @else
-                    <div class="w-full h-[450px] bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl flex items-center justify-center sticky top-32">
-                        <svg class="w-24 h-24 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    <div style="background: #fff; border-radius: 24px; padding: 40px; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center;">
+                        <i class="fa-solid fa-diagram-project" style="font-size: 80px; color: #eff6ff; margin-bottom: 20px; display: block;"></i>
+                        <h4 style="font-size: 18px; font-weight: 700; color: #0f172a;">Structured Workflow</h4>
+                        <p style="font-size: 14px; color: #64748b;">We follow a rigorous development lifecycle to ensure quality delivery.</p>
                     </div>
                 @endif
-            </div>
-            <div class="space-y-4">
-                @foreach($steps as $index => $step)
-                    <div class="bg-white border border-slate-100 rounded-2xl p-6 hover:shadow-lg hover:border-amber-100 transition-all duration-300 flex gap-4 items-start">
-                        <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                            {{ $index + 1 }}
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-900 mb-2">{{ $step['title'] }}</h4>
-                            <p class="text-slate-600 text-sm leading-relaxed">{{ $step['description'] }}</p>
-                        </div>
-                    </div>
-                @endforeach
             </div>
         </div>
     </div>

@@ -119,10 +119,12 @@ class TechnologyController extends Controller
         }
 
         // 1. Hero/Banner
-        if ($request->filled('banner_title') || $request->filled('banner_subtitle')) {
+        if ($request->filled('banner_title') || $request->filled('banner_subtitle') || $request->filled('banner_badge') || $request->filled('banner_video_url')) {
             $cd['banner'] = [
                 'title' => $request->banner_title ?? '',
                 'subtitle' => $request->banner_subtitle ?? '',
+                'badge' => $request->banner_badge ?? '',
+                'video_url' => $request->banner_video_url ?? '',
             ];
         }
 
@@ -140,16 +142,28 @@ class TechnologyController extends Controller
         }
 
         // 4. About Technology
-        if ($request->filled('about_title') || $request->filled('about_description')) {
+        if ($request->filled('about_title') || $request->filled('about_description') || $request->filled('detailed_overview')) {
             $cd['about'] = [
                 'title' => $request->about_title ?? '',
                 'description' => $request->about_description ?? '',
+                'detailed_overview' => $request->detailed_overview ?? '',
             ];
+        }
+
+        // 4b. Key Highlights
+        if ($request->has('highlights')) {
+            $cd['highlights'] = array_filter($request->highlights, function($item) {
+                return !empty(trim($item ?? ''));
+            });
+            $cd['highlights'] = array_values($cd['highlights']);
         }
 
         // 5. Services/Solutions
         if ($request->filled('solutions_title')) {
             $cd['solutions_title'] = $request->solutions_title;
+        }
+        if ($request->filled('solutions_label')) {
+            $cd['solutions_label'] = $request->solutions_label;
         }
         if ($request->has('solutions')) {
             $cd['solutions'] = array_filter($request->solutions, function($item) {
@@ -189,6 +203,9 @@ class TechnologyController extends Controller
         }
 
         // 9. Industries We Serve
+        if ($request->filled('industries_title')) {
+            $cd['industries_title'] = $request->industries_title;
+        }
         if ($request->has('industries_served')) {
             $cd['industries_served'] = array_filter($request->industries_served, function($item) {
                 return !empty(trim($item['title'] ?? ''));
@@ -197,6 +214,9 @@ class TechnologyController extends Controller
         }
 
         // 10. Engagement Models
+        if ($request->filled('engagement_title')) {
+            $cd['engagement_title'] = $request->engagement_title;
+        }
         if ($request->has('engagement_models')) {
             $cd['engagement_models'] = array_filter($request->engagement_models, function($item) {
                 return !empty(trim($item['title'] ?? ''));
@@ -221,6 +241,9 @@ class TechnologyController extends Controller
         }
 
         // 13. Technology Stack/Tools
+        if ($request->filled('tech_stack_title')) {
+            $cd['tech_stack_title'] = $request->tech_stack_title;
+        }
         if ($request->has('tech_stack')) {
             $cd['tech_stack'] = array_filter($request->tech_stack, function($item) {
                 return !empty(trim($item['title'] ?? ''));
@@ -229,6 +252,9 @@ class TechnologyController extends Controller
         }
 
         // 14. FAQs
+        if ($request->filled('faqs_title')) {
+            $cd['faqs_title'] = $request->faqs_title;
+        }
         if ($request->has('faqs')) {
             $cd['faqs'] = array_filter($request->faqs, function($item) {
                 return !empty(trim($item['title'] ?? ''));
@@ -237,6 +263,9 @@ class TechnologyController extends Controller
         }
 
         // 15. Testimonials
+        if ($request->filled('testimonials_title')) {
+            $cd['testimonials_title'] = $request->testimonials_title;
+        }
         if ($request->has('testimonials')) {
             $cd['testimonials'] = array_filter($request->testimonials, function($item) {
                 return !empty(trim($item['title'] ?? ''));
@@ -250,6 +279,23 @@ class TechnologyController extends Controller
                 'title' => $request->cta_title ?? '',
                 'subtitle' => $request->cta_subtitle ?? '',
                 'button' => $request->cta_button ?? 'Contact Us',
+            ];
+        }
+
+        // 17. Advantages (Why Businesses Choose)
+        if ($request->has('advantages')) {
+            $cd['advantages'] = array_filter($request->advantages, function($item) {
+                return !empty(trim($item['title'] ?? ''));
+            });
+            $cd['advantages'] = array_values($cd['advantages']);
+        }
+
+        // 18. Expert Consultation
+        if ($request->filled('expert_title') || $request->filled('expert_description')) {
+            $cd['expert_consultation'] = [
+                'title' => $request->expert_title ?? '',
+                'description' => $request->expert_description ?? '',
+                'button' => $request->expert_button ?? 'Schedule a Call',
             ];
         }
 

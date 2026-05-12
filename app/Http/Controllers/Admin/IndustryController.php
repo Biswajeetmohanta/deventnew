@@ -119,10 +119,54 @@ class IndustryController extends Controller
         }
 
         // Banner
-        if ($request->filled('banner_title') || $request->filled('banner_subtitle')) {
+        if ($request->filled('banner_title') || $request->filled('banner_subtitle') || $request->filled('banner_badge')) {
             $cd['banner'] = [
                 'title' => $request->banner_title ?? '',
                 'subtitle' => $request->banner_subtitle ?? '',
+                'badge' => $request->banner_badge ?? '',
+                'video_url' => $request->banner_video_url ?? '',
+            ];
+        }
+
+        // About / Detailed Overview
+        if ($request->filled('about_title') || $request->filled('about_description') || $request->filled('detailed_overview')) {
+            $cd['about'] = [
+                'title' => $request->about_title ?? '',
+                'description' => $request->about_description ?? '',
+                'detailed_overview' => $request->detailed_overview ?? '',
+            ];
+        }
+
+        // Solutions Label
+        if ($request->filled('solutions_label')) {
+            $cd['solutions_label'] = $request->solutions_label;
+        }
+
+        // Advantages
+        if ($request->has('advantages')) {
+            $cd['advantages'] = array_filter($request->advantages, function($item) {
+                return !empty(trim($item['title'] ?? ''));
+            });
+            $cd['advantages'] = array_values($cd['advantages']);
+        }
+
+        // Tech Stack
+        if ($request->filled('tech_stack_title')) {
+            $cd['tech_stack_title'] = $request->tech_stack_title;
+        }
+        if ($request->has('tech_stack')) {
+            $cd['tech_stack'] = array_filter($request->tech_stack, function($item) {
+                return !empty(trim($item['title'] ?? ''));
+            });
+            $cd['tech_stack'] = array_values($cd['tech_stack']);
+        }
+
+        // Expert Consultation
+        if ($request->filled('expert_consultation_title')) {
+            $cd['expert_consultation'] = [
+                'title' => $request->expert_consultation_title ?? '',
+                'description' => $request->expert_consultation_description ?? '',
+                'button' => $request->expert_consultation_button ?? 'Schedule a Free Consultation',
             ];
         }
 
