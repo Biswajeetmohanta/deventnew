@@ -59,7 +59,7 @@
                 <div style="position: relative;">
                     <div style="position: relative; z-index: 2; border-radius: 40px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.1);">
                         @if(isset($cd['about_image']))
-                            <img src="{{ asset('storage/' . $cd['about_image']) }}" style="width: 100%; height: 600px; object-fit: cover;">
+                            <img src="{{ asset('storage/' . $cd['about_image']) }}" style="width: 100%; height: auto; max-height: 600px; object-fit: contain; background: #f8fafc;">
                         @else
                             <div style="width: 100%; height: 600px; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); display: flex; align-items: center; justify-content: center;">
                                 <i class="fa-solid fa-user-tie text-9xl text-slate-300"></i>

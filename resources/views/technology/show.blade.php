@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         @if(isset($cd['intro_image']))
-                            <img src="{{ Storage::url($cd['intro_image']) }}" alt="{{ $cd['intro']['title'] }}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 16px; margin-bottom: 40px;">
+                            <img src="{{ Storage::url($cd['intro_image']) }}" alt="{{ $cd['intro']['title'] }}" style="width: 100%; height: auto; max-height: 300px; object-fit: contain; background: #f8fafc; border-radius: 16px; margin-bottom: 40px;">
                         @endif
                     @endif
 

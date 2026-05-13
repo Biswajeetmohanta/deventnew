@@ -59,7 +59,7 @@
             <div class="hidden lg:block" style="position: relative;">
                 @if($image)
                     <div style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.4);">
-                        <img src="{{ asset('storage/' . $image) }}" alt="{{ $title }}" style="width: 100%; height: 400px; object-fit: cover;">
+                        <img src="{{ asset('storage/' . $image) }}" alt="{{ $title }}" style="width: 100%; height: auto; max-height: 400px; object-fit: contain; background: rgba(255,255,255,0.05);">
                     </div>
                 @else
                     <div style="width: 100%; height: 400px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
