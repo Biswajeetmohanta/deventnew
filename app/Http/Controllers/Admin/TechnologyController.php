@@ -33,6 +33,7 @@ class TechnologyController extends Controller
         ]);
 
         $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
         $data['content_data'] = $this->buildContentData($request);
 
         if ($request->hasFile('logo')) {
@@ -60,6 +61,7 @@ class TechnologyController extends Controller
         ]);
 
         $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
         $data['content_data'] = $this->buildContentData($request, $technology);
 
         if ($request->hasFile('logo')) {

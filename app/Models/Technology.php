@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Technology extends Model
 {
-    protected $fillable = ['name', 'logo', 'category', 'is_active', 'description', 'content_data'];
+    protected $fillable = ['name', 'slug', 'logo', 'category', 'is_active', 'description', 'content_data'];
 
     protected $casts = [
         'content_data' => 'array',
