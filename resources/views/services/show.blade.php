@@ -52,7 +52,7 @@
                     @php $approachImage = $service->image; @endphp
                     @if($approachImage)
                         <div style="position: relative; border-radius: 30px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);">
-                            <img src="{{ asset('storage/' . $approachImage) }}" alt="{{ $service->title }}" style="width: 100%; height: 500px; object-fit: cover;">
+                            <img src="{{ asset('storage/' . $approachImage) }}" alt="{{ $service->title }}" style="width: 100%; height: auto;">
                             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15, 23, 42, 0.4), transparent);"></div>
                         </div>
                     @else
@@ -121,7 +121,7 @@
                     @php $whyImage = $cd['why_choose_image'] ?? $service->image; @endphp
                     @if($whyImage)
                         <div style="position: relative; border-radius: 30px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.12);">
-                            <img src="{{ asset('storage/' . $whyImage) }}" alt="Why Choose Us" style="width: 100%; height: 550px; object-fit: cover;">
+                            <img src="{{ asset('storage/' . $whyImage) }}" alt="Why Choose Us" style="width: 100%; height: auto;">
                             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);"></div>
                         </div>
                     @else
@@ -250,7 +250,7 @@
                     <a href="{{ url('/blog/' . $post->slug) }}" style="text-decoration: none; group" class="group">
                         <div style="position: relative; border-radius: 24px; overflow: hidden; margin-bottom: 24px; aspect-ratio: 16/10; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
                             @if($post->image)
-                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" class="group-hover:scale-110">
+                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: contain; background: #f8fafc; transition: transform 0.5s ease;" class="group-hover:scale-110">
                             @else
                                 <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); display: flex; align-items: center; justify-content: center;">
                                     <i class="fa-solid fa-newspaper" style="font-size: 40px; color: rgba(255,255,255,0.1);"></i>
