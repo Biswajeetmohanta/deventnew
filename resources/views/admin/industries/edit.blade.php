@@ -226,8 +226,8 @@ Omnichannel Solutions">@if(isset($industry->content_data['highlights']))@foreach
                         @php $faqs = $industry->content_data['faqs'] ?? []; @endphp
                         @foreach($faqs as $i => $item)
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-white rounded-lg border border-slate-100 row-item relative">
-                                <input type="text" name="faqs[{{ $i }}][title]" value="{{ $item['title'] }}" class="text-sm py-1 w-full" placeholder="e.g. How long does it take?">
-                                <input type="text" name="faqs[{{ $i }}][description]" value="{{ $item['description'] }}" class="text-sm py-1 w-full" placeholder="e.g. It depends on features.">
+                                <input type="text" name="faqs[{{ $i }}][title]" value="{{ $item['title'] ?? $item['question'] ?? '' }}" class="text-sm py-1 w-full" placeholder="e.g. How long does it take?">
+                                <input type="text" name="faqs[{{ $i }}][description]" value="{{ $item['description'] ?? $item['answer'] ?? '' }}" class="text-sm py-1 w-full" placeholder="e.g. It depends on features.">
                                 <button type="button" onclick="this.closest('.row-item').remove()" class="absolute -right-2 -top-2 bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-200">×</button>
                             </div>
                         @endforeach
