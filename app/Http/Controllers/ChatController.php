@@ -120,10 +120,20 @@ class ChatController extends Controller
      */
     private function processBackgroundTasks($msg, $session)
     {
-        // 1. Send Email Notification
+        // 1. Send Email Notification (Always send this for every visitor message)
         $this->sendEmailNotification($msg, $session);
 
-        // 2. Auto-reply logic
+        // 2. Prevent duplicate auto-replies (Debounce check)
+        $recentAdminMsg = ChatMessage::where('chat_session_id', $session->id)
+            ->where('sender', 'admin')
+            ->where('created_at', '>=', now()->subSeconds(2))
+            ->exists();
+            
+        if ($recentAdminMsg) {
+            return;
+        }
+
+        // 3. Auto-reply logic
         $aiEnabled = \App\Models\Setting::where('key', 'chatbot_ai_enabled')->value('value');
         $apiKey = \App\Models\Setting::where('key', 'gemini_api_key')->value('value');
         $autoReplySent = false;
@@ -179,8 +189,10 @@ class ChatController extends Controller
                 'is_read' => false,
             ]);
         } else {
-            // Keyword Replies
-            $keywords = \App\Models\ChatAutoReply::where('is_active', true)->get();
+            // Keyword Replies - Sort by length descending to match longest phrases first
+            $keywords = \App\Models\ChatAutoReply::where('is_active', true)
+                ->orderByRaw('LENGTH(keyword) DESC')
+                ->get();
             foreach ($keywords as $keyword) {
                 if (stripos($msg->message, $keyword->keyword) !== false) {
                     ChatMessage::create([
