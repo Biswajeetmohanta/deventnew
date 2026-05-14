@@ -29,6 +29,15 @@ class SettingController extends Controller
             'twitter_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
             'instagram_url' => 'nullable|url',
+            'chatbot_ai_enabled' => 'nullable|string',
+            'gemini_api_key' => 'nullable|string|max:255',
+            'chatbot_notification_email' => 'nullable|email',
+            'mail_host' => 'nullable|string',
+            'mail_port' => 'nullable|string',
+            'mail_username' => 'nullable|string',
+            'mail_password' => 'nullable|string',
+            'mail_encryption' => 'nullable|string',
+            'mail_from_address' => 'nullable|email',
         ]);
 
         $inputs = $request->except('_token');

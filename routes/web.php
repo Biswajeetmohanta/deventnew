@@ -47,6 +47,7 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function () {
     Route::post('/chats/{id}/reply', [\App\Http\Controllers\Admin\ChatController::class, 'reply'])->name('chats.reply');
     Route::get('/chats/{id}/poll', [\App\Http\Controllers\Admin\ChatController::class, 'getNewMessages'])->name('chats.poll');
     Route::post('/chats/{id}/close', [\App\Http\Controllers\Admin\ChatController::class, 'close'])->name('chats.close');
+    Route::resource('chat-auto-replies', \App\Http\Controllers\Admin\ChatAutoReplyController::class);
 });
 
 // Frontend Routes

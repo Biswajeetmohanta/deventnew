@@ -44,6 +44,12 @@
                 <i class="fa-solid fa-microchip mr-3 text-lg"></i>
                 Technology Page
             </button>
+            <button @click="activeTab = 'chatbot'" 
+                :class="activeTab === 'chatbot' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-200' : 'bg-white text-slate-600 hover:bg-slate-50'"
+                class="w-full flex items-center px-6 py-4 rounded-2xl transition-all duration-300 font-bold text-sm">
+                <i class="fa-solid fa-robot mr-3 text-lg"></i>
+                Chatbot Settings
+            </button>
         </div>
 
         <!-- Settings Content -->
@@ -306,6 +312,95 @@
                                     </div>
                                 </div>
                             @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chatbot Settings -->
+                <div x-show="activeTab === 'chatbot'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="glass p-8 rounded-[2.5rem] shadow-xl border-slate-100">
+                    <div class="flex items-center mb-10">
+                        <div class="w-12 h-12 bg-cyan-50 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-robot text-cyan-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">Chatbot Settings</h3>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Automatic replies configuration</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label for="chatbot_ai_enabled">Enable AI Responses</label>
+                            <select name="chatbot_ai_enabled" id="chatbot_ai_enabled">
+                                <option value="0" {{ ($settings['chatbot_ai_enabled'] ?? '0') == '0' ? 'selected' : '' }}>Disabled</option>
+                                <option value="1" {{ ($settings['chatbot_ai_enabled'] ?? '0') == '1' ? 'selected' : '' }}>Enabled</option>
+                            </select>
+                            <p class="mt-2 text-xs text-slate-400">When enabled, the chatbot will use Gemini API to generate responses.</p>
+                        </div>
+                        <div>
+                            <label for="gemini_api_key">Gemini API Key</label>
+                            <input type="text" name="gemini_api_key" id="gemini_api_key" value="{{ $settings['gemini_api_key'] ?? '' }}" placeholder="Enter your Gemini API key">
+                            <p class="mt-2 text-xs text-slate-400">Required if AI Responses are enabled. You can get a free key from Google AI Studio.</p>
+                        </div>
+                        
+                        <hr class="border-slate-100 my-8">
+                        
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-envelope-open-text text-indigo-600"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Email Notifications</h4>
+                        </div>
+                        
+                        <div>
+                            <label for="chatbot_notification_email">Notification Recipient Email</label>
+                            <input type="email" name="chatbot_notification_email" id="chatbot_notification_email" value="{{ $settings['chatbot_notification_email'] ?? '' }}" placeholder="e.g. jyoti@deventtechnology.com">
+                            <p class="mt-2 text-xs text-slate-400">New visitor messages will be sent to this email.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-3xl mt-6">
+                            <div class="md:col-span-2">
+                                <h5 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">SMTP Configuration (For Sending)</h5>
+                            </div>
+                            <div>
+                                <label for="mail_host" class="text-xs">SMTP Host</label>
+                                <input type="text" name="mail_host" id="mail_host" value="{{ $settings['mail_host'] ?? '' }}" placeholder="e.g. smtp.gmail.com">
+                            </div>
+                            <div>
+                                <label for="mail_port" class="text-xs">SMTP Port</label>
+                                <input type="text" name="mail_port" id="mail_port" value="{{ $settings['mail_port'] ?? '' }}" placeholder="e.g. 465 or 587">
+                            </div>
+                            <div>
+                                <label for="mail_username" class="text-xs">SMTP Username</label>
+                                <input type="text" name="mail_username" id="mail_username" value="{{ $settings['mail_username'] ?? '' }}" placeholder="e.g. your-email@gmail.com">
+                            </div>
+                            <div>
+                                <label for="mail_password" class="text-xs">SMTP Password / App Password</label>
+                                <input type="password" name="mail_password" id="mail_password" value="{{ $settings['mail_password'] ?? '' }}" placeholder="Enter password">
+                            </div>
+                            <div>
+                                <label for="mail_encryption" class="text-xs">Encryption</label>
+                                <select name="mail_encryption" id="mail_encryption">
+                                    <option value="tls" {{ ($settings['mail_encryption'] ?? 'tls') == 'tls' ? 'selected' : '' }}>TLS (Port 587)</option>
+                                    <option value="ssl" {{ ($settings['mail_encryption'] ?? 'tls') == 'ssl' ? 'selected' : '' }}>SSL (Port 465)</option>
+                                    <option value="none" {{ ($settings['mail_encryption'] ?? 'tls') == 'none' ? 'selected' : '' }}>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="mail_from_address" class="text-xs">Send From Address</label>
+                                <input type="email" name="mail_from_address" id="mail_from_address" value="{{ $settings['mail_from_address'] ?? '' }}" placeholder="e.g. noreply@devent.com">
+                            </div>
+                        </div>
+                        
+                        <hr class="border-slate-100 my-8">
+                        
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">Keyword Replies</h4>
+                            <p class="text-xs text-slate-500 mb-4">You can manage fixed replies based on keywords in the dedicated section.</p>
+                            <a href="{{ route('admin.chat-auto-replies.index') }}" class="inline-flex items-center text-sm font-bold text-blue-600 hover:text-blue-700">
+                                <i class="fa-solid fa-list-check mr-2"></i>
+                                Manage Keyword Replies
+                            </a>
                         </div>
                     </div>
                 </div>

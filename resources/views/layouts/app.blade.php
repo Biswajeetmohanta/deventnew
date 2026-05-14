@@ -1981,6 +1981,14 @@
             chatSendBtn.disabled = true;
             chatWelcome.style.display = 'none';
 
+            // Instant UI update (Optimistic)
+            appendMessage({
+                message: message,
+                sender: 'visitor',
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            chatInput.value = '';
+
             fetch('{{ url("/chat/send") }}', {
                 method: 'POST',
                 headers: {
@@ -1996,11 +2004,10 @@
                     console.warn(data.error);
                     return;
                 }
-                appendMessage(data);
+                // Update lastMessageId for polling
                 lastMessageId = Math.max(lastMessageId, data.id);
-                chatInput.value = '';
 
-                // Show typing indicator briefly
+                // Show typing indicator for AI/Admin response
                 chatTyping.classList.add('show');
                 setTimeout(() => chatTyping.classList.remove('show'), 2000 + Math.random() * 2000);
             })
