@@ -1896,6 +1896,7 @@
                 chatBtnIcon.style.fontSize = '22px';
                 
                 if (!isInitialized) {
+                    isInitialized = true;
                     initChat();
                 }
                 

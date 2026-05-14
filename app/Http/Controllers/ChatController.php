@@ -28,13 +28,15 @@ class ChatController extends Controller
                 'status' => 'active',
             ]);
 
-            // Send welcome message
-            ChatMessage::create([
-                'chat_session_id' => $session->id,
-                'message' => 'Hi! Welcome to Devent Technology. How can we help you today?',
-                'sender' => 'admin',
-                'is_read' => false,
-            ]);
+            // Send welcome message ONLY if session has no messages
+            if ($session->messages()->count() === 0) {
+                ChatMessage::create([
+                    'chat_session_id' => $session->id,
+                    'message' => 'Hi! Welcome to Devent Technology. How can we help you today?',
+                    'sender' => 'admin',
+                    'is_read' => false,
+                ]);
+            }
 
             $session->update(['last_message_at' => now()]);
         }
@@ -124,12 +126,12 @@ class ChatController extends Controller
         $this->sendEmailNotification($msg, $session);
 
         // 2. Prevent duplicate auto-replies (Debounce check)
-        $recentAdminMsg = ChatMessage::where('chat_session_id', $session->id)
+        $lastAdminMsg = ChatMessage::where('chat_session_id', $session->id)
             ->where('sender', 'admin')
-            ->where('created_at', '>=', now()->subSeconds(2))
-            ->exists();
+            ->latest()
+            ->first();
             
-        if ($recentAdminMsg) {
+        if ($lastAdminMsg && $lastAdminMsg->created_at->diffInSeconds(now()) < 5) {
             return;
         }
 
