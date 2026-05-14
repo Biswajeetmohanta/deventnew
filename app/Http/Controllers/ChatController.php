@@ -196,7 +196,8 @@ class ChatController extends Controller
                 ->orderByRaw('LENGTH(keyword) DESC')
                 ->get();
             foreach ($keywords as $keyword) {
-                if (stripos($msg->message, $keyword->keyword) !== false) {
+                // Use regex word boundary to prevent "hi" matching inside "this" or "white"
+                if (preg_match('/\b' . preg_quote($keyword->keyword, '/') . '\b/i', $msg->message) || stripos($msg->message, $keyword->keyword) !== false) {
                     ChatMessage::create([
                         'chat_session_id' => $session->id,
                         'message' => $keyword->reply,
@@ -228,28 +229,30 @@ class ChatController extends Controller
         try {
             $notifyEmail = \App\Models\Setting::where('key', 'chatbot_notification_email')->value('value');
             if ($notifyEmail) {
-                $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
-                $mail->isSMTP();
-                $mail->Host       = \App\Models\Setting::where('key', 'mail_host')->value('value') ?? 'smtp.gmail.com';
-                $mail->SMTPAuth   = true;
-                $mail->Username   = \App\Models\Setting::where('key', 'mail_username')->value('value') ?? 'perfectpicels@gmail.com';
-                $mail->Password   = \App\Models\Setting::where('key', 'mail_password')->value('value') ?? 'ewshzqepcqlzhwrk';
-                $mail->SMTPSecure = \App\Models\Setting::where('key', 'mail_encryption')->value('value') ?? 'ssl';
-                $mail->Port       = \App\Models\Setting::where('key', 'mail_port')->value('value') ?? 465;
+                // Use Laravel's built-in Mail system instead of PHPMailer
+                $mailConfig = [
+                    'transport' => 'smtp',
+                    'host' => \App\Models\Setting::where('key', 'mail_host')->value('value') ?? 'smtp.gmail.com',
+                    'port' => \App\Models\Setting::where('key', 'mail_port')->value('value') ?? 465,
+                    'encryption' => \App\Models\Setting::where('key', 'mail_encryption')->value('value') ?? 'ssl',
+                    'username' => \App\Models\Setting::where('key', 'mail_username')->value('value') ?? 'perfectpicels@gmail.com',
+                    'password' => \App\Models\Setting::where('key', 'mail_password')->value('value') ?? 'ewshzqepcqlzhwrk',
+                    'timeout' => null,
+                ];
 
                 $fromAddress = \App\Models\Setting::where('key', 'mail_from_address')->value('value') ?? 'perfectpicels@gmail.com';
                 $siteName = \App\Models\Setting::where('key', 'site_name')->value('value') ?? 'Devent Chatbot';
-                $mail->setFrom($fromAddress, $siteName);
-                $mail->addAddress($notifyEmail);
 
-                $mail->isHTML(true);
-                $mail->Subject = 'New Message from Website Chatbot';
-                $html = view('emails.chat_notification', ['chatMessage' => $msg, 'chatSession' => $session])->render();
-                $mail->Body = $html;
-                $mail->send();
+                config([
+                    'mail.mailers.smtp' => $mailConfig,
+                    'mail.from.address' => $fromAddress,
+                    'mail.from.name' => $siteName,
+                ]);
+
+                \Illuminate\Support\Facades\Mail::to($notifyEmail)->send(new \App\Mail\ChatMessageNotification($msg, $session));
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Chatbot PHPMailer Error: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Chatbot Email Error: ' . $e->getMessage());
         }
     }
 
@@ -299,6 +302,7 @@ class ChatController extends Controller
         $messages = $session->messages()
             ->where('id', '>', $lastId)
             ->where('sender', 'admin')
+            ->where('is_read', false)
             ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($msg) {
