@@ -229,8 +229,13 @@ class ChatController extends Controller
         try {
             $notifyEmail = \App\Models\Setting::where('key', 'chatbot_notification_email')->value('value');
             if ($notifyEmail) {
-                // Use Laravel's built-in Mail system instead of PHPMailer
-                $mailConfig = [
+                // Send Email Notification
+
+                $fromAddress = \App\Models\Setting::where('key', 'mail_from_address')->value('value') ?? 'perfectpicels@gmail.com';
+                $siteName = \App\Models\Setting::where('key', 'site_name')->value('value') ?? 'Devent Chatbot';
+
+                // Use Mail::build() to dynamically configure the mailer without affecting global config
+                $mailer = \Illuminate\Support\Facades\Mail::build([
                     'transport' => 'smtp',
                     'host' => \App\Models\Setting::where('key', 'mail_host')->value('value') ?? 'smtp.gmail.com',
                     'port' => \App\Models\Setting::where('key', 'mail_port')->value('value') ?? 465,
@@ -238,18 +243,13 @@ class ChatController extends Controller
                     'username' => \App\Models\Setting::where('key', 'mail_username')->value('value') ?? 'perfectpicels@gmail.com',
                     'password' => \App\Models\Setting::where('key', 'mail_password')->value('value') ?? 'ewshzqepcqlzhwrk',
                     'timeout' => null,
-                ];
-
-                $fromAddress = \App\Models\Setting::where('key', 'mail_from_address')->value('value') ?? 'perfectpicels@gmail.com';
-                $siteName = \App\Models\Setting::where('key', 'site_name')->value('value') ?? 'Devent Chatbot';
-
-                config([
-                    'mail.mailers.smtp' => $mailConfig,
-                    'mail.from.address' => $fromAddress,
-                    'mail.from.name' => $siteName,
                 ]);
 
-                \Illuminate\Support\Facades\Mail::to($notifyEmail)->send(new \App\Mail\ChatMessageNotification($msg, $session));
+                // Set From address dynamically inside the Mailable
+                $notification = new \App\Mail\ChatMessageNotification($msg, $session);
+                $notification->from($fromAddress, $siteName);
+
+                $mailer->to($notifyEmail)->send($notification);
             }
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Chatbot Email Error: ' . $e->getMessage());
