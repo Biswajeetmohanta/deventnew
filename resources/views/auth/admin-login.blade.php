@@ -16,7 +16,7 @@
     <div class="glass p-8 md:p-12 rounded-[2.5rem] w-full max-w-md">
         <div class="text-center mb-10">
             @php
-                $loginImage = \App\Models\Setting::where('key', 'admin_login_image')->value('value') ?? \App\Models\Setting::where('key', 'site_logo')->value('value');
+                $loginImage = \App\Models\Setting::where('key', 'site_logo')->value('value');
             @endphp
             @if($loginImage)
                 <img src="{{ asset('storage/' . $loginImage) }}" alt="Devent Logo" class="h-20 w-auto mx-auto mb-6">

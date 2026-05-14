@@ -22,8 +22,6 @@ class SettingController extends Controller
             'site_name' => 'nullable|string|max:255',
             'site_logo' => 'nullable|image|max:2048',
             'site_favicon' => 'nullable|image|max:1024',
-            'admin_favicon' => 'nullable|image|max:1024',
-            'admin_login_image' => 'nullable|image|max:2048',
             'contact_email' => 'nullable|email',
             'contact_phone' => 'nullable|string',
             'address' => 'nullable|string',

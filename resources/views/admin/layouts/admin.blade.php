@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Admin Dashboard</title>
     @php
-        $favicon = \App\Models\Setting::where('key', 'admin_favicon')->value('value') ?? \App\Models\Setting::where('key', 'site_favicon')->value('value');
+        $favicon = \App\Models\Setting::where('key', 'site_favicon')->value('value');
     @endphp
     @if($favicon)
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $favicon) }}">
@@ -65,7 +65,14 @@
            class="w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-50 transition-transform duration-300 lg:translate-x-0 shadow-sm">
         <div class="p-6 flex items-center justify-between border-b border-slate-100">
             <a href="{{ route('admin.dashboard') }}">
-                <img src="{{ asset('assets/images/devent_logo_new.jpeg') }}" alt="Logo" class="h-16 w-auto">
+                @php
+                    $sidebarLogo = \App\Models\Setting::where('key', 'site_logo')->value('value');
+                @endphp
+                @if($sidebarLogo)
+                    <img src="{{ asset('storage/' . $sidebarLogo) }}" alt="Logo" class="h-16 w-auto max-w-[180px] object-contain">
+                @else
+                    <img src="{{ asset('assets/images/devent_logo_new.jpeg') }}" alt="Logo" class="h-16 w-auto max-w-[180px] object-contain">
+                @endif
             </a>
             <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-slate-600">
                 <i class="fa-solid fa-xmark text-xl"></i>
