@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Admin Dashboard</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/devent-favicon.png') }}">
+    @php
+        $favicon = \App\Models\Setting::where('key', 'admin_favicon')->value('value') ?? \App\Models\Setting::where('key', 'site_favicon')->value('value');
+    @endphp
+    @if($favicon)
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $favicon) }}">
+    @else
+        <link rel="icon" type="image/png" href="{{ asset('assets/images/devent-favicon.png') }}">
+    @endif
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">

@@ -258,7 +258,7 @@
                                 <input type="file" name="site_logo" class="text-xs text-slate-500 w-full">
                             </div>
                             <div class="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
-                                <label class="block text-xs uppercase tracking-[0.2em] font-black mb-6">Favicon</label>
+                                <label class="block text-xs uppercase tracking-[0.2em] font-black mb-6">Frontend Favicon</label>
                                 <div class="mb-6 h-20 flex items-center justify-center">
                                     @if(isset($settings['site_favicon']))
                                         <img src="{{ asset('storage/' . $settings['site_favicon']) }}" class="h-12 w-12" alt="Favicon">
@@ -267,6 +267,28 @@
                                     @endif
                                 </div>
                                 <input type="file" name="site_favicon" class="text-xs text-slate-500 w-full">
+                            </div>
+                            <div class="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
+                                <label class="block text-xs uppercase tracking-[0.2em] font-black mb-6">Admin Favicon</label>
+                                <div class="mb-6 h-20 flex items-center justify-center">
+                                    @if(isset($settings['admin_favicon']))
+                                        <img src="{{ asset('storage/' . $settings['admin_favicon']) }}" class="h-12 w-12" alt="Admin Favicon">
+                                    @else
+                                        <i class="fa-solid fa-shield-halved text-slate-200 text-4xl"></i>
+                                    @endif
+                                </div>
+                                <input type="file" name="admin_favicon" class="text-xs text-slate-500 w-full">
+                            </div>
+                            <div class="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
+                                <label class="block text-xs uppercase tracking-[0.2em] font-black mb-6">Admin Login Image</label>
+                                <div class="mb-6 h-20 flex items-center justify-center">
+                                    @if(isset($settings['admin_login_image']))
+                                        <img src="{{ asset('storage/' . $settings['admin_login_image']) }}" class="max-h-full rounded-lg" alt="Login Image">
+                                    @else
+                                        <i class="fa-solid fa-right-to-bracket text-slate-200 text-4xl"></i>
+                                    @endif
+                                </div>
+                                <input type="file" name="admin_login_image" class="text-xs text-slate-500 w-full">
                             </div>
                         </div>
                     </div>

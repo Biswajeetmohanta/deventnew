@@ -15,7 +15,14 @@
 <body class="flex items-center justify-center min-h-screen p-4">
     <div class="glass p-8 md:p-12 rounded-[2.5rem] w-full max-w-md">
         <div class="text-center mb-10">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="Devent Logo" class="h-20 w-auto mx-auto mb-6">
+            @php
+                $loginImage = \App\Models\Setting::where('key', 'admin_login_image')->value('value') ?? \App\Models\Setting::where('key', 'site_logo')->value('value');
+            @endphp
+            @if($loginImage)
+                <img src="{{ asset('storage/' . $loginImage) }}" alt="Devent Logo" class="h-20 w-auto mx-auto mb-6">
+            @else
+                <img src="{{ asset('assets/images/logo.png') }}" alt="Devent Logo" class="h-20 w-auto mx-auto mb-6">
+            @endif
             <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight">Admin Portal</h1>
             <p class="text-slate-500 text-sm mt-1">Please sign in to manage your website.</p>
         </div>
