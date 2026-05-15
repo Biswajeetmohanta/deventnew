@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChatSession extends Model
 {
-    protected $fillable = ['session_id', 'visitor_name', 'visitor_email', 'status', 'is_read', 'last_message_at'];
+    protected $fillable = ['session_id', 'visitor_name', 'visitor_email', 'status', 'current_step', 'is_read', 'last_message_at'];
 
     protected $casts = [
         'is_read' => 'boolean',

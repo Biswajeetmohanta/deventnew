@@ -127,7 +127,33 @@ class ChatController extends Controller
             return;
         }
 
-        // 3. Auto-reply logic
+        // 3. Conversational Script Logic (Lead Capture)
+        if ($session->current_step < 6) {
+            $questions = [
+                0 => "Nice to meet you! 👋 Before we dive in, may I know your **Full Name** and **Contact Number**?",
+                1 => "Thank you. What **Service** are you interested in? (e.g., Website Design, Software Development, Digital Marketing, etc.)",
+                2 => "Got it! Which **Industry** is your project or business in?",
+                3 => "Could you share some details about your **Project Requirements**?",
+                4 => "Great. Lastly, what is your preferred **Timeline** and estimated **Budget** for this project?",
+                5 => "Thank you for all the details! One of our experts will review them and get back to you shortly. Meanwhile, feel free to ask any other questions!"
+            ];
+
+            $reply = $questions[$session->current_step];
+            
+            // Save admin reply
+            ChatMessage::create([
+                'chat_session_id' => $session->id,
+                'message' => $reply,
+                'sender' => 'admin',
+                'is_read' => false,
+            ]);
+
+            // Update session step
+            $session->increment('current_step');
+            return;
+        }
+
+        // 4. Default AI/Auto-reply logic (only after script is completed)
         $aiEnabled = \App\Models\Setting::where('key', 'chatbot_ai_enabled')->value('value');
         $apiKey = \App\Models\Setting::where('key', 'gemini_api_key')->value('value');
         $autoReplySent = false;

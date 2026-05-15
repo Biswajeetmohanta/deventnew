@@ -1839,14 +1839,7 @@
             </div>
         </div>
 
-        <!-- Hidden Lead Request Template -->
-        <div id="leadRequestTemplate" style="display: none;">
-            <div class="chat-message admin" style="margin-bottom: 15px;">
-                <div class="chat-message-content" style="background: #f1f5f9; color: #334155; max-width: 90%;">
-                    <p style="font-size: 13px; margin-bottom: 0;">If you'd like our team to get back to you, feel free to share your <strong>Name, Email, and Phone number</strong> here. (Optional)</p>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Typing Indicator -->
         <div class="chat-typing" id="chatTyping" style="padding: 0 16px 8px;">
@@ -1974,17 +1967,6 @@
             chatBody.appendChild(div);
             scrollChatDown();
 
-            // After first admin reply, show lead request text
-            if (msg.sender === 'admin' && !leadFormShown) {
-                setTimeout(() => {
-                    const template = document.getElementById('leadRequestTemplate').innerHTML;
-                    const leadDiv = document.createElement('div');
-                    leadDiv.innerHTML = template;
-                    chatBody.appendChild(leadDiv);
-                    scrollChatDown();
-                    leadFormShown = true;
-                }, 1000);
-            }
         }
 
         function escapeHtml(text) {
