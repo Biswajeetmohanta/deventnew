@@ -1835,15 +1835,13 @@
                     <i class="fa-regular fa-comments" style="color: #2563eb;"></i>
                 </div>
                 <h5>Hi there! 👋</h5>
-                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">Share your details if you'd like us to connect with you.</p>
-                <form id="chatLeadForm" style="margin-top: 15px; text-align: left;">
-                    <input type="text" id="leadName" placeholder="Your Name" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
-                    <input type="email" id="leadEmail" placeholder="Your Email" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
-                    <input type="tel" id="leadPhone" placeholder="Phone Number" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
-                    <textarea id="leadRequirement" placeholder="Your Requirement" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
-                    <button type="submit" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 8px;">Continue Chat</button>
-                    <button type="button" id="skipLeadBtn" style="width: 100%; padding: 10px; background: #ffffff; color: #3366ff; border: 1px solid #3366ff; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;">Skip & Start Chat</button>
-                </form>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">Sharing your details is optional.</p>
+                <div id="optionalLeadFields" style="margin-top: 15px; text-align: left;">
+                    <input type="text" id="leadName" placeholder="Your Name" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
+                    <input type="email" id="leadEmail" placeholder="Your Email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
+                    <input type="tel" id="leadPhone" placeholder="Phone Number" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
+                    <textarea id="leadRequirement" placeholder="Your Requirement" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
+                </div>
             </div>
         </div>
 
@@ -1856,7 +1854,7 @@
 
         <!-- Input -->
         <div class="chat-footer">
-            <form id="chatForm" class="chat-input-wrap" autocomplete="off" style="display: none;">
+            <form id="chatForm" class="chat-input-wrap" autocomplete="off">
                 <input type="text" id="chatInput" placeholder="Type a message..." maxlength="1000">
                 <button type="submit" class="chat-send-btn" id="chatSendBtn">
                     <i class="fa-solid fa-paper-plane"></i>
@@ -1947,7 +1945,6 @@
 
                 if (data.messages && data.messages.length > 0) {
                     chatWelcome.style.display = 'none';
-                    chatForm.style.display = 'flex';
                     data.messages.forEach(msg => {
                         appendMessage(msg);
                     });
@@ -1994,8 +1991,28 @@
 
             isSending = true;
             chatSendBtn.disabled = true;
+
+            // Capture lead details on first message if filled
+            const leadName = document.getElementById('leadName').value;
+            const leadEmail = document.getElementById('leadEmail').value;
+            const leadPhone = document.getElementById('leadPhone').value;
+            const leadReq = document.getElementById('leadRequirement').value;
+
+            if (leadName || leadEmail || leadPhone || leadReq) {
+                fetch('{{ url("/chat/submit-details") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        name: leadName || 'Visitor',
+                        email: leadEmail,
+                        phone: leadPhone,
+                        requirement: leadReq
+                    })
+                });
+            }
+
             chatWelcome.style.display = 'none';
-            chatForm.style.display = 'flex';
 
             // Instant UI update (Optimistic)
             appendMessage({
@@ -2059,7 +2076,6 @@
                 if (data.messages && data.messages.length > 0) {
                     chatTyping.classList.remove('show');
                     chatWelcome.style.display = 'none';
-                    chatForm.style.display = 'flex';
 
                     data.messages.forEach(msg => {
                         appendMessage(msg);
@@ -2104,84 +2120,6 @@
             }
         }, 8000);
 
-        // Lead Form Submission
-        const chatLeadForm = document.getElementById('chatLeadForm');
-        if (chatLeadForm) {
-            chatLeadForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const leadSubmitBtn = document.getElementById('leadSubmitBtn');
-                leadSubmitBtn.disabled = true;
-                leadSubmitBtn.textContent = 'Submitting...';
-
-                fetch('{{ url("/chat/submit-details") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        name: document.getElementById('leadName').value,
-                        email: document.getElementById('leadEmail').value,
-                        phone: document.getElementById('leadPhone').value,
-                        requirement: document.getElementById('leadRequirement').value,
-                    })
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        chatWelcome.style.display = 'none';
-                        chatForm.style.display = 'flex';
-                        pollMessages(); // Fetch the thank you message
-                    } else {
-                        alert(data.error || 'Failed to submit details.');
-                        leadSubmitBtn.disabled = false;
-                        leadSubmitBtn.textContent = 'Continue Chat';
-                    }
-                })
-                .catch(err => {
-                    console.error('Lead submit error:', err);
-                    leadSubmitBtn.disabled = false;
-                    leadSubmitBtn.textContent = 'Continue Chat';
-                });
-            });
-        }
-
-        // Skip Lead Form
-        const skipLeadBtn = document.getElementById('skipLeadBtn');
-        if (skipLeadBtn) {
-            skipLeadBtn.addEventListener('click', function() {
-                skipLeadBtn.disabled = true;
-                
-                fetch('{{ url("/chat/skip") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        session_id: sessionId
-                    })
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        chatWelcome.style.display = 'none';
-                        chatForm.style.display = 'flex';
-                        if (data.session_id) {
-                            sessionId = data.session_id;
-                        }
-                        pollMessages(); // This will fetch the welcome message
-                    }
-                })
-                .catch(err => {
-                    console.error('Skip lead error:', err);
-                    skipLeadBtn.disabled = false;
-                });
-            });
-        }
     })();
     </script>
     <!-- Calendly Modal -->
