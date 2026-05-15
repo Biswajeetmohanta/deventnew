@@ -388,4 +388,43 @@ class ChatController extends Controller
             'success' => true
         ])->cookie('chat_session_id', $sessionId, 60 * 24 * 30);
     }
+
+    public function skipLead(Request $request)
+    {
+        $sessionId = $request->cookie('chat_session_id') ?? $request->input('session_id');
+
+        if (!$sessionId) {
+            $sessionId = \Illuminate\Support\Str::uuid()->toString();
+            $session = ChatSession::create([
+                'session_id' => $sessionId,
+                'visitor_name' => 'Visitor',
+                'status' => 'active',
+            ]);
+        } else {
+            $session = ChatSession::where('session_id', $sessionId)->first();
+            if (!$session) {
+                $sessionId = \Illuminate\Support\Str::uuid()->toString();
+                $session = ChatSession::create([
+                    'session_id' => $sessionId,
+                    'visitor_name' => 'Visitor',
+                    'status' => 'active',
+                ]);
+            }
+        }
+
+        // Add welcome message if not already added
+        if ($session->messages()->count() === 0) {
+            ChatMessage::create([
+                'chat_session_id' => $session->id,
+                'message' => 'Hi! Welcome to Devent Technology. How can we help you today?',
+                'sender' => 'admin',
+                'is_read' => false,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true, 
+            'session_id' => $sessionId
+        ])->cookie('chat_session_id', $sessionId, 60 * 24 * 30);
+    }
 }

@@ -2152,28 +2152,34 @@
         const skipLeadBtn = document.getElementById('skipLeadBtn');
         if (skipLeadBtn) {
             skipLeadBtn.addEventListener('click', function() {
-                chatWelcome.style.display = 'none';
-                chatForm.style.display = 'flex';
-                // Trigger an initial message or just open the input
-                if (!sessionId) {
-                    fetch('{{ url("/chat/start") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json',
-                        }
+                skipLeadBtn.disabled = true;
+                
+                fetch('{{ url("/chat/skip") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        session_id: sessionId
                     })
-                    .then(r => r.json())
-                    .then(data => {
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        chatWelcome.style.display = 'none';
+                        chatForm.style.display = 'flex';
                         if (data.session_id) {
                             sessionId = data.session_id;
-                            pollMessages();
                         }
-                    });
-                } else {
-                    pollMessages();
-                }
+                        pollMessages(); // This will fetch the welcome message
+                    }
+                })
+                .catch(err => {
+                    console.error('Skip lead error:', err);
+                    skipLeadBtn.disabled = false;
+                });
             });
         }
     })();
