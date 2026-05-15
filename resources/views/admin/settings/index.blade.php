@@ -360,33 +360,13 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-3xl mt-6">
                             <div class="md:col-span-2">
-                                <h5 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">SMTP Configuration (For Sending)</h5>
+                                <h5 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Brevo API Configuration (For Sending)</h5>
                             </div>
-                            <div>
-                                <label for="mail_host" class="text-xs">SMTP Host</label>
-                                <input type="text" name="mail_host" id="mail_host" value="{{ $settings['mail_host'] ?? '' }}" placeholder="e.g. smtp.gmail.com">
+                            <div class="md:col-span-2">
+                                <label for="brevo_api_key" class="text-xs">Brevo API Key</label>
+                                <input type="text" name="brevo_api_key" id="brevo_api_key" value="{{ $settings['brevo_api_key'] ?? '' }}" placeholder="Enter Brevo API Key">
                             </div>
-                            <div>
-                                <label for="mail_port" class="text-xs">SMTP Port</label>
-                                <input type="text" name="mail_port" id="mail_port" value="{{ $settings['mail_port'] ?? '' }}" placeholder="e.g. 465 or 587">
-                            </div>
-                            <div>
-                                <label for="mail_username" class="text-xs">SMTP Username</label>
-                                <input type="text" name="mail_username" id="mail_username" value="{{ $settings['mail_username'] ?? '' }}" placeholder="e.g. your-email@gmail.com">
-                            </div>
-                            <div>
-                                <label for="mail_password" class="text-xs">SMTP Password / App Password</label>
-                                <input type="password" name="mail_password" id="mail_password" value="{{ $settings['mail_password'] ?? '' }}" placeholder="Enter password">
-                            </div>
-                            <div>
-                                <label for="mail_encryption" class="text-xs">Encryption</label>
-                                <select name="mail_encryption" id="mail_encryption">
-                                    <option value="tls" {{ ($settings['mail_encryption'] ?? 'tls') == 'tls' ? 'selected' : '' }}>TLS (Port 587)</option>
-                                    <option value="ssl" {{ ($settings['mail_encryption'] ?? 'tls') == 'ssl' ? 'selected' : '' }}>SSL (Port 465)</option>
-                                    <option value="none" {{ ($settings['mail_encryption'] ?? 'tls') == 'none' ? 'selected' : '' }}>None</option>
-                                </select>
-                            </div>
-                            <div>
+                            <div class="md:col-span-2">
                                 <label for="mail_from_address" class="text-xs">Send From Address</label>
                                 <input type="email" name="mail_from_address" id="mail_from_address" value="{{ $settings['mail_from_address'] ?? '' }}" placeholder="e.g. noreply@devent.com">
                             </div>

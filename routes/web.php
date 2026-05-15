@@ -75,4 +75,5 @@ Route::post('/careers/{id}/apply', [CareerController::class, 'storeApplication']
 // Chat API (public)
 Route::post('/chat/start', [\App\Http\Controllers\ChatController::class, 'startSession']);
 Route::post('/chat/send', [\App\Http\Controllers\ChatController::class, 'sendMessage']);
+Route::post('/chat/submit-details', [\App\Http\Controllers\ChatController::class, 'submitDetails']);
 Route::get('/chat/messages', [\App\Http\Controllers\ChatController::class, 'getMessages']);

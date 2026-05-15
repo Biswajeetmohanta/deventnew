@@ -1830,7 +1830,14 @@
                     <i class="fa-regular fa-comments" style="color: #2563eb;"></i>
                 </div>
                 <h5>Hi there! 👋</h5>
-                <p>How can we help you today? Send us a message and we'll get back to you shortly.</p>
+                <p>Please share your details before continuing.</p>
+                <form id="chatLeadForm" style="margin-top: 15px; text-align: left;">
+                    <input type="text" id="leadName" placeholder="Your Name" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
+                    <input type="email" id="leadEmail" placeholder="Your Email" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
+                    <input type="tel" id="leadPhone" placeholder="Phone Number" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
+                    <textarea id="leadRequirement" placeholder="Your Requirement" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
+                    <button type="submit" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Submit Details</button>
+                </form>
             </div>
         </div>
 
@@ -1843,7 +1850,7 @@
 
         <!-- Input -->
         <div class="chat-footer">
-            <form id="chatForm" class="chat-input-wrap" autocomplete="off">
+            <form id="chatForm" class="chat-input-wrap" autocomplete="off" style="display: none;">
                 <input type="text" id="chatInput" placeholder="Type a message..." maxlength="1000">
                 <button type="submit" class="chat-send-btn" id="chatSendBtn">
                     <i class="fa-solid fa-paper-plane"></i>
@@ -1934,6 +1941,7 @@
 
                 if (data.messages && data.messages.length > 0) {
                     chatWelcome.style.display = 'none';
+                    chatForm.style.display = 'flex';
                     data.messages.forEach(msg => {
                         appendMessage(msg);
                     });
@@ -1981,6 +1989,7 @@
             isSending = true;
             chatSendBtn.disabled = true;
             chatWelcome.style.display = 'none';
+            chatForm.style.display = 'flex';
 
             // Instant UI update (Optimistic)
             appendMessage({
@@ -2044,6 +2053,7 @@
                 if (data.messages && data.messages.length > 0) {
                     chatTyping.classList.remove('show');
                     chatWelcome.style.display = 'none';
+                    chatForm.style.display = 'flex';
 
                     data.messages.forEach(msg => {
                         appendMessage(msg);
@@ -2087,6 +2097,50 @@
                 pollMessages();
             }
         }, 8000);
+
+        // Lead Form Submission
+        const chatLeadForm = document.getElementById('chatLeadForm');
+        if (chatLeadForm) {
+            chatLeadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const leadSubmitBtn = document.getElementById('leadSubmitBtn');
+                leadSubmitBtn.disabled = true;
+                leadSubmitBtn.textContent = 'Submitting...';
+
+                fetch('{{ url("/chat/submit-details") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        name: document.getElementById('leadName').value,
+                        email: document.getElementById('leadEmail').value,
+                        phone: document.getElementById('leadPhone').value,
+                        requirement: document.getElementById('leadRequirement').value,
+                    })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        chatWelcome.style.display = 'none';
+                        chatForm.style.display = 'flex';
+                        pollMessages(); // Fetch the thank you message
+                    } else {
+                        alert(data.error || 'Failed to submit details.');
+                        leadSubmitBtn.disabled = false;
+                        leadSubmitBtn.textContent = 'Submit Details';
+                    }
+                })
+                .catch(err => {
+                    console.error('Lead submit error:', err);
+                    leadSubmitBtn.disabled = false;
+                    leadSubmitBtn.textContent = 'Submit Details';
+                });
+            });
+        }
     })();
     </script>
     <!-- Calendly Modal -->

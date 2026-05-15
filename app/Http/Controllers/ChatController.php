@@ -28,15 +28,7 @@ class ChatController extends Controller
                 'status' => 'active',
             ]);
 
-            // Send welcome message ONLY if session has no messages
-            if ($session->messages()->count() === 0) {
-                ChatMessage::create([
-                    'chat_session_id' => $session->id,
-                    'message' => 'Hi! Welcome to Devent Technology. How can we help you today?',
-                    'sender' => 'admin',
-                    'is_read' => false,
-                ]);
-            }
+            // We no longer create an automatic message here so that the frontend shows the lead form.
 
             $session->update(['last_message_at' => now()]);
         }
@@ -229,27 +221,40 @@ class ChatController extends Controller
         try {
             $notifyEmail = \App\Models\Setting::where('key', 'chatbot_notification_email')->value('value');
             if ($notifyEmail) {
-                // Send Email Notification
+                // Send Email Notification via Brevo API
 
                 $fromAddress = \App\Models\Setting::where('key', 'mail_from_address')->value('value') ?? 'perfectpicels@gmail.com';
                 $siteName = \App\Models\Setting::where('key', 'site_name')->value('value') ?? 'Devent Chatbot';
 
-                // Use Mail::build() to dynamically configure the mailer without affecting global config
-                $mailer = \Illuminate\Support\Facades\Mail::build([
-                    'transport' => 'smtp',
-                    'host' => \App\Models\Setting::where('key', 'mail_host')->value('value') ?? 'smtp.gmail.com',
-                    'port' => \App\Models\Setting::where('key', 'mail_port')->value('value') ?? 465,
-                    'encryption' => \App\Models\Setting::where('key', 'mail_encryption')->value('value') ?? 'ssl',
-                    'username' => \App\Models\Setting::where('key', 'mail_username')->value('value') ?? 'perfectpicels@gmail.com',
-                    'password' => \App\Models\Setting::where('key', 'mail_password')->value('value') ?? 'ewshzqepcqlzhwrk',
-                    'timeout' => null,
+                $apiKey = \App\Models\Setting::where('key', 'brevo_api_key')->value('value');
+
+                $htmlContent = view('emails.chat_notification', [
+                    'chatMessage' => $msg,
+                    'chatSession' => $session
+                ])->render();
+
+                $response = \Illuminate\Support\Facades\Http::withHeaders([
+                    'api-key' => $apiKey,
+                    'accept' => 'application/json',
+                    'content-type' => 'application/json',
+                ])->post('https://api.brevo.com/v3/smtp/email', [
+                    'sender' => [
+                        'name' => $siteName,
+                        'email' => $fromAddress,
+                    ],
+                    'to' => [
+                        [
+                            'email' => $notifyEmail,
+                            'name' => 'Admin'
+                        ]
+                    ],
+                    'subject' => 'New Message from Website Chatbot',
+                    'htmlContent' => $htmlContent,
                 ]);
 
-                // Set From address dynamically inside the Mailable
-                $notification = new \App\Mail\ChatMessageNotification($msg, $session);
-                $notification->from($fromAddress, $siteName);
-
-                $mailer->to($notifyEmail)->send($notification);
+                if (!$response->successful()) {
+                    \Illuminate\Support\Facades\Log::error('Brevo Email API Error: ' . $response->body());
+                }
             }
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Chatbot Email Error: ' . $e->getMessage());
@@ -322,5 +327,62 @@ class ChatController extends Controller
         }
 
         return response()->json(['messages' => $messages]);
+    }
+
+    public function submitDetails(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'requirement' => 'required|string|max:1000',
+        ]);
+
+        $sessionId = $request->cookie('chat_session_id') ?? $request->input('session_id');
+
+        if (!$sessionId) {
+            return response()->json(['error' => 'No active session'], 400);
+        }
+
+        $session = ChatSession::where('session_id', $sessionId)->first();
+        if (!$session) {
+            return response()->json(['error' => 'Session not found'], 404);
+        }
+
+        $session->update([
+            'visitor_name' => strip_tags($request->input('name')),
+            'visitor_email' => strip_tags($request->input('email')),
+            'last_message_at' => now(),
+            'status' => 'active',
+        ]);
+
+        // Create the user message containing the details
+        $detailsMessage = "Name: " . strip_tags($request->input('name')) . "\n";
+        $detailsMessage .= "Email: " . strip_tags($request->input('email')) . "\n";
+        $detailsMessage .= "Phone: " . strip_tags($request->input('phone')) . "\n";
+        $detailsMessage .= "Requirement: " . strip_tags($request->input('requirement'));
+
+        $msg = ChatMessage::create([
+            'chat_session_id' => $session->id,
+            'message' => $detailsMessage,
+            'sender' => 'visitor',
+            'is_read' => false,
+        ]);
+
+        // Send Email Notification
+        $this->sendEmailNotification($msg, $session);
+
+        // Auto reply
+        ChatMessage::create([
+            'chat_session_id' => $session->id,
+            'message' => 'Thank you for sharing your details. Our executive will connect with you shortly.',
+            'sender' => 'admin',
+            'is_read' => false,
+        ]);
+
+        return response()->json([
+            'session_id' => $sessionId,
+            'success' => true
+        ])->cookie('chat_session_id', $sessionId, 60 * 24 * 30);
     }
 }
