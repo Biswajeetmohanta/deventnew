@@ -97,6 +97,8 @@ class ChatController extends Controller
         ];
 
         // Process background tasks (Auto-reply and Email)
+        \Log::info("Chat: Message saved. Session ID: {$session->id}, Message ID: {$msg->id}");
+        
         if (function_exists('fastcgi_finish_request')) {
             response()->json($responseData)->send();
             fastcgi_finish_request();
@@ -127,30 +129,25 @@ class ChatController extends Controller
             return;
         }
 
-        // 3. Conversational Script Logic (Lead Capture)
-        if ($session->current_step < 6) {
-            $questions = [
-                0 => "Nice to meet you! 👋 Before we dive in, may I know your **Full Name** and **Contact Number**?",
-                1 => "Thank you. What **Service** are you interested in? (e.g., Website Design, Software Development, Digital Marketing, etc.)",
-                2 => "Got it! Which **Industry** is your project or business in?",
-                3 => "Could you share some details about your **Project Requirements**?",
-                4 => "Great. Lastly, what is your preferred **Timeline** and estimated **Budget** for this project?",
-                5 => "Thank you for all the details! One of our experts will review them and get back to you shortly. Meanwhile, feel free to ask any other questions!"
-            ];
+        // 3. Conversational Script Logic (Dynamic Lead Capture)
+        \Log::info("Chat: Session {$session->id}, Step: {$session->current_step}");
 
-            $reply = $questions[$session->current_step];
+        if ($session->current_step < 5) {
+            $reply = $this->getConversationalReply($session);
             
-            // Save admin reply
-            ChatMessage::create([
-                'chat_session_id' => $session->id,
-                'message' => $reply,
-                'sender' => 'admin',
-                'is_read' => false,
-            ]);
+            if ($reply) {
+                \Log::info("Chat: Sending step {$session->current_step} reply");
+                
+                ChatMessage::create([
+                    'chat_session_id' => $session->id,
+                    'message' => $reply,
+                    'sender' => 'admin',
+                    'is_read' => false,
+                ]);
 
-            // Update session step
-            $session->increment('current_step');
-            return;
+                $session->increment('current_step');
+                return;
+            }
         }
 
         // 4. Default AI/Auto-reply logic (only after script is completed)
@@ -170,7 +167,7 @@ class ChatController extends Controller
         }
         
         if (!$autoReplySent && (stripos($message, 'technolog') !== false || stripos($message, 'stack') !== false)) {
-            $items = \App\Models\Technology::pluck('name')->toArray();
+            $items = \App\Models\Technology::pluck('title')->toArray();
             if (!empty($items)) {
                 $reply = "We work with a wide range of technologies, including:\n• " . implode("\n• ", $items) . "\n\nDo you have a specific stack in mind for your project?";
                 $autoReplySent = true;
@@ -178,7 +175,7 @@ class ChatController extends Controller
         }
 
         if (!$autoReplySent && (stripos($message, 'industr') !== false || stripos($message, 'sector') !== false)) {
-            $items = \App\Models\Industry::pluck('name')->toArray();
+            $items = \App\Models\Industry::pluck('title')->toArray();
             if (!empty($items)) {
                 $reply = "We have expertise in several industries, such as:\n• " . implode("\n• ", $items) . "\n\nHow can we help in your specific industry?";
                 $autoReplySent = true;
@@ -214,7 +211,6 @@ class ChatController extends Controller
                 ->orderByRaw('LENGTH(keyword) DESC')
                 ->get();
             foreach ($keywords as $keyword) {
-                // Use regex word boundary to prevent "hi" matching inside "this" or "white"
                 if (preg_match('/\b' . preg_quote($keyword->keyword, '/') . '\b/i', $msg->message) || stripos($msg->message, $keyword->keyword) !== false) {
                     ChatMessage::create([
                         'chat_session_id' => $session->id,
@@ -239,6 +235,71 @@ class ChatController extends Controller
                     'is_read' => false,
                 ]);
             }
+        }
+    }
+
+    /**
+     * Build the conversational reply based on the current step.
+     */
+    private function getConversationalReply($session)
+    {
+        switch ($session->current_step) {
+            case 0:
+                // Step 0: Welcome + Ask for basic details
+                return "Hi there! Welcome to Devent Technology. How can we help you today?\n\n" .
+                       "Please share a few basic details so we can give you a quick estimate within 2 minutes.\n\n" .
+                       "Name:\nPhone Number / Email:\nService Required:\nIndustry:\nBrief Requirement:";
+
+            case 1:
+                // Step 1: Show dynamic services list
+                $services = \App\Models\Service::where('is_active', true)->pluck('title')->toArray();
+                if (empty($services)) {
+                    $services = ['Website Development', 'Mobile App Development', 'Custom Software Development'];
+                }
+                
+                $list = '';
+                foreach ($services as $i => $service) {
+                    $list .= ($i + 1) . ". " . $service . "\n";
+                }
+                $list .= ($i + 2) . ". Other";
+                
+                return "Thank you!\n\nPlease select the service you are looking for:\n\n" . $list;
+
+            case 2:
+                // Step 2: Show dynamic industries list
+                $industries = \App\Models\Industry::pluck('title')->toArray();
+                if (empty($industries)) {
+                    $industries = ['E-commerce', 'Healthcare', 'Education', 'Real Estate', 'Finance'];
+                }
+                
+                $list = '';
+                foreach ($industries as $i => $industry) {
+                    $list .= ($i + 1) . ". " . $industry . "\n";
+                }
+                $list .= ($i + 2) . ". Other";
+                
+                return "Great! Please select your industry:\n\n" . $list;
+
+            case 3:
+                // Step 3: Ask for detailed project requirements
+                return "Perfect. Based on your requirement, our team can provide a quick project estimate within 2 minutes.\n\n" .
+                       "Please share the following details:\n\n" .
+                       "1. Platform Required:\nWebsite / Android App / iOS App / Web App / CRM / Software\n\n" .
+                       "2. Number of Pages or Screens:\nExample: 5 pages, 10 screens, admin panel, dashboard, etc.\n\n" .
+                       "3. Main Features Required:\nExample: Login, payment gateway, booking, chat, notification, product listing, user dashboard, admin panel, reports, etc.\n\n" .
+                       "4. Reference Website/App:\nPlease share any reference link if available.\n\n" .
+                       "5. Expected Timeline:\nUrgent / 15 days / 1 month / 2-3 months\n\n" .
+                       "6. Budget Range:\nPlease share your approximate budget if available.";
+
+            case 4:
+                // Step 4: Thank you & confirmation
+                return "Thank you for sharing the details!\n\n" .
+                       "Our team will prepare a quick estimate and share it shortly. For an accurate final quote, we may need a short discussion to understand the complete scope, features, design, and timeline.\n\n" .
+                       "You can also connect with us directly for faster discussion.\n\n" .
+                       "Feel free to ask any other questions!";
+
+            default:
+                return null;
         }
     }
 
