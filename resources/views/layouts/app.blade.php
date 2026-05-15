@@ -1839,18 +1839,11 @@
             </div>
         </div>
 
-        <!-- Hidden Lead Form Template -->
-        <div id="leadFormTemplate" style="display: none;">
+        <!-- Hidden Lead Request Template -->
+        <div id="leadRequestTemplate" style="display: none;">
             <div class="chat-message admin" style="margin-bottom: 15px;">
                 <div class="chat-message-content" style="background: #f1f5f9; color: #334155; max-width: 90%;">
-                    <p style="font-size: 13px; margin-bottom: 10px;">If you'd like us to reach out to you, feel free to share your details (optional):</p>
-                    <div id="optionalLeadFields" style="text-align: left;">
-                        <input type="text" id="leadName" placeholder="Your Name" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none;">
-                        <input type="email" id="leadEmail" placeholder="Your Email" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none;">
-                        <input type="tel" id="leadPhone" placeholder="Phone Number" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none;">
-                        <textarea id="leadRequirement" placeholder="Your Requirement" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none; resize: none;" rows="2"></textarea>
-                        <button type="button" id="leadSubmitBtn" style="width: 100%; padding: 8px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px;">Submit Details</button>
-                    </div>
+                    <p style="font-size: 13px; margin-bottom: 0;">If you'd like our team to get back to you, feel free to share your <strong>Name, Email, and Phone number</strong> here. (Optional)</p>
                 </div>
             </div>
         </div>
@@ -1981,12 +1974,11 @@
             chatBody.appendChild(div);
             scrollChatDown();
 
-            // After first admin reply, show lead form
+            // After first admin reply, show lead request text
             if (msg.sender === 'admin' && !leadFormShown) {
                 setTimeout(() => {
-                    const template = document.getElementById('leadFormTemplate').innerHTML;
+                    const template = document.getElementById('leadRequestTemplate').innerHTML;
                     const leadDiv = document.createElement('div');
-                    leadDiv.id = 'activeLeadForm';
                     leadDiv.innerHTML = template;
                     chatBody.appendChild(leadDiv);
                     scrollChatDown();
@@ -2125,56 +2117,7 @@
 
     })();
 
-    // Handle Lead Submit Button
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.id === 'leadSubmitBtn') {
-            const btn = e.target;
-            btn.disabled = true;
-            btn.textContent = 'Submitting...';
 
-            const name = document.getElementById('leadName').value;
-            const email = document.getElementById('leadEmail').value;
-            const phone = document.getElementById('leadPhone').value;
-            const req = document.getElementById('leadRequirement').value;
-
-            // Use global sessionId and csrfToken
-            fetch('{{ url("/chat/submit-details") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    session_id: window.sessionId,
-                    name: name || 'Visitor',
-                    email: email,
-                    phone: phone,
-                    requirement: req
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    const activeForm = document.getElementById('activeLeadForm');
-                    if (activeForm) {
-                        activeForm.innerHTML = '<div class="chat-message admin"><div class="chat-message-content" style="background: #dcfce7; color: #166534;">Thank you for sharing your details!</div></div>';
-                    }
-                    if (data.session_id) { window.sessionId = data.session_id; }
-                    window.pollMessages();
-                } else {
-                    btn.disabled = false;
-                    btn.textContent = 'Submit Details';
-                    alert(data.error || 'Submission failed');
-                }
-            })
-            .catch(err => {
-                console.error('Lead error:', err);
-                btn.disabled = false;
-                btn.textContent = 'Submit Details';
-            });
-        }
-    });
     </script>
     <!-- Calendly Modal -->
     <div id="calendlyModal" class="calendly-modal-overlay">
