@@ -21,7 +21,7 @@
             <p>A visitor has sent a new message via the website chatbot.</p>
             
             <div class="message-box">
-                "{{ $chatMessage->message }}"
+                {!! nl2br(e($chatMessage->message)) !!}
             </div>
             
             <p><strong>Session ID:</strong> {{ $chatSession->session_id }}</p>
