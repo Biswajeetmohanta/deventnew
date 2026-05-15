@@ -26,7 +26,12 @@ class SettingsServiceProvider extends ServiceProvider
         // Share settings with all views
         // Using cache to avoid DB hits on every request
         $settings = Cache::rememberForever('site_settings', function () {
-            return Setting::all()->pluck('value', 'key');
+            try {
+                return Setting::all()->pluck('value', 'key');
+            } catch (\Exception $e) {
+                // Return empty collection if table doesn't exist (e.g., during migrations)
+                return collect([]);
+            }
         });
 
         View::share('settings', $settings);
