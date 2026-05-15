@@ -1652,6 +1652,7 @@
             line-height: 1.5;
             position: relative;
             word-wrap: break-word;
+            white-space: pre-line;
         }
         .chat-msg.admin .chat-msg-bubble {
             background: white;
