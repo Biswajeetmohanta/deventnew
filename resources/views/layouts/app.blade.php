@@ -1835,13 +1835,22 @@
                     <i class="fa-regular fa-comments" style="color: #2563eb;"></i>
                 </div>
                 <h5>Hi there! 👋</h5>
-                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">Sharing your details is optional.</p>
-                <div id="optionalLeadFields" style="margin-top: 15px; text-align: left;">
-                    <input type="text" id="leadName" placeholder="Your Name" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
-                    <input type="email" id="leadEmail" placeholder="Your Email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
-                    <input type="tel" id="leadPhone" placeholder="Phone Number" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
-                    <textarea id="leadRequirement" placeholder="Your Requirement" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
-                    <button type="button" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Submit Details</button>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 0; line-height: 1.5;">How can we help you today?</p>
+            </div>
+        </div>
+
+        <!-- Hidden Lead Form Template -->
+        <div id="leadFormTemplate" style="display: none;">
+            <div class="chat-message admin" style="margin-bottom: 15px;">
+                <div class="chat-message-content" style="background: #f1f5f9; color: #334155; max-width: 90%;">
+                    <p style="font-size: 13px; margin-bottom: 10px;">If you'd like us to reach out to you, feel free to share your details (optional):</p>
+                    <div id="optionalLeadFields" style="text-align: left;">
+                        <input type="text" id="leadName" placeholder="Your Name" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none;">
+                        <input type="email" id="leadEmail" placeholder="Your Email" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none;">
+                        <input type="tel" id="leadPhone" placeholder="Phone Number" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none;">
+                        <textarea id="leadRequirement" placeholder="Your Requirement" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; outline: none; resize: none;" rows="2"></textarea>
+                        <button type="button" id="leadSubmitBtn" style="width: 100%; padding: 8px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px;">Submit Details</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1891,6 +1900,7 @@
 
         let sessionId = null;
         let lastMessageId = 0;
+        let leadFormShown = false;
         let isOpen = false;
         let isSending = false;
         let pollInterval = null;
@@ -1970,6 +1980,19 @@
             `;
             chatBody.appendChild(div);
             scrollChatDown();
+
+            // After first admin reply, show lead form
+            if (msg.sender === 'admin' && !leadFormShown) {
+                setTimeout(() => {
+                    const template = document.getElementById('leadFormTemplate').innerHTML;
+                    const leadDiv = document.createElement('div');
+                    leadDiv.id = 'activeLeadForm';
+                    leadDiv.innerHTML = template;
+                    chatBody.appendChild(leadDiv);
+                    scrollChatDown();
+                    leadFormShown = true;
+                }, 1000);
+            }
         }
 
         function escapeHtml(text) {
@@ -1992,27 +2015,6 @@
 
             isSending = true;
             chatSendBtn.disabled = true;
-
-            // Capture lead details on first message if filled
-            const leadName = document.getElementById('leadName').value;
-            const leadEmail = document.getElementById('leadEmail').value;
-            const leadPhone = document.getElementById('leadPhone').value;
-            const leadReq = document.getElementById('leadRequirement').value;
-
-            if (leadName || leadEmail || leadPhone || leadReq) {
-                fetch('{{ url("/chat/submit-details") }}', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        name: leadName || 'Visitor',
-                        email: leadEmail,
-                        phone: leadPhone,
-                        requirement: leadReq
-                    })
-                });
-            }
-
             chatWelcome.style.display = 'none';
 
             // Instant UI update (Optimistic)
@@ -2154,7 +2156,10 @@
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById('chatWelcome').style.display = 'none';
+                    const activeForm = document.getElementById('activeLeadForm');
+                    if (activeForm) {
+                        activeForm.innerHTML = '<div class="chat-message admin"><div class="chat-message-content" style="background: #dcfce7; color: #166534;">Thank you for sharing your details!</div></div>';
+                    }
                     if (data.session_id) { window.sessionId = data.session_id; }
                     window.pollMessages();
                 } else {
