@@ -1803,6 +1803,11 @@
                 padding-bottom: max(12px, env(safe-area-inset-bottom));
             }
         }
+
+        #skipLeadBtn:hover {
+            background-color: #f5f7ff !important;
+            border-color: #2563eb !important;
+        }
     </style>
 
     <!-- Chat Widget HTML -->
@@ -1837,7 +1842,7 @@
                     <input type="tel" id="leadPhone" placeholder="Phone Number" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
                     <textarea id="leadRequirement" placeholder="Your Requirement" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
                     <button type="submit" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 8px;">Continue Chat</button>
-                    <button type="button" id="skipLeadBtn" style="width: 100%; padding: 10px; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;">Skip & Start Chat</button>
+                    <button type="button" id="skipLeadBtn" style="width: 100%; padding: 10px; background: #ffffff; color: #3366ff; border: 1px solid #3366ff; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;">Skip & Start Chat</button>
                 </form>
             </div>
         </div>
