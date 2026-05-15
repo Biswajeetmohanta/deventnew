@@ -133,20 +133,64 @@ class ChatController extends Controller
         \Log::info("Chat: Session {$session->id}, Step: {$session->current_step}");
 
         if ($session->current_step < 5) {
-            $reply = $this->getConversationalReply($session);
-            
-            if ($reply) {
-                \Log::info("Chat: Sending step {$session->current_step} reply");
+            // Special handling for Step 1: Check if user provided details
+            if ($session->current_step == 1) {
+                $hasDetails = stripos($msg->message, 'Name:') !== false || stripos($msg->message, 'Email:') !== false;
                 
-                ChatMessage::create([
-                    'chat_session_id' => $session->id,
-                    'message' => $reply,
-                    'sender' => 'admin',
-                    'is_read' => false,
-                ]);
+                if (!$hasDetails) {
+                    // User didn't provide details, let AI/Keywords handle this message
+                    // We don't return here; we fall through to AI logic
+                    \Log::info("Chat: No details provided in step 1, falling back to AI/Keywords");
+                } else {
+                    // User provided details!
+                    $name = 'there';
+                    if (preg_match('/Name:\s*([^\n\r]+)/i', $msg->message, $matches)) {
+                        $name = trim($matches[1]);
+                        $session->update(['visitor_name' => $name]);
+                    }
+                    
+                    $reply = "Thank you, {$name}!\n\n" . $this->getConversationalReply($session);
+                    
+                    ChatMessage::create([
+                        'chat_session_id' => $session->id,
+                        'message' => $reply,
+                        'sender' => 'admin',
+                        'is_read' => false,
+                    ]);
 
-                $session->increment('current_step');
-                return;
+                    $session->increment('current_step');
+                    return;
+                }
+            } else {
+                // Handle "Other" selection for Service (Step 2) or Industry (Step 3)
+                if (($session->current_step == 2 || $session->current_step == 3) && strtolower(trim($msg->message)) == 'other') {
+                    $itemType = ($session->current_step == 2) ? "service" : "industry";
+                    $reply = "Please type the name of the {$itemType} you are looking for:";
+                    
+                    ChatMessage::create([
+                        'chat_session_id' => $session->id,
+                        'message' => $reply,
+                        'sender' => 'admin',
+                        'is_read' => false,
+                    ]);
+                    
+                    return; // Don't increment yet, wait for manual input
+                }
+
+                // Normal steps
+                $reply = $this->getConversationalReply($session);
+                
+                if ($reply) {
+                    ChatMessage::create([
+                        'chat_session_id' => $session->id,
+                        'message' => $reply,
+                        'sender' => 'admin',
+                        'is_read' => false,
+                    ]);
+
+                    $session->increment('current_step');
+                    return;
+                }
             }
         }
 
@@ -256,14 +300,9 @@ class ChatController extends Controller
                 if (empty($services)) {
                     $services = ['Website Development', 'Mobile App Development', 'Custom Software Development'];
                 }
+                $services[] = 'Other';
                 
-                $list = '';
-                foreach ($services as $i => $service) {
-                    $list .= ($i + 1) . ". " . $service . "\n";
-                }
-                $list .= ($i + 2) . ". Other";
-                
-                return "Thank you!\n\nPlease select the service you are looking for:\n\n" . $list;
+                return "Please select the service you are looking for:\n[OPTIONS]:" . implode('|', $services);
 
             case 2:
                 // Step 2: Show dynamic industries list
@@ -271,14 +310,9 @@ class ChatController extends Controller
                 if (empty($industries)) {
                     $industries = ['E-commerce', 'Healthcare', 'Education', 'Real Estate', 'Finance'];
                 }
+                $industries[] = 'Other';
                 
-                $list = '';
-                foreach ($industries as $i => $industry) {
-                    $list .= ($i + 1) . ". " . $industry . "\n";
-                }
-                $list .= ($i + 2) . ". Other";
-                
-                return "Great! Please select your industry:\n\n" . $list;
+                return "Great! Please select your industry:\n[OPTIONS]:" . implode('|', $industries);
 
             case 3:
                 // Step 3: Ask for detailed project requirements

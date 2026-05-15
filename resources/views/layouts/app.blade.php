@@ -1645,11 +1645,11 @@
             flex-direction: row-reverse;
         }
         .chat-msg-bubble {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 18px;
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 16px;
             font-size: 13.5px;
-            line-height: 1.5;
+            line-height: 1.4;
             position: relative;
             word-wrap: break-word;
             white-space: pre-line;
@@ -1680,6 +1680,29 @@
         @keyframes chatMsgIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Chat Options Buttons */
+        .chat-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .chat-opt-btn {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chat-opt-btn:hover {
+            background: #2563eb;
+            color: white;
         }
 
         /* Chat Input */
@@ -1829,7 +1852,7 @@
                 </div>
                 <div class="chat-header-info">
                     <h4>Devent Support</h4>
-                    <p><span class="chat-online-dot"></span> We typically reply in minutes</p>
+                    <p><span class="chat-online-dot"></span> Get a quick project estimate within 2 minutes</p>
                 </div>
             </div>
         </div>
@@ -1964,16 +1987,40 @@
         function appendMessage(msg) {
             const div = document.createElement('div');
             div.className = `chat-msg ${msg.sender}`;
-            div.innerHTML = `
-                <div class="chat-msg-bubble">
-                    ${escapeHtml(msg.message)}
-                    <div class="chat-msg-time">${msg.time || ''}</div>
-                </div>
-            `;
+            
+            let messageContent = msg.message;
+            let optionsHtml = '';
+            
+            if (msg.message.includes('[OPTIONS]:')) {
+                const parts = msg.message.split('[OPTIONS]:');
+                messageContent = parts[0];
+                const options = parts[1].split('|');
+                
+                optionsHtml = '<div class="chat-options">';
+                options.forEach(opt => {
+                    optionsHtml += `<button class="chat-opt-btn" onclick="sendOption('${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+                });
+                optionsHtml += '</div>';
+            }
+
+            div.innerHTML = `<div class="chat-msg-bubble">${escapeHtml(messageContent)}${optionsHtml}<div class="chat-msg-time">${msg.time || ''}</div></div>`;
             chatBody.appendChild(div);
             scrollChatDown();
-
         }
+
+        // Global function for option buttons
+        window.sendOption = function(option) {
+            // Find and disable all buttons in the last message to prevent multiple clicks
+            const lastMsg = chatBody.lastElementChild;
+            if (lastMsg) {
+                const btns = lastMsg.querySelectorAll('.chat-opt-btn');
+                btns.forEach(btn => btn.disabled = true);
+            }
+            
+            // Set input value and send
+            chatInput.value = option;
+            sendChatMessage();
+        };
 
         function escapeHtml(text) {
             const d = document.createElement('div');
