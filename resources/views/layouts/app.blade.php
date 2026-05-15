@@ -1703,7 +1703,7 @@
             background: white;
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
-        .chat-input-wrap input {
+        .chat-input-wrap textarea {
             flex: 1;
             border: none;
             background: none;
@@ -1712,6 +1712,11 @@
             color: #1e293b;
             padding: 10px 0;
             font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            min-height: 20px;
+            line-height: 1.4;
+            overflow-y: auto;
         }
         .chat-send-btn {
             width: 36px;
@@ -1851,7 +1856,7 @@
         <!-- Input -->
         <div class="chat-footer">
             <form id="chatForm" class="chat-input-wrap" autocomplete="off">
-                <input type="text" id="chatInput" placeholder="Type a message..." maxlength="1000">
+                <textarea id="chatInput" placeholder="Type a message..." maxlength="2000" rows="1"></textarea>
                 <button type="submit" class="chat-send-btn" id="chatSendBtn">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
@@ -1982,14 +1987,14 @@
         }
 
         // Send message
-        chatForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        function sendChatMessage() {
             const message = chatInput.value.trim();
             if (!message || isSending || !sessionId) return;
 
             isSending = true;
             chatSendBtn.disabled = true;
             chatWelcome.style.display = 'none';
+            chatInput.style.height = 'auto';
 
             // Instant UI update (Optimistic)
             appendMessage({
@@ -2027,6 +2032,25 @@
                 chatSendBtn.disabled = false;
                 chatInput.focus();
             });
+        }
+
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendChatMessage();
+        });
+
+        // Enter = new line, Shift+Enter = send
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
         });
 
         // Poll for admin replies

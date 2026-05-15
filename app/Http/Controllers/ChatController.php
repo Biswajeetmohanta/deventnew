@@ -248,7 +248,7 @@ class ChatController extends Controller
                 // Step 0: Welcome + Ask for basic details
                 return "Hi there! Welcome to Devent Technology. How can we help you today?\n\n" .
                        "Please share a few basic details so we can give you a quick estimate within 2 minutes.\n\n" .
-                       "Name:\nPhone Number / Email:\nService Required:\nIndustry:\nBrief Requirement:";
+                       "Name:\nPhone Number / Email:\nService Required:\nBrief Requirement:";
 
             case 1:
                 // Step 1: Show dynamic services list
