@@ -332,10 +332,10 @@ class ChatController extends Controller
     public function submitDetails(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'requirement' => 'required|string|max:1000',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'requirement' => 'nullable|string|max:1000',
         ]);
 
         $sessionId = $request->cookie('chat_session_id') ?? $request->input('session_id');
@@ -349,18 +349,21 @@ class ChatController extends Controller
             return response()->json(['error' => 'Session not found'], 404);
         }
 
+        $name = $request->input('name') ? strip_tags($request->input('name')) : 'Visitor';
+        $email = $request->input('email') ? strip_tags($request->input('email')) : null;
+
         $session->update([
-            'visitor_name' => strip_tags($request->input('name')),
-            'visitor_email' => strip_tags($request->input('email')),
+            'visitor_name' => $name,
+            'visitor_email' => $email,
             'last_message_at' => now(),
             'status' => 'active',
         ]);
 
         // Create the user message containing the details
-        $detailsMessage = "Name: " . strip_tags($request->input('name')) . "\n";
-        $detailsMessage .= "Email: " . strip_tags($request->input('email')) . "\n";
-        $detailsMessage .= "Phone: " . strip_tags($request->input('phone')) . "\n";
-        $detailsMessage .= "Requirement: " . strip_tags($request->input('requirement'));
+        $detailsMessage = "Name: " . ($request->input('name') ? strip_tags($request->input('name')) : 'Not provided') . "\n";
+        $detailsMessage .= "Email: " . ($request->input('email') ? strip_tags($request->input('email')) : 'Not provided') . "\n";
+        $detailsMessage .= "Phone: " . ($request->input('phone') ? strip_tags($request->input('phone')) : 'Not provided') . "\n";
+        $detailsMessage .= "Requirement: " . ($request->input('requirement') ? strip_tags($request->input('requirement')) : 'Not provided');
 
         $msg = ChatMessage::create([
             'chat_session_id' => $session->id,
