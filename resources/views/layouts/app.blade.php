@@ -1830,13 +1830,13 @@
                     <i class="fa-regular fa-comments" style="color: #2563eb;"></i>
                 </div>
                 <h5>Hi there! 👋</h5>
-                <p>Please share your details if you'd like us to connect with you.</p>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">Share your details if you'd like us to connect with you. <strong>All fields are optional.</strong></p>
                 <form id="chatLeadForm" style="margin-top: 15px; text-align: left;">
                     <input type="text" id="leadName" placeholder="Your Name" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
                     <input type="email" id="leadEmail" placeholder="Your Email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
                     <input type="tel" id="leadPhone" placeholder="Phone Number" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
                     <textarea id="leadRequirement" placeholder="Your Requirement" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
-                    <button type="submit" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Start Chatting</button>
+                    <button type="submit" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Continue Chat</button>
                 </form>
             </div>
         </div>
