@@ -332,10 +332,10 @@ class ChatController extends Controller
     public function submitDetails(Request $request)
     {
         $request->validate([
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'requirement' => 'nullable|string|max:1000',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'requirement' => 'required|string|max:1000',
         ]);
 
         $sessionId = $request->cookie('chat_session_id') ?? $request->input('session_id');
