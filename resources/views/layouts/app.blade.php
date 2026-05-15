@@ -1841,6 +1841,7 @@
                     <input type="email" id="leadEmail" placeholder="Your Email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
                     <input type="tel" id="leadPhone" placeholder="Phone Number" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none;">
                     <textarea id="leadRequirement" placeholder="Your Requirement" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: none;" rows="2"></textarea>
+                    <button type="button" id="leadSubmitBtn" style="width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Submit Details</button>
                 </div>
             </div>
         </div>
@@ -2121,6 +2122,54 @@
         }, 8000);
 
     })();
+
+    // Handle Lead Submit Button
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'leadSubmitBtn') {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+
+            const name = document.getElementById('leadName').value;
+            const email = document.getElementById('leadEmail').value;
+            const phone = document.getElementById('leadPhone').value;
+            const req = document.getElementById('leadRequirement').value;
+
+            // Use global sessionId and csrfToken
+            fetch('{{ url("/chat/submit-details") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    session_id: window.sessionId,
+                    name: name || 'Visitor',
+                    email: email,
+                    phone: phone,
+                    requirement: req
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('chatWelcome').style.display = 'none';
+                    if (data.session_id) { window.sessionId = data.session_id; }
+                    window.pollMessages();
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = 'Submit Details';
+                    alert(data.error || 'Submission failed');
+                }
+            })
+            .catch(err => {
+                console.error('Lead error:', err);
+                btn.disabled = false;
+                btn.textContent = 'Submit Details';
+            });
+        }
+    });
     </script>
     <!-- Calendly Modal -->
     <div id="calendlyModal" class="calendly-modal-overlay">
