@@ -50,6 +50,12 @@
                 <i class="fa-solid fa-robot mr-3 text-lg"></i>
                 Chatbot Settings
             </button>
+            <button @click="activeTab = 'privacy'" 
+                :class="activeTab === 'privacy' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-600 hover:bg-slate-50'"
+                class="w-full flex items-center px-6 py-4 rounded-2xl transition-all duration-300 font-bold text-sm">
+                <i class="fa-solid fa-shield-halved mr-3 text-lg"></i>
+                Privacy Policy
+            </button>
         </div>
 
         <!-- Settings Content -->
@@ -385,6 +391,53 @@
                     </div>
                 </div>
 
+                <!-- Privacy Policy Tab -->
+                @php
+                    $defaultPrivacyContent = '<h2>Privacy Policy</h2>
+<p>Devent Technology respects your privacy and is committed to protecting the personal information shared by users through our website.</p>
+
+<h3>Information We Collect</h3>
+<p>Users may browse our website without providing personal details. We collect information only when users voluntarily submit it through contact forms, inquiry forms, emails, or other communication channels. This may include name, email address, phone number, company details, and service requirements.</p>
+<p>We may also collect non-personal information such as IP address, browser type, device details, pages visited, and website usage data through cookies and analytics tools to improve our website, services, and user experience.</p>
+
+<h3>Use of Information</h3>
+<p>The information collected may be used to respond to inquiries, understand project requirements, provide service-related communication, improve our website, and prevent misuse or spam.</p>
+<p>Devent Technology does not sell, rent, or trade users’ personal information to third parties. Information may be shared only when required for business operations, legal compliance, or protection of our rights.</p>
+
+<h3>Third-Party Links & Consent</h3>
+<p>Our website may contain links to third-party websites. Devent Technology is not responsible for the privacy practices, content, or services of such external websites.</p>
+<p>By using our website, users agree to this Privacy Policy. For any privacy-related questions, users may contact Devent Technology through the contact details available on our website.</p>';
+
+                    $privacyContent = $settings['privacy_policy'] ?? $defaultPrivacyContent;
+                @endphp
+                
+                <div x-show="activeTab === 'privacy'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="glass p-8 rounded-[2.5rem] shadow-xl border-slate-100">
+                    <div class="flex items-center mb-10">
+                        <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-shield-halved text-indigo-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">Privacy Policy</h3>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Dynamic policy page content</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Edit Privacy Policy Content</label>
+                            <p class="text-xs text-slate-400 mb-4">Use the rich text editor below to format your privacy policy. You can use headings, lists, bold text, and links.</p>
+                            
+                            <!-- Quill editor container -->
+                            <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+                                <div id="editor-container" class="min-h-[400px] text-slate-800 p-4">{!! $privacyContent !!}</div>
+                            </div>
+                            
+                            <!-- Hidden input to submit editor content -->
+                            <input type="hidden" name="privacy_policy" id="privacy_policy_input">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Global Save Button -->
                 <div class="flex justify-end pt-6">
                     <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-black px-12 py-5 rounded-[2rem] transition-all shadow-2xl shadow-slate-200 active:scale-95 flex items-center group">
@@ -399,4 +452,37 @@
 
 <!-- Alpine.js for Tab Switching -->
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+@endsection
+
+@section('scripts')
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.getElementById('editor-container')) {
+            var quill = new Quill('#editor-container', {
+                theme: 'snow',
+                placeholder: 'Write your Privacy Policy here...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, 4, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link', 'clean']
+                    ]
+                }
+            });
+
+            // On submit, update hidden input
+            var form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                var privacyPolicyInput = document.querySelector('#privacy_policy_input');
+                if (privacyPolicyInput) {
+                    // Get HTML content from Quill
+                    privacyPolicyInput.value = quill.root.innerHTML;
+                }
+            });
+        }
+    });
+</script>
 @endsection

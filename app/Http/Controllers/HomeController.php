@@ -25,4 +25,10 @@ class HomeController extends Controller
 
         return view('home', compact('banners', 'services', 'technologies', 'portfolios', 'testimonials', 'settings', 'industries'));
     }
+
+    public function privacyPolicy()
+    {
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        return view('privacy-policy', compact('settings'));
+    }
 }

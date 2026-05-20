@@ -72,6 +72,9 @@ Route::get('/careers', [CareerController::class, 'index']);
 Route::get('/careers/{id}', [CareerController::class, 'show']);
 Route::post('/careers/{id}/apply', [CareerController::class, 'storeApplication'])->name('careers.apply');
 
+// Privacy Policy
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy-policy');
+
 // Chat API (public)
 Route::post('/chat/start', [\App\Http\Controllers\ChatController::class, 'startSession']);
 Route::post('/chat/send', [\App\Http\Controllers\ChatController::class, 'sendMessage']);

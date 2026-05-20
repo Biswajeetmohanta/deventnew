@@ -139,6 +139,9 @@
                     <a href="{{ route('admin.settings.index', ['tab' => 'contact']) }}" class="block px-4 py-2 text-sm {{ request()->get('tab') === 'contact' ? 'text-amber-600 font-bold' : 'text-slate-500' }} hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-all border-l-2 border-transparent hover:border-amber-500">
                         Contact Info
                     </a>
+                    <a href="{{ route('admin.settings.index', ['tab' => 'privacy']) }}" class="block px-4 py-2 text-sm {{ request()->get('tab') === 'privacy' ? 'text-amber-600 font-bold' : 'text-slate-500' }} hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-all border-l-2 border-transparent hover:border-amber-500">
+                        Privacy Policy
+                    </a>
                 </div>
             </div>
         </nav>

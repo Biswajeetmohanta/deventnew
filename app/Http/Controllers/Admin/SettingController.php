@@ -34,6 +34,7 @@ class SettingController extends Controller
             'chatbot_notification_email' => 'nullable|email',
             'brevo_api_key' => 'nullable|string|max:255',
             'mail_from_address' => 'nullable|email',
+            'privacy_policy' => 'nullable|string',
         ]);
 
         $inputs = $request->except('_token');

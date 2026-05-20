@@ -1031,6 +1031,13 @@
             .back-to-top { right: 28px; bottom: 160px !important; }
             .whatsapp-float-label { display: none; }
         }
+
+        /* Prevent overlap of footer links with floating buttons */
+        @media (min-width: 768px) {
+            .footer-bottom-links {
+                padding-right: 180px !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased text-slate-900 bg-white">
@@ -1392,14 +1399,15 @@
             <!-- Bottom Bar -->
             <div class="border-t border-slate-900 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-semibold text-slate-500">
                 <p>&copy; {{ date('Y') }} <span class="text-blue-500">Devent Technology</span>. All Rights Reserved.</p>
-                <div class="flex items-center gap-8">
-                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <div class="flex items-center gap-8 footer-bottom-links">
+                    <a href="{{ route('privacy-policy') }}" class="text-slate-400 hover:text-blue-500 transition-colors duration-300">Privacy Policy</a>
                     <div class="w-px h-4 bg-slate-800"></div>
-                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                    <a href="#" class="text-slate-400 hover:text-blue-500 transition-colors duration-300">Support</a>
                 </div>
             </div>
         </div>
     </footer>
+
     <div id="backToTop" class="back-to-top">
         <i class="fa-solid fa-arrow-up"></i>
     </div>
