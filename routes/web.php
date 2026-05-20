@@ -3,12 +3,12 @@
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\CaseStudyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
-use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
+use App\Http\Controllers\Admin\CaseStudyController as AdminCaseStudyController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\CareerController as AdminCareerController;
@@ -26,7 +26,7 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function () {
     })->name('dashboard');
 
     Route::resource('services', AdminServiceController::class);
-    Route::resource('portfolios', AdminPortfolioController::class);
+    Route::resource('case-studies', AdminCaseStudyController::class);
     Route::resource('inquiries', AdminInquiryController::class)->only(['index', 'show', 'destroy']);
     Route::resource('testimonials', AdminTestimonialController::class);
     Route::resource('careers', AdminCareerController::class);
@@ -54,8 +54,8 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function () {
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{slug}', [ServiceController::class, 'show']);
-Route::get('/portfolio', [PortfolioController::class, 'index']);
-Route::get('/portfolio/{slug}', [PortfolioController::class, 'show']);
+Route::get('/case-studies', [CaseStudyController::class, 'index'])->name('case-studies.index');
+Route::get('/case-studies/{slug}', [CaseStudyController::class, 'show'])->name('case-studies.show');
 Route::get('/industry', [\App\Http\Controllers\IndustryController::class, 'index']);
 Route::get('/industry/{slug}', [\App\Http\Controllers\IndustryController::class, 'show']);
 Route::get('/technology', [\App\Http\Controllers\TechnologyController::class, 'index']);

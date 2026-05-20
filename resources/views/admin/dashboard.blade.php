@@ -21,11 +21,11 @@
     <div class="glass p-6 rounded-3xl">
         <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 border border-blue-100">
-                <i class="fa-solid fa-briefcase text-xl"></i>
+                <i class="fa-solid fa-laptop-code text-xl"></i>
             </div>
-            <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Portfolio</span>
+            <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Case Studies</span>
         </div>
-        <h3 class="text-2xl font-extrabold text-slate-800">{{ \App\Models\Portfolio::count() }}</h3>
+        <h3 class="text-2xl font-extrabold text-slate-800">{{ \App\Models\CaseStudy::count() }}</h3>
         <p class="text-slate-500 text-xs mt-1 font-medium">Case studies completed</p>
     </div>
 
@@ -114,9 +114,9 @@
                 <i class="fa-solid fa-plus block mb-3 text-amber-500 text-2xl group-hover:scale-110 transition-transform"></i>
                 <span class="text-sm font-bold text-slate-700">Add Service</span>
             </a>
-            <a href="{{ route('admin.portfolios.create') }}" class="group p-6 bg-blue-50 border border-blue-100 rounded-2xl text-center hover:bg-blue-100 transition-all hover:shadow-lg hover:shadow-blue-500/5">
+            <a href="{{ route('admin.case-studies.create') }}" class="group p-6 bg-blue-50 border border-blue-100 rounded-2xl text-center hover:bg-blue-100 transition-all hover:shadow-lg hover:shadow-blue-500/5">
                 <i class="fa-solid fa-plus block mb-3 text-blue-500 text-2xl group-hover:scale-110 transition-transform"></i>
-                <span class="text-sm font-bold text-slate-700">Add Project</span>
+                <span class="text-sm font-bold text-slate-700">Add Case Study</span>
             </a>
             <a href="{{ route('admin.posts.create') }}" class="group p-6 bg-purple-50 border border-purple-100 rounded-2xl text-center hover:bg-purple-100 transition-all hover:shadow-lg hover:shadow-purple-500/5">
                 <i class="fa-solid fa-plus block mb-3 text-purple-500 text-2xl group-hover:scale-110 transition-transform"></i>

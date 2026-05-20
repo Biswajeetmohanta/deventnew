@@ -12,8 +12,8 @@ class Technology extends Model
         'content_data' => 'array',
     ];
 
-    public function portfolios()
+    public function caseStudies()
     {
-        return $this->belongsToMany(Portfolio::class);
+        return $this->belongsToMany(CaseStudy::class);
     }
 }

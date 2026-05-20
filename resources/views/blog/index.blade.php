@@ -25,7 +25,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 @forelse($posts as $post)
-                    <div class="premium-card group !p-0 overflow-hidden">
+                    <div class="premium-card group overflow-hidden" style="padding: 0 !important;">
                         <div class="relative h-64 overflow-hidden">
                             @if($post->image)
                                 <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">

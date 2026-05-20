@@ -226,10 +226,10 @@ class ChatController extends Controller
             }
         }
 
-        if (!$autoReplySent && (stripos($message, 'project') !== false || stripos($message, 'portfolio') !== false || stripos($message, 'work') !== false)) {
-            $items = \App\Models\Portfolio::latest()->take(5)->pluck('title')->toArray();
+        if (!$autoReplySent && (stripos($message, 'project') !== false || stripos($message, 'portfolio') !== false || stripos($message, 'work') !== false || stripos($message, 'case stud') !== false)) {
+            $items = \App\Models\CaseStudy::latest()->take(5)->pluck('title')->toArray();
             if (!empty($items)) {
-                $reply = "Here are some of our recent projects:\n• " . implode("\n• ", $items) . "\n\nYou can view our full portfolio on our website!";
+                $reply = "Here are some of our recent case studies:\n• " . implode("\n• ", $items) . "\n\nYou can view our full case studies on our website!";
                 $autoReplySent = true;
             }
         }

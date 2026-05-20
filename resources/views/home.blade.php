@@ -180,8 +180,8 @@
         </div>
     </section>
 
-    @if($portfolios->isNotEmpty())
-    <!-- Portfolio Section -->
+    @if($caseStudies->isNotEmpty())
+    <!-- Case Studies Section -->
     <section class="py-24 bg-[#f8fafc]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -190,11 +190,11 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach($portfolios->take(3) as $portfolio)
-                    <div class="premium-card group !p-0 overflow-hidden">
+                @foreach($caseStudies->take(3) as $caseStudy)
+                    <div class="premium-card group overflow-hidden" style="padding: 0 !important;">
                         <div class="h-64 overflow-hidden">
-                            @if($portfolio->image)
-                                <img src="{{ Storage::url($portfolio->image) }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                            @if($caseStudy->image)
+                                <img src="{{ Storage::url($caseStudy->image) }}" alt="{{ $caseStudy->title }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
                             @else
                                 <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">
                                     <i class="fa-solid fa-image text-4xl"></i>
@@ -202,11 +202,11 @@
                             @endif
                         </div>
                         <div class="p-8">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-3 block">{{ $portfolio->client }}</span>
-                            <h4 class="premium-card-title">{{ $portfolio->title }}</h4>
-                            <p class="premium-card-text mb-6">{{ \Illuminate\Support\Str::limit($portfolio->description, 100) }}</p>
-                            <a href="{{ url('/portfolio/' . $portfolio->slug) }}" class="text-sm font-bold flex items-center text-blue-600 hover:text-blue-700">
-                                View Project <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 12h16"></path></svg>
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-3 block">{{ $caseStudy->client }}</span>
+                            <h4 class="premium-card-title">{{ $caseStudy->title }}</h4>
+                            <p class="premium-card-text mb-6">{{ \Illuminate\Support\Str::limit($caseStudy->description, 100) }}</p>
+                            <a href="{{ url('/case-studies/' . $caseStudy->slug) }}" class="text-sm font-bold flex items-center text-blue-600 hover:text-blue-700">
+                                View Case Study <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 12h16"></path></svg>
                             </a>
                         </div>
                     </div>

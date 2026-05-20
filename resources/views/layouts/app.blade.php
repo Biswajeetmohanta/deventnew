@@ -1150,6 +1150,10 @@
                         </div>
                     </div>
                     
+                    <!-- <div class="flex items-center">
+                        <a href="{{ url('/case-studies') }}" class="nav-link {{ request()->is('case-studies*') ? 'active' : '' }}">Case Studies</a>
+                    </div> -->
+                    
                     <div class="flex items-center">
                         <a href="{{ url('/testimonials') }}" class="nav-link {{ request()->is('testimonials*') ? 'active' : '' }}">Testimonials</a>
                     </div>
@@ -1265,6 +1269,7 @@
                 </div>
             </details>
 
+            <a href="{{ url('/case-studies') }}" class="text-xl font-black text-slate-900 hover:text-blue-600 transition-colors">Case Studies</a>
             <a href="{{ url('/testimonials') }}" class="text-xl font-black text-slate-900 hover:text-blue-600 transition-colors">Testimonials</a>
             <hr class="border-slate-100 my-4">
             <button onclick="openCalendlyModal()" class="border-2 border-blue-600 text-blue-600 py-4 rounded-2xl text-center text-sm font-black uppercase tracking-widest hover:bg-blue-50 transition-all flex items-center justify-center gap-2 mb-3">
@@ -1362,7 +1367,7 @@
                     <ul class="space-y-4">
                         <li><a href="{{ url('/about') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>About Us</a></li>
                         <li><a href="{{ url('/contact') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Contact</a></li>
-                        <li><a href="{{ url('/portfolio') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Portfolio</a></li>
+                        <li><a href="{{ url('/case-studies') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Case Studies</a></li>
                         <li><a href="{{ url('/services') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Services</a></li>
                         <li><a href="{{ url('/testimonials') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Testimonials</a></li>
                         <li><a href="{{ url('/blog') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>

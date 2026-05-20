@@ -118,21 +118,21 @@
                         </div>
                     @endif
 
-                    {{-- Portfolio / Projects --}}
-                    @if($technology->portfolios->count() > 0)
+                    {{-- Case Studies / Projects --}}
+                    @if($technology->caseStudies->count() > 0)
                         <div style="margin-top: 40px;">
-                            <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 24px;">Projects Built With {{ $technology->name }}</h2>
-                            @foreach($technology->portfolios as $portfolio)
+                            <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 24px;">Case Studies Built With {{ $technology->name }}</h2>
+                            @foreach($technology->caseStudies as $caseStudy)
                                 <div style="display: flex; gap: 24px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin-bottom: 16px;" class="flex-col sm:flex-row">
-                                    @if($portfolio->image)
+                                    @if($caseStudy->image)
                                         <div style="flex-shrink: 0;">
-                                            <img src="{{ Storage::url($portfolio->image) }}" alt="{{ $portfolio->title }}" style="width: 240px; height: 180px; object-fit: cover;">
+                                            <img src="{{ Storage::url($caseStudy->image) }}" alt="{{ $caseStudy->title }}" style="width: 240px; height: 180px; object-fit: cover;">
                                         </div>
                                     @endif
                                     <div style="padding: 24px; display: flex; flex-direction: column; justify-content: center;">
-                                        <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">{{ $portfolio->title }}</h3>
-                                        <p style="font-size: 13px; color: #64748b; line-height: 1.7; margin-bottom: 12px;">{{ Str::limit($portfolio->description, 150) }}</p>
-                                        <a href="{{ url('/portfolio/' . $portfolio->slug) }}" style="font-size: 13px; font-weight: 700; color: #3b82f6; text-decoration: none;">View Case Study →</a>
+                                        <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">{{ $caseStudy->title }}</h3>
+                                        <p style="font-size: 13px; color: #64748b; line-height: 1.7; margin-bottom: 12px;">{{ Str::limit($caseStudy->description, 150) }}</p>
+                                        <a href="{{ url('/case-studies/' . $caseStudy->slug) }}" style="font-size: 13px; font-weight: 700; color: #3b82f6; text-decoration: none;">View Case Study →</a>
                                     </div>
                                 </div>
                             @endforeach

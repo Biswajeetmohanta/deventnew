@@ -21,7 +21,7 @@ class TechnologyController extends Controller
     {
         $technology = \App\Models\Technology::where('slug', $slug)->firstOrFail();
         $settings = \App\Models\Setting::all()->pluck('value', 'key');
-        $technology->load('portfolios');
+        $technology->load('caseStudies');
         $otherTechnologies = \App\Models\Technology::where('is_active', true)->get();
         
         return view('technology.show', compact('technology', 'settings', 'otherTechnologies'));

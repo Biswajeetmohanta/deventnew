@@ -96,8 +96,8 @@
             <a href="{{ route('admin.technologies.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/technologies*') ? 'active' : '' }}">
                 <i class="fa-solid fa-microchip w-8 text-lg"></i> Technologies
             </a>
-            <a href="{{ route('admin.portfolios.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/portfolios*') ? 'active' : '' }}">
-                <i class="fa-solid fa-briefcase w-8 text-lg"></i> Portfolios
+            <a href="{{ route('admin.case-studies.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/case-studies*') ? 'active' : '' }}">
+                <i class="fa-solid fa-laptop-code w-8 text-lg"></i> Case Studies
             </a>
             <a href="{{ route('admin.posts.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/posts*') ? 'active' : '' }}">
                 <i class="fa-solid fa-newspaper w-8 text-lg"></i> Blog Posts
