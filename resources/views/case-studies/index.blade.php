@@ -33,12 +33,14 @@
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3"><i class="fa-solid fa-building mr-1"></i> Filter by Industry</h4>
                     <div class="flex flex-wrap gap-2">
                         <a href="{{ route('case-studies.index', array_merge(request()->query(), ['industry' => null])) }}" 
-                           class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ !request('industry') ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}">
+                           class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ !request('industry') ? 'text-white shadow-lg shadow-blue-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}"
+                           {!! !request('industry') ? 'style="background-color: #2563eb !important; border-color: #2563eb !important; color: white !important;"' : '' !!}>
                             All Industries
                         </a>
                         @foreach($industries as $ind)
                             <a href="{{ route('case-studies.index', array_merge(request()->query(), ['industry' => $ind->slug])) }}" 
-                               class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ (request()->filled('industry') && request('industry') === $ind->slug) ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}">
+                               class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ (request()->filled('industry') && request('industry') === $ind->slug) ? 'text-white shadow-lg shadow-blue-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}"
+                               {!! (request()->filled('industry') && request('industry') === $ind->slug) ? 'style="background-color: #2563eb !important; border-color: #2563eb !important; color: white !important;"' : '' !!}>
                                 {{ $ind->title }}
                             </a>
                         @endforeach
@@ -50,12 +52,14 @@
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3"><i class="fa-solid fa-code mr-1"></i> Filter by Tech Stack</h4>
                     <div class="flex flex-wrap gap-2">
                         <a href="{{ route('case-studies.index', array_merge(request()->query(), ['technology' => null])) }}" 
-                           class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ !request('technology') ? 'bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}">
+                           class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ !request('technology') ? 'text-white shadow-lg shadow-purple-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}"
+                           {!! !request('technology') ? 'style="background-color: #8b5cf6 !important; border-color: #8b5cf6 !important; color: white !important;"' : '' !!}>
                             All Tech
                         </a>
                         @foreach($technologies as $tech)
                             <a href="{{ route('case-studies.index', array_merge(request()->query(), ['technology' => $tech->slug])) }}" 
-                               class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ (request()->filled('technology') && request('technology') === $tech->slug) ? 'bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}">
+                               class="px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 {{ (request()->filled('technology') && request('technology') === $tech->slug) ? 'text-white shadow-lg shadow-purple-600/15' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300' }}"
+                               {!! (request()->filled('technology') && request('technology') === $tech->slug) ? 'style="background-color: #8b5cf6 !important; border-color: #8b5cf6 !important; color: white !important;"' : '' !!}>
                                 {{ $tech->name }}
                             </a>
                         @endforeach
