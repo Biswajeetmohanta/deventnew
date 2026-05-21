@@ -1417,11 +1417,6 @@
         <i class="fa-solid fa-arrow-up"></i>
     </div>
 
-    <!-- Floating Meeting Button -->
-    <button onclick="openCalendlyModal()" class="fixed bottom-7 left-7 z-[9997] btn-gradient text-white px-5 py-3 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-105 font-bold text-sm">
-        <i class="fa-solid fa-calendar-alt mr-2"></i>
-        Book a Meeting
-    </button>
 
     <!-- Floating WhatsApp Button -->
     <div class="whatsapp-float">

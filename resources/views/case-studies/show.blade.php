@@ -79,7 +79,7 @@
                 <!-- Right visual media (explainer video or mockup) -->
                 <div class="lg:col-span-5 relative">
                     <div class="relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-slate-900/60 backdrop-blur-md p-3 shadow-2xl shadow-blue-900/10">
-                        @if(isset($cd['banner']['video_url']) && !empty($cd['banner']['video_url']))
+                        @if(isset($cd['banner']['video_url']) && !empty(trim($cd['banner']['video_url'])) && trim($cd['banner']['video_url']) !== '#' && (strpos(trim($cd['banner']['video_url']), 'http://') === 0 || strpos(trim($cd['banner']['video_url']), 'https://') === 0))
                             @php
                                 $videoUrl = $cd['banner']['video_url'];
                                 $embedUrl = '';
@@ -101,9 +101,9 @@
                             @endif
                         @else
                             <!-- Fallback Mockup Image -->
-                            <div class="aspect-video w-full rounded-[2rem] overflow-hidden relative group">
+                            <div class="w-full rounded-[2rem] overflow-hidden relative group">
                                 @if($caseStudy->image)
-                                    <img src="{{ Storage::url($caseStudy->image) }}" alt="{{ $caseStudy->title }}" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::url($caseStudy->image) }}" alt="{{ $caseStudy->title }}" class="w-full h-auto">
                                 @else
                                     <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-600">
                                         <i class="fa-solid fa-laptop-code text-6xl"></i>
@@ -201,8 +201,8 @@
                     
                     <div class="relative">
                         @if(isset($cd['challenge_image']))
-                            <div class="rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-200/60 aspect-video">
-                                <img src="{{ asset('storage/' . $cd['challenge_image']) }}" alt="Challenge illustration" class="w-full h-full object-cover">
+                            <div class="rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-200/60">
+                                <img src="{{ asset('storage/' . $cd['challenge_image']) }}" alt="Challenge illustration" class="w-full h-auto">
                             </div>
                         @else
                             <div class="w-full h-64 bg-gradient-to-br from-rose-50 to-rose-100 border border-rose-200/50 rounded-[2.5rem] flex items-center justify-center text-rose-500">
@@ -230,8 +230,8 @@
                     
                     <div class="lg:order-1 relative">
                         @if(isset($cd['solution_image']))
-                            <div class="rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-200/60 aspect-video">
-                                <img src="{{ asset('storage/' . $cd['solution_image']) }}" alt="Solution illustration" class="w-full h-full object-cover">
+                            <div class="rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-200/60">
+                                <img src="{{ asset('storage/' . $cd['solution_image']) }}" alt="Solution illustration" class="w-full h-auto">
                             </div>
                         @else
                             <div class="w-full h-64 bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200/50 rounded-[2.5rem] flex items-center justify-center text-emerald-500">
@@ -321,8 +321,8 @@
                         </p>
 
                         @if(isset($cd['process_image']))
-                            <div class="rounded-[2rem] overflow-hidden shadow-lg border border-slate-200/60 aspect-video">
-                                <img src="{{ asset('storage/' . $cd['process_image']) }}" alt="Process diagram" class="w-full h-full object-cover">
+                            <div class="rounded-[2rem] overflow-hidden shadow-lg border border-slate-200/60">
+                                <img src="{{ asset('storage/' . $cd['process_image']) }}" alt="Process diagram" class="w-full h-auto">
                             </div>
                         @else
                             <div class="w-full h-48 bg-slate-50 rounded-[2rem] border border-slate-200/50 flex items-center justify-center text-slate-400">
@@ -481,9 +481,9 @@
                     @foreach($otherCaseStudies as $other)
                         <div class="premium-card group overflow-hidden bg-white hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full" style="padding: 0 !important;">
                             <div>
-                                <div class="h-48 overflow-hidden relative">
+                                <div class="h-48 overflow-hidden relative bg-white flex items-center justify-center">
                                     @if($other->image)
-                                        <img src="{{ Storage::url($other->image) }}" alt="{{ $other->title }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                                        <img src="{{ Storage::url($other->image) }}" alt="{{ $other->title }}" class="w-full h-full object-contain p-2 transform group-hover:scale-105 transition-transform duration-700">
                                     @else
                                         <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">
                                             <i class="fa-solid fa-laptop-code text-3xl"></i>
