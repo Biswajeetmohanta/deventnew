@@ -29,6 +29,8 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function () {
     Route::resource('case-studies', AdminCaseStudyController::class);
     Route::resource('inquiries', AdminInquiryController::class)->only(['index', 'show', 'destroy']);
     Route::resource('testimonials', AdminTestimonialController::class);
+    Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);
+    Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
     Route::resource('careers', AdminCareerController::class);
     Route::resource('applications', \App\Http\Controllers\Admin\JobApplicationController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::resource('posts', AdminPostController::class);
@@ -61,6 +63,8 @@ Route::get('/industry/{slug}', [\App\Http\Controllers\IndustryController::class,
 Route::get('/technology', [\App\Http\Controllers\TechnologyController::class, 'index']);
 Route::get('/technology/{slug}', [\App\Http\Controllers\TechnologyController::class, 'show']);
 Route::get('/testimonials', [\App\Http\Controllers\TestimonialController::class, 'index']);
+Route::get('/clients', [\App\Http\Controllers\ClientController::class, 'index'])->name('clients.index');
+Route::get('/certificates', [\App\Http\Controllers\CertificateController::class, 'index'])->name('certificates.index');
 Route::get('/build-your-team', [\App\Http\Controllers\TeamRoleController::class, 'index']);
 Route::get('/build-your-team/{slug}', [\App\Http\Controllers\TeamRoleController::class, 'show']);
 Route::get('/contact', [ContactController::class, 'index']);

@@ -108,6 +108,12 @@
             <a href="{{ route('admin.testimonials.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/testimonials*') ? 'active' : '' }}">
                 <i class="fa-solid fa-quote-left w-8 text-lg"></i> Testimonials
             </a>
+            <a href="{{ route('admin.clients.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/clients*') ? 'active' : '' }}">
+                <i class="fa-solid fa-building w-8 text-lg"></i> Clients
+            </a>
+            <a href="{{ route('admin.certificates.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/certificates*') ? 'active' : '' }}">
+                <i class="fa-solid fa-award w-8 text-lg"></i> Certificates
+            </a>
             <a href="{{ route('admin.applications.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/applications*') ? 'active' : '' }}">
                 <i class="fa-solid fa-file-lines w-8 text-lg"></i> Job Applications
             </a>
