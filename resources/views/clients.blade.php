@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Our Clients | Devent Technology')
+@section('title', 'Our Portfolio | Devent Technology')
 
 @section('content')
     <!-- Hero Section -->
@@ -11,15 +11,15 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <h1 class="text-5xl md:text-7xl font-black text-slate-950 mb-8 tracking-tighter">
-                Trusted by <span style="color: #0052FF;">Industry Leaders</span>
+                Our <span style="color: #0052FF;">Portfolio</span>
             </h1>
             <p class="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
-                We partner with forward-thinking companies to build, scale, and maintain high-performance digital solutions.
+                Explore our diverse portfolio of projects and partnerships that showcase our expertise in building high-performance digital solutions.
             </p>
         </div>
     </section>
 
-    <!-- Clients Grid -->
+    <!-- Portfolio Grid -->
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -48,21 +48,21 @@
                     </div>
                 @empty
                     <div class="col-span-full text-center py-20 text-slate-400">
-                        <i class="fa-solid fa-building text-5xl mb-4 opacity-30"></i>
-                        <p class="text-lg font-medium">No clients registered at the moment. Please check back later.</p>
+                        <i class="fa-solid fa-folder-open text-5xl mb-4 opacity-30"></i>
+                        <p class="text-lg font-medium">No portfolio projects available at the moment. Please check back later.</p>
                     </div>
                 @endforelse
             </div>
         </div>
     </section>
 
-    <!-- Client Success CTA -->
+    <!-- Portfolio CTA -->
     <section class="pb-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-slate-900 rounded-[50px] p-12 md:p-24 text-center relative overflow-hidden">
                 <div class="relative z-10">
-                    <h2 class="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter">Partner with Us Today</h2>
-                    <p class="text-slate-400 text-lg mb-12 max-w-2xl mx-auto font-medium">Let's work together to build your next breakthrough digital product.</p>
+                    <h2 class="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter">Let's Build Something Great Together</h2>
+                    <p class="text-slate-400 text-lg mb-12 max-w-2xl mx-auto font-medium">Ready to bring your next project to life? Partner with us and let's create impactful digital solutions.</p>
                     <a href="{{ url('/contact') }}" class="premium-cta-btn px-10 py-5">
                         <span class="btn-text">Get in Touch</span>
                         <i class="fa-solid fa-arrow-right ml-3 relative z-10"></i>

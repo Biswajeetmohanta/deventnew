@@ -40,7 +40,7 @@ class ClientController extends Controller
 
         Client::create($data);
 
-        return redirect()->route('admin.clients.index')->with('success', 'Client added successfully.');
+        return redirect()->route('admin.clients.index')->with('success', 'Portfolio project added successfully.');
     }
 
     public function edit(Client $client)
@@ -70,7 +70,7 @@ class ClientController extends Controller
 
         $client->update($data);
 
-        return redirect()->route('admin.clients.index')->with('success', 'Client updated successfully.');
+        return redirect()->route('admin.clients.index')->with('success', 'Portfolio project updated successfully.');
     }
 
     public function destroy(Client $client)
@@ -80,6 +80,6 @@ class ClientController extends Controller
         }
         $client->delete();
 
-        return redirect()->route('admin.clients.index')->with('success', 'Client deleted successfully.');
+        return redirect()->route('admin.clients.index')->with('success', 'Portfolio project deleted successfully.');
     }
 }

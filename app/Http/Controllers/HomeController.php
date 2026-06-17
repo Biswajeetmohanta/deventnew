@@ -10,6 +10,7 @@ use App\Models\Technology;
 use App\Models\CaseStudy;
 use App\Models\Testimonial;
 use App\Models\Industry;
+use App\Models\Client;
 
 class HomeController extends Controller
 {
@@ -22,8 +23,9 @@ class HomeController extends Controller
         $testimonials = Testimonial::all();
         $industries = Industry::all();
         $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $portfolioItems = Client::where('status', true)->orderBy('sort_order')->orderBy('name')->get();
 
-        return view('home', compact('banners', 'services', 'technologies', 'caseStudies', 'testimonials', 'settings', 'industries'));
+        return view('home', compact('banners', 'services', 'technologies', 'caseStudies', 'testimonials', 'settings', 'industries', 'portfolioItems'));
     }
 
     public function privacyPolicy()

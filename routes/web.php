@@ -63,7 +63,7 @@ Route::get('/industry/{slug}', [\App\Http\Controllers\IndustryController::class,
 Route::get('/technology', [\App\Http\Controllers\TechnologyController::class, 'index']);
 Route::get('/technology/{slug}', [\App\Http\Controllers\TechnologyController::class, 'show']);
 Route::get('/testimonials', [\App\Http\Controllers\TestimonialController::class, 'index']);
-Route::get('/clients', [\App\Http\Controllers\ClientController::class, 'index'])->name('clients.index');
+Route::get('/portfolio', [\App\Http\Controllers\ClientController::class, 'index'])->name('portfolio.index');
 Route::get('/certificates', [\App\Http\Controllers\CertificateController::class, 'index'])->name('certificates.index');
 Route::get('/build-your-team', [\App\Http\Controllers\TeamRoleController::class, 'index']);
 Route::get('/build-your-team/{slug}', [\App\Http\Controllers\TeamRoleController::class, 'show']);

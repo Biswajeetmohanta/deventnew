@@ -216,6 +216,54 @@
     </section>
     @endif
 
+    @if($portfolioItems->isNotEmpty())
+    <!-- Portfolio Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-blue-600 font-bold uppercase tracking-widest text-sm mb-4">Portfolio</h2>
+                <h3 class="text-3xl md:text-5xl font-bold text-slate-950">Our Featured Projects</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($portfolioItems->take(3) as $item)
+                    <div class="premium-card group flex flex-col items-center justify-between p-8 rounded-[30px] border border-slate-100 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div class="w-full flex items-center justify-center h-28 mb-6 bg-slate-50 rounded-2xl p-4 transition-colors group-hover:bg-slate-100/50">
+                            @if($item->logo)
+                                <img src="{{ asset('storage/' . $item->logo) }}" alt="{{ $item->name }}" class="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                            @else
+                                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 text-2xl font-bold">
+                                    {{ substr($item->name, 0, 1) }}
+                                </div>
+                            @endif
+                        </div>
+                        <div class="text-center w-full">
+                            <h4 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors">{{ $item->name }}</h4>
+                            @if($item->description)
+                                <p class="text-sm text-slate-500 line-clamp-3 mb-4">{{ $item->description }}</p>
+                            @endif
+                            @if($item->website_url)
+                                <a href="{{ $item->website_url }}" target="_blank" class="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors mt-auto gap-1">
+                                    Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            @if($portfolioItems->count() > 3)
+                <div class="text-center mt-12">
+                    <a href="{{ route('portfolio.index') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
+                        View All Portfolio
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 12h16"></path></svg>
+                    </a>
+                </div>
+            @endif
+        </div>
+    </section>
+    @endif
+
     <!-- Industries Section -->
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

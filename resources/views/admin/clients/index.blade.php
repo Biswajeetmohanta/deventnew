@@ -1,16 +1,16 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Manage Clients')
-@section('page_title', 'Clients')
+@section('title', 'Manage Portfolio')
+@section('page_title', 'Portfolio')
 
 @section('content')
 <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <div>
-        <h3 class="text-xl font-bold text-slate-800">Our Clients</h3>
-        <p class="text-sm text-slate-500">Manage client information, logos, and display ordering.</p>
+        <h3 class="text-xl font-bold text-slate-800">Our Portfolio</h3>
+        <p class="text-sm text-slate-500">Manage portfolio projects, logos, and display ordering.</p>
     </div>
     <a href="{{ route('admin.clients.create') }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-amber-500/20 flex items-center">
-        <i class="fa-solid fa-plus mr-2"></i> Add New Client
+        <i class="fa-solid fa-plus mr-2"></i> Add New Project
     </a>
 </div>
 
@@ -19,7 +19,7 @@
         <table class="w-full text-left">
             <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase text-xs font-bold tracking-wider">
                 <tr>
-                    <th class="px-6 py-4">Client Info</th>
+                    <th class="px-6 py-4">Project Info</th>
                     <th class="px-6 py-4">Website</th>
                     <th class="px-6 py-4">Sort Order</th>
                     <th class="px-6 py-4">Status</th>
@@ -72,7 +72,7 @@
                         <form action="{{ route('admin.clients.destroy', $client) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-rose-500 hover:text-rose-600 transition-all p-2 hover:bg-rose-50 rounded-lg" onclick="return confirm('Are you sure you want to delete this client?')" title="Delete">
+                            <button type="submit" class="text-rose-500 hover:text-rose-600 transition-all p-2 hover:bg-rose-50 rounded-lg" onclick="return confirm('Are you sure you want to delete this portfolio project?')" title="Delete">
                                 <i class="fa-solid fa-trash-can text-lg"></i>
                             </button>
                         </form>
@@ -81,8 +81,8 @@
                 @empty
                 <tr>
                     <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic bg-slate-50/20">
-                        <i class="fa-solid fa-building text-4xl mb-3 block opacity-20"></i>
-                        No clients found. Show off your client network!
+                        <i class="fa-solid fa-folder-open text-4xl mb-3 block opacity-20"></i>
+                        No portfolio projects found. Showcase your work!
                     </td>
                 </tr>
                 @endforelse

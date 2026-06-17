@@ -1370,7 +1370,7 @@
                         <li><a href="{{ url('/case-studies') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Case Studies</a></li>
                         <li><a href="{{ url('/services') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Services</a></li>
                         <li><a href="{{ url('/testimonials') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Testimonials</a></li>
-                        <li><a href="{{ route('clients.index') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Our Clients</a></li>
+                        <li><a href="{{ route('portfolio.index') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Portfolio</a></li>
                         <li><a href="{{ route('certificates.index') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Certificates</a></li>
                         <li><a href="{{ url('/blog') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
                         <li><a href="{{ url('/build-your-team') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Build Your Team</a></li>

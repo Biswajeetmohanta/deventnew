@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Add Client')
-@section('page_title', 'Create Client')
+@section('title', 'Add Portfolio Project')
+@section('page_title', 'Create Portfolio Project')
 
 @section('content')
 <div class="glass p-8 rounded-3xl max-w-4xl mx-auto">
@@ -10,7 +10,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label for="name">Client Name</label>
+                <label for="name">Project Name</label>
                 <input type="text" name="name" id="name" required value="{{ old('name') }}" placeholder="e.g. Acme Corporation">
             </div>
 
@@ -34,12 +34,12 @@
         </div>
 
         <div>
-            <label for="description">Client Details (Optional)</label>
-            <textarea name="description" id="description" rows="4" placeholder="Brief details about the client, project, or partnership...">{{ old('description') }}</textarea>
+            <label for="description">Project Details (Optional)</label>
+            <textarea name="description" id="description" rows="4" placeholder="Brief details about the project, partnership, or work delivered...">{{ old('description') }}</textarea>
         </div>
 
         <div>
-            <label for="logo">Client Logo</label>
+            <label for="logo">Project Logo</label>
             <div class="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-2 border-slate-200 border-dashed rounded-2xl bg-slate-50">
                 <div class="space-y-1 text-center">
                     <i class="fa-solid fa-image text-slate-300 text-3xl mb-2"></i>
@@ -57,7 +57,7 @@
         <div class="flex justify-end space-x-4 pt-8 border-t border-slate-100">
             <a href="{{ route('admin.clients.index') }}" class="px-6 py-3 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl transition-all">Cancel</a>
             <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-10 py-3 rounded-xl transition-all shadow-lg shadow-amber-500/20 active:scale-95">
-                Save Client
+                Save Project
             </button>
         </div>
     </form>

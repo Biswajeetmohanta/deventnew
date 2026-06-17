@@ -109,7 +109,7 @@
                 <i class="fa-solid fa-quote-left w-8 text-lg"></i> Testimonials
             </a>
             <a href="{{ route('admin.clients.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/clients*') ? 'active' : '' }}">
-                <i class="fa-solid fa-building w-8 text-lg"></i> Clients
+                <i class="fa-solid fa-folder-open w-8 text-lg"></i> Portfolio
             </a>
             <a href="{{ route('admin.certificates.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/certificates*') ? 'active' : '' }}">
                 <i class="fa-solid fa-award w-8 text-lg"></i> Certificates
