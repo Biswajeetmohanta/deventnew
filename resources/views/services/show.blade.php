@@ -14,19 +14,19 @@
 
 @push('schema')
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "name": "{{ $service->title }}",
-  "serviceType": "{{ $service->title }}",
-  "provider": {
-    "@type": "Organization",
-    "name": "Devent Technology",
-    "url": "https://deventtechnology.com"
-  },
-  "description": "{{ addslashes($serviceMetaDesc) }}",
-  "url": "{{ $serviceCanonical }}"
-}
+{!! json_encode([
+  '@context' => 'https://schema.org',
+  '@type' => 'Service',
+  'name' => $service->title,
+  'serviceType' => $service->title,
+  'provider' => [
+    '@type' => 'Organization',
+    'name' => 'Devent Technology',
+    'url' => 'https://deventtechnology.com'
+  ],
+  'description' => $serviceMetaDesc,
+  'url' => $serviceCanonical
+], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
 </script>
 @endpush
 

@@ -5,28 +5,28 @@
 
 @push('schema')
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Devent Technology",
-  "url": "https://deventtechnology.com",
-  "logo": "https://deventtechnology.com/storage/settings/MCFEKq6Tri7JLmJOrJdAOQBZ0rvTbA4CQDlGk7IP.png",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "401 Maruti Laxis",
-    "addressLocality": "Ahmedabad",
-    "addressRegion": "Gujarat",
-    "postalCode": "382424",
-    "addressCountry": "IN"
-  },
-  "telephone": "+919274688925",
-  "sameAs": [
-    "https://www.facebook.com/people/Devent-Technology/61579117859626/",
-    "https://x.com/DeventT92574",
-    "https://www.linkedin.com/company/devent-technology/",
-    "https://www.instagram.com/deventtechnology/"
+{!! json_encode([
+  '@context' => 'https://schema.org',
+  '@type' => 'Organization',
+  'name' => 'Devent Technology',
+  'url' => 'https://deventtechnology.com',
+  'logo' => 'https://deventtechnology.com/storage/settings/MCFEKq6Tri7JLmJOrJdAOQBZ0rvTbA4CQDlGk7IP.png',
+  'address' => [
+    '@type' => 'PostalAddress',
+    'streetAddress' => '401 Maruti Laxis',
+    'addressLocality' => 'Ahmedabad',
+    'addressRegion' => 'Gujarat',
+    'postalCode' => '382424',
+    'addressCountry' => 'IN'
+  ],
+  'telephone' => '+919274688925',
+  'sameAs' => [
+    'https://www.facebook.com/people/Devent-Technology/61579117859626/',
+    'https://x.com/DeventT92574',
+    'https://www.linkedin.com/company/devent-technology/',
+    'https://www.instagram.com/deventtechnology/'
   ]
-}
+], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
 </script>
 @endpush
 
