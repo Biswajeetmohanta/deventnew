@@ -117,6 +117,15 @@
             <a href="{{ route('admin.applications.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/applications*') ? 'active' : '' }}">
                 <i class="fa-solid fa-file-lines w-8 text-lg"></i> Job Applications
             </a>
+            <a href="{{ route('admin.portal-clients.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/portal-clients*') ? 'active' : '' }}">
+                <i class="fa-solid fa-users-gear w-8 text-lg"></i> Portal Clients
+            </a>
+            <a href="{{ route('admin.projects.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/projects*') ? 'active' : '' }}">
+                <i class="fa-solid fa-bars-progress w-8 text-lg"></i> Client Projects
+            </a>
+            <a href="{{ route('admin.calculator-settings.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/calculator-settings*') ? 'active' : '' }}">
+                <i class="fa-solid fa-calculator w-8 text-lg"></i> Calculator Settings
+            </a>
             <a href="{{ route('admin.inquiries.index') }}" class="sidebar-item flex items-center px-4 py-3 rounded-xl transition-all {{ request()->is('admin/inquiries*') ? 'active' : '' }}">
                 <i class="fa-solid fa-envelope w-8 text-lg"></i> Inquiries
             </a>

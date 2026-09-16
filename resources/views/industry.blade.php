@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Industries We Serve | Devent Technology')
+@section('meta_description', 'See how Devent Technology builds tailored software for banking, healthcare, real estate, retail, logistics, and 10+ other industries.')
 
 <!-- Enable Tailwind CDN for this page to support dynamic color classes from database -->
 <script src="https://cdn.tailwindcss.com"></script>

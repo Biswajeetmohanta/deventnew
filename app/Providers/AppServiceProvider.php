@@ -45,5 +45,10 @@ class AppServiceProvider extends ServiceProvider
             $navTeamRoles = \App\Models\TeamRole::where('is_active', true)->orderBy('order')->get();
             view()->share('navTeamRoles', $navTeamRoles);
         }
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('posts')) {
+            $latestPublishedPost = \App\Models\Post::where('status', 'published')->latest()->first();
+            view()->share('latestPublishedPost', $latestPublishedPost);
+        }
     }
 }

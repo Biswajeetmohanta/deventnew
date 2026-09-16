@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', $caseStudy->title . ' | Case Study | Devent Technology')
+@section('meta_description', Str::limit(strip_tags($caseStudy->description ?? $caseStudy->title), 160))
+@section('canonical_url', url('/case-studies/' . $caseStudy->slug))
 
 @section('content')
     @php

@@ -458,6 +458,10 @@
                         <label for="meta_keywords" class="text-xs">Meta Keywords</label>
                         <input type="text" name="meta_keywords" id="meta_keywords" value="{{ old('meta_keywords', $cd['seo']['meta_keywords'] ?? '') }}" placeholder="e.g. react native, app development, mobile apps">
                     </div>
+                    <div>
+                        <label for="canonical_url" class="text-xs">Canonical URL</label>
+                        <input type="url" name="canonical_url" id="canonical_url" value="{{ old('canonical_url', $cd['seo']['canonical_url'] ?? '') }}" placeholder="e.g. https://deventtechnology.com/technology/react-native">
+                    </div>
                 </div>
             </div>
         </div>

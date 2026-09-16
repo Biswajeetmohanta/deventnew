@@ -316,6 +316,14 @@ Scalable Architecture">@if(isset($industry->content_data['why_choose_points']))@
                         <label for="meta_description" class="text-xs">Meta Description</label>
                         <textarea name="meta_description" id="meta_description" rows="3" placeholder="e.g. We provide custom retail and e-commerce software development services.">{{ old('meta_description', $industry->content_data['seo']['meta_description'] ?? '') }}</textarea>
                     </div>
+                    <div>
+                        <label for="meta_keywords" class="text-xs">Meta Keywords</label>
+                        <input type="text" name="meta_keywords" id="meta_keywords" value="{{ old('meta_keywords', $industry->content_data['seo']['meta_keywords'] ?? '') }}" placeholder="e.g. ecommerce software, online retail, shopping cart">
+                    </div>
+                    <div>
+                        <label for="canonical_url" class="text-xs">Canonical URL</label>
+                        <input type="url" name="canonical_url" id="canonical_url" value="{{ old('canonical_url', $industry->content_data['seo']['canonical_url'] ?? '') }}" placeholder="e.g. https://deventtechnology.com/industry/ecommerce-retail">
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,34 @@
 @extends('layouts.app')
 
-@section('title', $service->title . ' | Devent Technology')
+@php
+    $cd = $service->content_data ?? [];
+    $serviceMetaDesc = $cd['seo']['meta_description'] ?? ($service->description ? Str::limit(strip_tags($service->description), 160) : 'Learn more about ' . $service->title . ' provided by Devent Technology.');
+    $serviceMetaKeywords = $cd['seo']['meta_keywords'] ?? ($service->title . ', software development, IT services, Devent Technology');
+    $serviceCanonical = url('/services/' . $service->slug);
+@endphp
+
+@section('title', ($cd['seo']['meta_title'] ?? ($service->title . ' | Devent Technology')))
+@section('meta_description', $serviceMetaDesc)
+@section('meta_keywords', $serviceMetaKeywords)
+@section('canonical_url', $serviceCanonical)
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{{ $service->title }}",
+  "serviceType": "{{ $service->title }}",
+  "provider": {
+    "@type": "Organization",
+    "name": "Devent Technology",
+    "url": "https://deventtechnology.com"
+  },
+  "description": "{{ addslashes($serviceMetaDesc) }}",
+  "url": "{{ $serviceCanonical }}"
+}
+</script>
+@endpush
 
 @section('content')
     @php

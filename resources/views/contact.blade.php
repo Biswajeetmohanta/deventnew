@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Contact Us | Devent Technology')
+@section('meta_description', 'Contact Devent Technology to discuss your web, mobile, or enterprise software project. Reach our team for a free quote and technical consultation.')
 
 @section('content')
     <section class="py-24 bg-white">
@@ -18,7 +19,7 @@
                             </div>
                             <div>
                                 <h4 class="text-lg font-bold text-slate-950">Email Us</h4>
-                                <p class="text-slate-600 font-medium">{{ $settings['contact_email'] ?? 'contact@deventtechnology.com' }}</p>
+                                <a href="mailto:{{ $settings['contact_email'] ?? 'contact@deventtechnology.com' }}" class="text-slate-600 font-medium hover:text-blue-600 transition-colors">{{ $settings['contact_email'] ?? 'contact@deventtechnology.com' }}</a>
                             </div>
                         </div>
                         <div class="flex items-start space-x-6">
@@ -27,7 +28,18 @@
                             </div>
                             <div>
                                 <h4 class="text-lg font-bold text-slate-950">Call Us</h4>
-                                <p class="text-slate-600 font-medium">{{ $settings['contact_phone'] ?? '+91 1234567890' }}</p>
+                                @php
+                                    $cPhone = $settings['contact_phone'] ?? '+919274688925';
+                                    $cPhoneDigits = preg_replace('/[^0-9]/', '', $cPhone);
+                                    if (strlen($cPhoneDigits) === 12 && str_starts_with($cPhoneDigits, '91')) {
+                                        $cDisplay = '+91 ' . substr($cPhoneDigits, 2, 5) . ' ' . substr($cPhoneDigits, 7);
+                                    } elseif (strlen($cPhoneDigits) === 10) {
+                                        $cDisplay = '+91 ' . substr($cPhoneDigits, 0, 5) . ' ' . substr($cPhoneDigits, 5);
+                                    } else {
+                                        $cDisplay = $cPhone;
+                                    }
+                                @endphp
+                                <p class="text-slate-600 font-medium"><a href="tel:{{ preg_replace('/\s+/', '', $cPhone) }}" class="hover:text-blue-600 transition-colors">{{ $cDisplay }}</a></p>
                             </div>
                         </div>
                     </div>

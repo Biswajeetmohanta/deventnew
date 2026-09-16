@@ -5,7 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Devent Technology | Premium Software Solutions')</title>
-    <meta name="description" content="@yield('meta_description', 'Devent Technology provides high-quality web development, mobile apps, and digital marketing solutions.')">
+    <meta name="description" content="@yield('meta_description', 'Devent Technology is a Gujarat-based software agency delivering custom web & mobile app development, digital marketing, and IT consulting for businesses worldwide.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'software development, web development, mobile apps, devops, blockchain, cloud solutions, Devent Technology')">
+    <link rel="canonical" href="@yield('canonical_url', url()->current())">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="@yield('canonical_url', url()->current())">
+    <meta property="og:title" content="@yield('title', 'Devent Technology | Premium Software Solutions')">
+    <meta property="og:description" content="@yield('meta_description', 'Devent Technology is a Gujarat-based software agency delivering custom web & mobile app development, digital marketing, and IT consulting for businesses worldwide.')">
+    <meta property="og:image" content="@yield('og_image', isset($settings['site_logo']) ? Storage::url($settings['site_logo']) : asset('storage/settings/MCFEKq6Tri7JLmJOrJdAOQBZ0rvTbA4CQDlGk7IP.png'))">
+    <meta property="og:site_name" content="Devent Technology">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="@yield('canonical_url', url()->current())">
+    <meta name="twitter:title" content="@yield('title', 'Devent Technology | Premium Software Solutions')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Devent Technology is a Gujarat-based software agency delivering custom web & mobile app development, digital marketing, and IT consulting for businesses worldwide.')">
+    <meta name="twitter:image" content="@yield('og_image', isset($settings['site_logo']) ? Storage::url($settings['site_logo']) : asset('storage/settings/MCFEKq6Tri7JLmJOrJdAOQBZ0rvTbA4CQDlGk7IP.png'))">
+
+    @stack('schema')
     
     @if(isset($settings['site_favicon']))
         <link rel="icon" type="image/x-icon" href="{{ Storage::url($settings['site_favicon']) }}">
@@ -1043,6 +1062,34 @@
 <body class="antialiased text-slate-900 bg-white">
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 mega-nav">
+        @php
+            $blogNotifEnabled = ($settings['blog_notification_enabled'] ?? '1') == '1';
+            $blogNotifDays = (int) ($settings['blog_notification_days'] ?? 7);
+            $blogNotifBadge = $settings['blog_notification_badge'] ?? 'NEW ARTICLE';
+            $isBlogRecent = isset($latestPublishedPost) && $latestPublishedPost && $latestPublishedPost->created_at && $latestPublishedPost->created_at->diffInDays(now()) <= $blogNotifDays;
+        @endphp
+
+        @if($blogNotifEnabled && isset($latestPublishedPost) && $latestPublishedPost && $isBlogRecent)
+            <div id="blog-announcement-strip" class="bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-600 text-white text-xs py-2 px-4 border-b border-white/10 relative z-50">
+                <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-2.5 overflow-hidden mx-auto">
+                        <span class="bg-amber-400 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] tracking-wider uppercase flex-shrink-0 animate-pulse">
+                            {{ $blogNotifBadge }}
+                        </span>
+                        <span class="font-medium text-white/95 truncate max-w-xs sm:max-w-md md:max-w-2xl text-xs">
+                            {{ $latestPublishedPost->title }}
+                        </span>
+                        <a href="{{ url('/blog/' . $latestPublishedPost->slug) }}" class="underline font-bold text-amber-300 hover:text-white transition-colors whitespace-nowrap flex items-center gap-1 ml-1 text-xs">
+                            Read Now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                    <button type="button" onclick="dismissBlogNotification()" class="text-white/70 hover:text-white transition-colors p-1" title="Dismiss">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-stretch h-20">
                 <div class="flex-shrink-0 flex items-center">
@@ -1316,8 +1363,20 @@
                             <div class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-white bg-slate-900/50">
                                 <i class="fa-solid fa-phone-volume text-sm"></i>
                             </div>
-                            <a href="tel:{{ $settings['contact_phone'] ?? '+919274688925' }}" class="phone-pill group py-2 px-6">
-                                <span class="text-blue-500 font-black tracking-wider group-hover:text-white transition-colors text-sm md:text-base">{{ $settings['contact_phone'] ?? '+91 92746 88925' }}</span>
+                            @php
+                                $rawPhone = $settings['contact_phone'] ?? '+919274688925';
+                                $cleanPhoneHref = 'tel:' . preg_replace('/\s+/', '', $rawPhone);
+                                $digitsOnly = preg_replace('/[^0-9]/', '', $rawPhone);
+                                if (strlen($digitsOnly) === 12 && str_starts_with($digitsOnly, '91')) {
+                                    $formattedDisplayPhone = '+91 ' . substr($digitsOnly, 2, 5) . ' ' . substr($digitsOnly, 7);
+                                } elseif (strlen($digitsOnly) === 10) {
+                                    $formattedDisplayPhone = '+91 ' . substr($digitsOnly, 0, 5) . ' ' . substr($digitsOnly, 5);
+                                } else {
+                                    $formattedDisplayPhone = $rawPhone;
+                                }
+                            @endphp
+                            <a href="{{ $cleanPhoneHref }}" class="phone-pill group py-2 px-6">
+                                <span class="text-blue-500 font-black tracking-wider group-hover:text-white transition-colors text-sm md:text-base">{{ $formattedDisplayPhone }}</span>
                             </a>
                         </div>
                     </div>
@@ -1375,6 +1434,8 @@
                         <li><a href="{{ url('/blog') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
                         <li><a href="{{ url('/build-your-team') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Build Your Team</a></li>
                         <li><a href="{{ url('/careers') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+                        <li><a href="{{ url('/price-calculator') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Price Calculator</a></li>
+                        <li><a href="{{ url('/portal/login') }}" class="footer-link text-sm font-semibold text-slate-400"><i class="fa-solid fa-chevron-right"></i>Client Portal</a></li>
                     </ul>
                 </div>
 
@@ -2236,10 +2297,20 @@
             }
         });
 
-        // Close on ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeCalendlyModal();
+        // Blog Announcement Banner Dismiss Logic
+        function dismissBlogNotification() {
+            const strip = document.getElementById('blog-announcement-strip');
+            if (strip) {
+                strip.style.display = 'none';
+                localStorage.setItem('dismissed_blog_id', '{{ $latestPublishedPost->id ?? "" }}');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const dismissedId = localStorage.getItem('dismissed_blog_id');
+            const currentId = '{{ $latestPublishedPost->id ?? "" }}';
+            if (dismissedId && currentId && dismissedId === currentId) {
+                const strip = document.getElementById('blog-announcement-strip');
+                if (strip) strip.style.display = 'none';
             }
         });
     </script>

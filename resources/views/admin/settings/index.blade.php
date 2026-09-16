@@ -56,6 +56,12 @@
                 <i class="fa-solid fa-shield-halved mr-3 text-lg"></i>
                 Privacy Policy
             </button>
+            <button @click="activeTab = 'automation'" 
+                :class="activeTab === 'automation' ? 'bg-pink-600 text-white shadow-lg shadow-pink-200' : 'bg-white text-slate-600 hover:bg-slate-50'"
+                class="w-full flex items-center px-6 py-4 rounded-2xl transition-all duration-300 font-bold text-sm">
+                <i class="fa-solid fa-share-nodes mr-3 text-lg"></i>
+                Social & Automation
+            </button>
         </div>
 
         <!-- Settings Content -->
@@ -434,6 +440,104 @@
                             
                             <!-- Hidden input to submit editor content -->
                             <input type="hidden" name="privacy_policy" id="privacy_policy_input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social & Automation Tab -->
+                <div x-show="activeTab === 'automation'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="glass p-8 rounded-[2.5rem] shadow-xl border-slate-100">
+                    <input type="hidden" name="automation_tab_submitted" value="1">
+
+                    <div class="flex items-center mb-10">
+                        <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-share-nodes text-pink-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">Social Media & Blog Automation</h3>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Make.com Webhooks & Website Notification System</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <!-- Make.com Social Media Auto-Post Section -->
+                        <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-purple-600 text-white rounded-xl flex items-center justify-center font-black text-sm shadow-md">
+                                        M
+                                    </div>
+                                    <div>
+                                        <h4 class="text-base font-black text-slate-900">Make.com Social Auto-Post</h4>
+                                        <p class="text-xs text-slate-500">Auto-publish new blog posts to <strong>LinkedIn</strong> and <strong>Instagram</strong> via Webhook</p>
+                                    </div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="make_blog_webhook_enabled" value="1" class="sr-only peer" {{ ($settings['make_blog_webhook_enabled'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div class="w-12 h-7 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="space-y-4 pt-2">
+                                <div>
+                                    <label for="make_blog_webhook_url" class="text-xs font-bold uppercase tracking-wider text-slate-700">Make.com Custom Webhook URL</label>
+                                    <input type="url" name="make_blog_webhook_url" id="make_blog_webhook_url" value="{{ $settings['make_blog_webhook_url'] ?? 'https://hook.eu1.make.com/vjqm429xi59iksr8s55bhuy1w65fcuh4' }}" placeholder="https://hook.eu1.make.com/..." class="font-mono text-sm">
+                                    <p class="mt-2 text-xs text-slate-400">Whenever a blog post is published, Laravel will instantly send the post title, excerpt, full article URL, and image URL to this Webhook.</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                    <div class="p-3 bg-white rounded-2xl border border-slate-200 flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                                            <i class="fa-brands fa-linkedin text-lg"></i>
+                                        </div>
+                                        <div class="text-xs">
+                                            <strong class="text-slate-800 block">LinkedIn Integration</strong>
+                                            <span class="text-slate-500">Posts title, excerpt & read link</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-2xl border border-slate-200 flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-pink-50 flex items-center justify-center text-pink-600">
+                                            <i class="fa-brands fa-instagram text-lg"></i>
+                                        </div>
+                                        <div class="text-xs">
+                                            <strong class="text-slate-800 block">Instagram Integration</strong>
+                                            <span class="text-slate-500">Publishes featured photo & caption</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Website Notification Bar Section -->
+                        <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-black text-sm shadow-md">
+                                        <i class="fa-solid fa-bullhorn"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-base font-black text-slate-900">Website Latest Blog Notification</h4>
+                                        <p class="text-xs text-slate-500">Display a modern announcement bar on the website header when a new blog is published</p>
+                                    </div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="blog_notification_enabled" value="1" class="sr-only peer" {{ ($settings['blog_notification_enabled'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div class="w-12 h-7 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                                <div>
+                                    <label for="blog_notification_days" class="text-xs font-bold uppercase tracking-wider text-slate-700">Display Duration (Days)</label>
+                                    <input type="number" name="blog_notification_days" id="blog_notification_days" min="1" max="90" value="{{ $settings['blog_notification_days'] ?? '7' }}" placeholder="7">
+                                    <p class="mt-2 text-xs text-slate-400">Show notification bar for posts published within this number of days.</p>
+                                </div>
+
+                                <div>
+                                    <label for="blog_notification_badge" class="text-xs font-bold uppercase tracking-wider text-slate-700">Badge Text</label>
+                                    <input type="text" name="blog_notification_badge" id="blog_notification_badge" value="{{ $settings['blog_notification_badge'] ?? 'NEW ARTICLE' }}" placeholder="e.g. LATEST BLOG, NEW ARTICLE">
+                                    <p class="mt-2 text-xs text-slate-400">Custom label displayed next to the blog announcement.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Technologies We Use | Devent Technology')
+@section('meta_description', 'Explore the core technologies and frameworks powered by Devent Technology, including Laravel, React, Node.js, Python, Flutter, Solidity, and Ethereum.')
 
 @section('content')
     <!-- Hero Section -->
@@ -34,9 +35,10 @@
                             <a href="{{ url('/technology/' . $tech->slug) }}" class="premium-card group text-center block">
                                 <div class="premium-card-icon mx-auto transition-all duration-500 transform group-hover:scale-110">
                                     @if($tech->logo)
-                                        <img src="{{ Storage::url($tech->logo) }}" alt="{{ $tech->name }}" class="h-10 w-auto object-contain">
+                                        <img src="{{ Storage::url($tech->logo) }}" alt="{{ $tech->name }} Technology - Devent" class="h-10 w-auto object-contain" onerror="this.onerror=null; this.src='{{ asset('assets/images/tech/' . Str::slug($tech->name) . '.svg') }}';">
                                     @else
-                                        <i class="fa-solid fa-code text-3xl text-slate-300"></i>
+                                        <img src="{{ asset('assets/images/tech/' . Str::slug($tech->name) . '.svg') }}" alt="{{ $tech->name }} Technology - Devent" class="h-10 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                                        <i class="fa-solid fa-code text-3xl text-slate-300 hidden"></i>
                                     @endif
                                 </div>
                                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">{{ $tech->name }}</h3>

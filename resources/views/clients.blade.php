@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Our Portfolio | Devent Technology')
+@section('meta_description', 'Explore Devent Technology\'s portfolio of custom software, e-commerce, HRMS, and mobile app projects delivered for clients across industries.')
 
 @section('content')
     <!-- Hero Section -->
@@ -27,7 +28,7 @@
                     <div class="premium-card group flex flex-col items-center justify-between p-8 rounded-[30px] border border-slate-100 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <div class="w-full flex items-center justify-center h-28 mb-6 bg-slate-50 rounded-2xl p-4 transition-colors group-hover:bg-slate-100/50">
                             @if($client->logo)
-                                <img src="{{ asset('storage/' . $client->logo) }}" alt="{{ $client->name }}" class="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                <img src="{{ asset('storage/' . $client->logo) }}" alt="{{ $client->name }} Portfolio Case - Devent Technology" class="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
                             @else
                                 <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 text-2xl font-bold">
                                     {{ substr($client->name, 0, 1) }}

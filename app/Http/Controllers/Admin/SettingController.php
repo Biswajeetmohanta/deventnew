@@ -35,11 +35,26 @@ class SettingController extends Controller
             'brevo_api_key' => 'nullable|string|max:255',
             'mail_from_address' => 'nullable|email',
             'privacy_policy' => 'nullable|string',
+            'make_blog_webhook_url' => 'nullable|url',
+            'make_blog_webhook_enabled' => 'nullable|string',
+            'blog_notification_enabled' => 'nullable|string',
+            'blog_notification_days' => 'nullable|integer|min:1|max:365',
+            'blog_notification_badge' => 'nullable|string|max:50',
         ]);
 
         $inputs = $request->except('_token');
 
+        // Handle checkbox states if not present in request
+        if (!$request->has('make_blog_webhook_enabled') && $request->has('automation_tab_submitted')) {
+            $inputs['make_blog_webhook_enabled'] = '0';
+        }
+        if (!$request->has('blog_notification_enabled') && $request->has('automation_tab_submitted')) {
+            $inputs['blog_notification_enabled'] = '0';
+        }
+
         foreach ($inputs as $key => $value) {
+            if ($key === 'automation_tab_submitted') continue;
+
             if ($request->hasFile($key)) {
                 $oldSetting = Setting::where('key', $key)->first();
                 if ($oldSetting && $oldSetting->value) {

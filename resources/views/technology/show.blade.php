@@ -2,6 +2,8 @@
 
 @section('title', ($technology->content_data['seo']['meta_title'] ?? $technology->name . ' | Devent Technology'))
 @section('meta_description', ($technology->content_data['seo']['meta_description'] ?? $technology->description))
+@section('meta_keywords', ($technology->content_data['seo']['meta_keywords'] ?? ''))
+@section('canonical_url', ($technology->content_data['seo']['canonical_url'] ?? url('/technology/' . $technology->slug)))
 
 @section('content')
     @php

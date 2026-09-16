@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Our Services | Devent Technology')
+@section('meta_description', 'Discover custom software development, mobile apps, digital marketing, cloud, and IT consulting services tailored to scale your business.')
 
 @section('content')
     <!-- Services Hero -->

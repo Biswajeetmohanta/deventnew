@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Our Blog & Insights | Devent Technology')
+@section('meta_description', 'Read technical insights, guides, and trends on software development, cloud computing, mobile applications, and digital business transformation.')
 
 @section('content')
     <!-- Hero Section -->

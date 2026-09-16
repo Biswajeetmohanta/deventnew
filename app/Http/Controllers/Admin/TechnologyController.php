@@ -302,11 +302,12 @@ class TechnologyController extends Controller
         }
 
         // 19. SEO Meta
-        if ($request->filled('meta_title') || $request->filled('meta_description') || $request->filled('meta_keywords')) {
+        if ($request->filled('meta_title') || $request->filled('meta_description') || $request->filled('meta_keywords') || $request->filled('canonical_url')) {
             $cd['seo'] = [
                 'meta_title' => $request->meta_title ?? '',
                 'meta_description' => $request->meta_description ?? '',
                 'meta_keywords' => $request->meta_keywords ?? '',
+                'canonical_url' => $request->canonical_url ?? '',
             ];
         }
 

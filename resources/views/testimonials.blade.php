@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Client Testimonials | Devent Technology')
+@section('title', 'Client Testimonials & Reviews | Devent Technology')
+@section('meta_description', 'Read what founders and technology leaders say about partnering with Devent Technology for high-impact software, web, and mobile app development.')
 
 @section('content')
     <!-- Hero Section -->

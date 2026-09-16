@@ -1,5 +1,35 @@
 @extends('layouts.app')
 
+@section('title', 'Devent Technology | Leading Web & Mobile App Development Company')
+@section('meta_description', 'Devent Technology is a Gujarat-based software agency delivering custom web & mobile app development, digital marketing, and IT consulting for businesses worldwide.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Devent Technology",
+  "url": "https://deventtechnology.com",
+  "logo": "https://deventtechnology.com/storage/settings/MCFEKq6Tri7JLmJOrJdAOQBZ0rvTbA4CQDlGk7IP.png",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "401 Maruti Laxis",
+    "addressLocality": "Ahmedabad",
+    "addressRegion": "Gujarat",
+    "postalCode": "382424",
+    "addressCountry": "IN"
+  },
+  "telephone": "+919274688925",
+  "sameAs": [
+    "https://www.facebook.com/people/Devent-Technology/61579117859626/",
+    "https://x.com/DeventT92574",
+    "https://www.linkedin.com/company/devent-technology/",
+    "https://www.instagram.com/deventtechnology/"
+  ]
+}
+</script>
+@endpush
+
 @section('content')
     <!-- Hero Section -->
     <section class="relative min-h-[95vh] flex items-center overflow-hidden hero-section" id="heroSection">
@@ -130,7 +160,7 @@
                             <span class="text-4xl font-black text-slate-950 mb-2 counter-value" 
                                   data-target="{{ preg_replace('/[^0-9]/', '', $settings['counter_' . $i . '_value']) }}" 
                                   data-suffix="{{ preg_replace('/[0-9]/', '', $settings['counter_' . $i . '_value']) }}">
-                                0
+                                {{ $settings['counter_' . $i . '_value'] }}
                             </span>
                             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">
                                 {{ $settings['counter_' . $i . '_label'] }}
@@ -311,9 +341,16 @@
             <div class="flex flex-wrap justify-center gap-12 transition-all duration-700">
                 <!-- Tech Icons -->
                 @forelse($technologies as $tech)
-                     <div class="flex flex-col items-center">
-                        <img src="{{ Storage::url($tech->logo) }}" alt="{{ $tech->name }}" class="h-12 mb-2" onerror="this.style.display='none'">
-                        <span class="text-xs font-bold text-slate-700">{{ $tech->name }}</span>
+                     <div class="flex flex-col items-center group">
+                        @if(!empty($tech->logo))
+                            <img src="{{ Storage::url($tech->logo) }}" alt="{{ $tech->name }} - Devent Technology" class="h-12 mb-2 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" onerror="this.onerror=null; this.src='{{ asset('assets/images/tech/' . Str::slug($tech->name) . '.svg') }}';">
+                        @else
+                            <img src="{{ asset('assets/images/tech/' . Str::slug($tech->name) . '.svg') }}" alt="{{ $tech->name }} - Devent Technology" class="h-12 mb-2 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="h-12 w-12 rounded-xl bg-blue-50 hidden items-center justify-center text-blue-600 font-bold mb-2">
+                                {{ substr($tech->name, 0, 2) }}
+                            </div>
+                        @endif
+                        <span class="text-xs font-bold text-slate-700 group-hover:text-blue-600 transition-colors">{{ $tech->name }}</span>
                      </div>
                 @empty
                     <div class="text-4xl font-black text-slate-300">LARAVEL</div>

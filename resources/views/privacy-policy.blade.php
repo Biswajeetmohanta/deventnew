@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Privacy Policy | Devent Technology')
+@section('meta_description', 'Read the Devent Technology Privacy Policy to understand how we collect, handle, and safeguard your data, confidential information, and privacy.')
 
 @section('content')
 <!-- Premium Hero Section -->

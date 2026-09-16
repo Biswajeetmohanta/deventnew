@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', $post->title . ' | Devent Technology')
+@section('meta_description', Str::limit(strip_tags($post->excerpt ?? ($post->content ?? $post->title)), 160))
+@section('canonical_url', url('/blog/' . $post->slug))
 
 @section('content')
     <!-- Header Section -->

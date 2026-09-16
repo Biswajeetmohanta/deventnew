@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Case Studies | Devent Technology')
+@section('title', 'Case Studies & Client Success Stories | Devent Technology')
+@section('meta_description', 'Explore real-world case studies of impactful software platforms, enterprise ERPs, and mobile applications engineered by Devent Technology.')
 
 @section('content')
     <!-- Case Studies Hero Section -->

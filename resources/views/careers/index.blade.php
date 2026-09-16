@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Careers | Join Our Team')
+@section('title', 'Careers at Devent Technology | Join Our Team')
+@section('meta_description', 'Join Devent Technology\'s passionate team of developers, designers, and innovators. Explore current job openings and career opportunities in Gujarat.')
 
 @section('content')
     <section class="py-24 bg-slate-950 text-white">

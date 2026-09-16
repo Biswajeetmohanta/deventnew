@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Build Your Team | Devent Technology')
+@section('title', 'Build Your Dedicated Software Team | Devent Technology')
+@section('meta_description', 'Hire vetted full-stack developers, mobile app engineers, UI/UX designers, and DevOps specialists to scale your technical team with Devent Technology.')
 
 @section('content')
 <section style="padding: 160px 0 100px 0; background: #fff; position: relative; overflow: hidden;">

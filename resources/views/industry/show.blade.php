@@ -2,6 +2,8 @@
 
 @section('title', ($industry->content_data['seo']['meta_title'] ?? $industry->title . ' Solutions | Devent Technology'))
 @section('meta_description', ($industry->content_data['seo']['meta_description'] ?? $industry->description))
+@section('meta_keywords', ($industry->content_data['seo']['meta_keywords'] ?? ''))
+@section('canonical_url', ($industry->content_data['seo']['canonical_url'] ?? url('/industry/' . $industry->slug)))
 
 @section('content')
     @php

@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /chats/
+Disallow: /chat/
+Allow: /
+
+Sitemap: https://deventtechnology.com/sitemap.xml

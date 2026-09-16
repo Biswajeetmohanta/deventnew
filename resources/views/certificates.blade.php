@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Certificates & Accreditations | Devent Technology')
+@section('meta_description', 'View Devent Technology\'s professional certifications, ISO credentials, and industry compliance accreditations upholding our engineering quality.')
 
 @section('content')
     <!-- Hero Section -->

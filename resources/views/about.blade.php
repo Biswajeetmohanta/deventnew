@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'About Us | Devent Technology')
+@section('meta_description', 'Learn about Devent Technology\'s team, process, and approach to building custom software, mobile apps, and digital marketing solutions for growing businesses.')
 
 @section('content')
     <section class="py-24 bg-white">
